@@ -1,0 +1,16 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "statusName",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180507135545",
+    "entityTableName": "status",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

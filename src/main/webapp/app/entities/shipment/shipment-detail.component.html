@@ -1,0 +1,64 @@
+
+<div *ngIf="shipment">
+    <h2><span>Shipment</span> {{shipment.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span>Sender P</span></dt>
+        <dd>
+            <div *ngIf="shipment.senderP">
+                <a [routerLink]="['/person', shipment.senderP?.id]">{{shipment.senderP?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Sender V</span></dt>
+        <dd>
+            <div *ngIf="shipment.senderV">
+                <a [routerLink]="['/vendor', shipment.senderV?.id]">{{shipment.senderV?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Receiver</span></dt>
+        <dd>
+            <div *ngIf="shipment.receiver">
+                <a [routerLink]="['/receiver-info', shipment.receiver?.id]">{{shipment.receiver?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Employee</span></dt>
+        <dd>
+            <div *ngIf="shipment.employee">
+                <a [routerLink]="['/employee', shipment.employee?.id]">{{shipment.employee?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Status</span></dt>
+        <dd>
+            <div *ngIf="shipment.status">
+                <a [routerLink]="['/status', shipment.status?.id]">{{shipment.status?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Product</span></dt>
+        <dd>
+            <div *ngIf="shipment.product">
+                <a [routerLink]="['/product', shipment.product?.id]">{{shipment.product?.id}}</a>
+            </div>
+        </dd>
+        <dt><span>Location</span></dt>
+        <dd>
+            <div *ngIf="shipment.location">
+                <a [routerLink]="['/warehouse-location', shipment.location?.id]">{{shipment.location?.id}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'shipment/'+ shipment.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span> Edit</span>
+    </button>
+</div>

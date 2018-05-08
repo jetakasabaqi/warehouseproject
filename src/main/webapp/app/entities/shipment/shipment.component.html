@@ -1,0 +1,106 @@
+<div>
+    <h2>
+        <span>Shipments</span>
+        <button class="btn btn-primary float-right jh-create-entity create-shipment" [routerLink]="['/', { outlets: { popup: ['shipment-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span >
+            Create new Shipment
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="shipments">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span>ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="senderP.id"><span>Sender P</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="senderV.id"><span>Sender V</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="receiver.id"><span>Receiver</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="employee.id"><span>Employee</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="status.id"><span>Status</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="product.id"><span>Product</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="location.id"><span>Location</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let shipment of shipments ;trackBy: trackId">
+                <td><a [routerLink]="['../shipment', shipment.id ]">{{shipment.id}}</a></td>
+                <td>
+                    <div *ngIf="shipment.senderP">
+                        <a [routerLink]="['../person', shipment.senderP?.id ]" >{{shipment.senderP?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="shipment.senderV">
+                        <a [routerLink]="['../vendor', shipment.senderV?.id ]" >{{shipment.senderV?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="shipment.receiver">
+                        <a [routerLink]="['../receiver-info', shipment.receiver?.id ]" >{{shipment.receiver?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="shipment.employee">
+                        <a [routerLink]="['../employee', shipment.employee?.id ]" >{{shipment.employee?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="shipment.status">
+                        <a [routerLink]="['../status', shipment.status?.id ]" >{{shipment.status?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="shipment.product">
+                        <a [routerLink]="['../product', shipment.product?.id ]" >{{shipment.product?.id}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="shipment.location">
+                        <a [routerLink]="['../warehouse-location', shipment.location?.id ]" >{{shipment.location?.id}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../shipment', shipment.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'shipment/'+ shipment.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'shipment/'+ shipment.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="shipments && shipments.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>
