@@ -38,6 +38,10 @@ public class Person implements Serializable {
     @Column(name = "email")
     private String email;
 
+    @OneToOne
+    @JoinColumn(name="id",referencedColumnName = "userId")
+    private User user;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -112,6 +116,14 @@ public class Person implements Serializable {
         this.email = email;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public boolean equals(Object o) {

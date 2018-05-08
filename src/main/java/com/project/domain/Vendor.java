@@ -41,6 +41,11 @@ public class Vendor implements Serializable {
     @Column(name = "zip_code")
     private String zipCode;
 
+   @OneToOne
+   @JoinColumn(name="id",referencedColumnName = "userId")
+   private User user;
+
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -128,6 +133,14 @@ public class Vendor implements Serializable {
         this.zipCode = zipCode;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public boolean equals(Object o) {
