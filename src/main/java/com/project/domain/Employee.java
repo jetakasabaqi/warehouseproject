@@ -20,6 +20,7 @@ public class Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -40,9 +41,12 @@ public class Employee implements Serializable {
     @Column(name = "age")
     private String age;
 
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name="id",referencedColumnName = "userId")
     private User user;
+
+
+
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -125,6 +129,7 @@ public class Employee implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+
     }
 
     @Override

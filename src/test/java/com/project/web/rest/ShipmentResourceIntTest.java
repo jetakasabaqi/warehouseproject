@@ -4,10 +4,11 @@ import com.project.Jeta123App;
 
 import com.project.domain.Shipment;
 import com.project.repository.ShipmentRepository;
-import com.project.service.ShipmentService;
+import com.project.service.*;
 import com.project.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -60,11 +61,25 @@ public class ShipmentResourceIntTest {
     private MockMvc restShipmentMockMvc;
 
     private Shipment shipment;
+    @Autowired
+    private PersonService personService;
+    @Autowired
+    private VendorService vendorService;
+    @Autowired
+    private ReceiverInfoService receiverInfo;
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private StatusService statusService;
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private WarehouseLocationService warehouseLocationService;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService);
+        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService, personService, receiverInfo, vendorService, employeeService, statusService, productService, warehouseLocationService);
         this.restShipmentMockMvc = MockMvcBuilders.standaloneSetup(shipmentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -181,6 +196,7 @@ public class ShipmentResourceIntTest {
         assertThat(shipmentList).hasSize(databaseSizeBeforeUpdate);
         Shipment testShipment = shipmentList.get(shipmentList.size() - 1);
     }
+
 
     @Test
     @Transactional

@@ -74,4 +74,24 @@ public class ShipmentServiceImpl implements ShipmentService {
         log.debug("Request to delete Shipment : {}", id);
         shipmentRepository.delete(id);
     }
+
+    @Override
+    public boolean shipmentValidation(Shipment shipment) throws Exception {
+
+        if(shipment.getSenderP().getId() == null && shipment.getSenderV().getId()== null)
+            throw new Exception("SenderPerson && SenderVendor  ID must not be null!");
+        else if (shipment.getReceiver().getId()==null)
+            throw new Exception("Receiver ID must not be null!");
+        else if (shipment.getEmployee().getId()==null)
+            throw new Exception("Employee ID must not be null!");
+        else if (shipment.getStatus().getId()==null)
+            throw new Exception("Status ID must not be null!");
+        else if(shipment.getProduct().getId()==null)
+            throw new Exception("Product ID must not be null!");
+        else if(shipment.getLocation().getId()==null)
+            throw new Exception("WarehouseLocation ID must not be null!");
+
+
+        return true;
+    }
 }

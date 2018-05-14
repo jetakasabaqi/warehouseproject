@@ -1,8 +1,8 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.project.domain.Shipment;
-import com.project.service.ShipmentService;
+import com.project.domain.*;
+import com.project.service.*;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -35,8 +35,29 @@ public class ShipmentResource {
 
     private final ShipmentService shipmentService;
 
-    public ShipmentResource(ShipmentService shipmentService) {
+    private final PersonService personService;
+
+    private final ReceiverInfoService receiverInfo;
+
+    private final VendorService vendorService;
+
+    private final EmployeeService employeeService;
+
+    private final StatusService statusService;
+
+    private final ProductService productService;
+
+    private final WarehouseLocationService warehouseLocationService;
+
+    public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, ProductService productService, WarehouseLocationService warehouseLocationService) {
         this.shipmentService = shipmentService;
+        this.personService = personService;
+        this.receiverInfo = receiverInfo;
+        this.vendorService = vendorService;
+        this.employeeService = employeeService;
+        this.statusService = statusService;
+        this.productService = productService;
+        this.warehouseLocationService = warehouseLocationService;
     }
 
     /**
@@ -48,15 +69,23 @@ public class ShipmentResource {
      */
     @PostMapping("/shipments")
     @Timed
-    public ResponseEntity<Shipment> createShipment(@RequestBody Shipment shipment) throws URISyntaxException {
+    public ResponseEntity<Shipment> createShipment(@RequestBody Shipment shipment) throws Exception {
         log.debug("REST request to save Shipment : {}", shipment);
         if (shipment.getId() != null) {
             throw new BadRequestAlertException("A new shipment cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        boolean ok=shipmentService.shipmentValidation(shipment);
+       if(ok)
+       {
         Shipment result = shipmentService.save(shipment);
         return ResponseEntity.created(new URI("/api/shipments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .body(result);}
+            else
+       {
+         return  ResponseEntity.badRequest()
+             .body(shipment);
+       }
     }
 
     /**
@@ -70,7 +99,7 @@ public class ShipmentResource {
      */
     @PutMapping("/shipments")
     @Timed
-    public ResponseEntity<Shipment> updateShipment(@RequestBody Shipment shipment) throws URISyntaxException {
+    public ResponseEntity<Shipment> updateShipment(@RequestBody Shipment shipment) throws Exception {
         log.debug("REST request to update Shipment : {}", shipment);
         if (shipment.getId() == null) {
             return createShipment(shipment);

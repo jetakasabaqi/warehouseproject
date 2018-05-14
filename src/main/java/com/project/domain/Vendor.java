@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "vendor")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Vendor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,8 +23,11 @@ public class Vendor implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "address")
     private String address;
@@ -41,7 +44,7 @@ public class Vendor implements Serializable {
     @Column(name = "zip_code")
     private String zipCode;
 
-   @OneToOne
+   @OneToOne()
    @JoinColumn(name="id",referencedColumnName = "userId")
    private User user;
 
@@ -55,19 +58,30 @@ public class Vendor implements Serializable {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public Vendor fullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Vendor firstName(String firstName){
+        this.firstName = firstName;
         return this;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getLastName() {
+        return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public Vendor lastName(String lastName){
+        this.lastName = lastName;
+        return this;
+    }
     public String getAddress() {
         return address;
     }
@@ -142,6 +156,10 @@ public class Vendor implements Serializable {
         this.user = user;
     }
 
+    public Vendor user(User user){
+        this.user = user;
+        return this;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -166,7 +184,8 @@ public class Vendor implements Serializable {
     public String toString() {
         return "Vendor{" +
             "id=" + getId() +
-            ", fullName='" + getFullName() + "'" +
+            ", firstName='" + getFirstName() + "'" +
+            ", lastName='" + getLastName() + "'" +
             ", address='" + getAddress() + "'" +
             ", email='" + getEmail() + "'" +
             ", website='" + getWebsite() + "'" +

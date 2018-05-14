@@ -60,6 +60,8 @@ public class EmployeeDTO {
 
     private Set<String> authorities;
 
+    private Instant created_date;
+
     public EmployeeDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -76,13 +78,19 @@ public class EmployeeDTO {
         this.activated = employee.getUser().getActivated();
         this.imageUrl = employee.getUser().getImageUrl();
         this.langKey = employee.getUser().getLangKey();
-        this.createdBy = employee.getUser().getCreatedBy();
-        this.createdDate = employee.getUser().getCreatedDate();
-        this.lastModifiedBy = employee.getUser().getLastModifiedBy();
-        this.lastModifiedDate = employee.getUser().getLastModifiedDate();
+        this.created_date=created_date;
+
         this.authorities = employee.getUser().getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());
+    }
+
+    public Long getEmployeeid() {
+        return employeeid;
+    }
+
+    public void setEmployeeid(Long employeeid) {
+        this.employeeid = employeeid;
     }
 
     public User getUserId() {
@@ -91,30 +99,6 @@ public class EmployeeDTO {
 
     public void setUserId(User userId) {
         this.userId = userId;
-    }
-
-    public String getTel() {
-        return tel;
-    }
-
-    public void setTel(String tel) {
-        this.tel = tel;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public Long getEmployeeid() {
-        return employeeid;
-    }
-
-    public void setEmployeeid(Long id) {
-        this.employeeid = employeeid;
     }
 
     public String getLogin() {
@@ -129,8 +113,8 @@ public class EmployeeDTO {
         return name;
     }
 
-    public void setName(String firstName) {
-        this.name = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLastName() {
@@ -141,12 +125,28 @@ public class EmployeeDTO {
         this.lastName = lastName;
     }
 
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getImageUrl() {
@@ -186,7 +186,7 @@ public class EmployeeDTO {
     }
 
     public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate = created_date;
     }
 
     public String getLastModifiedBy() {

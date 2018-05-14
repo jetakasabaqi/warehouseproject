@@ -1,7 +1,9 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.project.domain.Price;
 import com.project.domain.Product;
+import com.project.service.PriceService;
 import com.project.service.ProductService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
@@ -34,9 +36,11 @@ public class ProductResource {
     private static final String ENTITY_NAME = "product";
 
     private final ProductService productService;
+    private final PriceService priceService;
 
-    public ProductResource(ProductService productService) {
+    public ProductResource(ProductService productService, PriceService priceService) {
         this.productService = productService;
+        this.priceService = priceService;
     }
 
     /**
@@ -53,6 +57,9 @@ public class ProductResource {
         if (product.getId() != null) {
             throw new BadRequestAlertException("A new product cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if(product.getPrice().getId() == null)
+            priceService.save(product.getPrice());
+
         Product result = productService.save(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))

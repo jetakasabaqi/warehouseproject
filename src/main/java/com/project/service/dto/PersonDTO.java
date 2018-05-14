@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PersonDTO {
+public class      PersonDTO {
 
     private User userId;
 
@@ -74,10 +74,6 @@ public class PersonDTO {
         this.activated = person.getUser().getActivated();
         this.imageUrl = person.getUser().getImageUrl();
         this.langKey = person.getUser().getLangKey();
-        this.createdBy = person.getUser().getCreatedBy();
-        this.createdDate = person.getUser().getCreatedDate();
-        this.lastModifiedBy = person.getUser().getLastModifiedBy();
-        this.lastModifiedDate = person.getUser().getLastModifiedDate();
         this.authorities = person.getUser().getAuthorities().stream()
             .map(Authority::getName)
             .collect(Collectors.toSet());

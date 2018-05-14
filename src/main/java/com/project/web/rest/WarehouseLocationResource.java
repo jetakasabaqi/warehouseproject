@@ -1,7 +1,9 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.project.domain.City;
 import com.project.domain.WarehouseLocation;
+import com.project.service.CityService;
 import com.project.service.WarehouseLocationService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
@@ -34,9 +36,11 @@ public class WarehouseLocationResource {
     private static final String ENTITY_NAME = "warehouseLocation";
 
     private final WarehouseLocationService warehouseLocationService;
+    private final CityService cityService;
 
-    public WarehouseLocationResource(WarehouseLocationService warehouseLocationService) {
+    public WarehouseLocationResource(WarehouseLocationService warehouseLocationService, CityService cityService) {
         this.warehouseLocationService = warehouseLocationService;
+        this.cityService = cityService;
     }
 
     /**
@@ -53,6 +57,7 @@ public class WarehouseLocationResource {
         if (warehouseLocation.getId() != null) {
             throw new BadRequestAlertException("A new warehouseLocation cannot already have an ID", ENTITY_NAME, "idexists");
         }
+       cityService.save(warehouseLocation.getCity());
         WarehouseLocation result = warehouseLocationService.save(warehouseLocation);
         return ResponseEntity.created(new URI("/api/warehouse-locations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -73,6 +78,7 @@ public class WarehouseLocationResource {
     public ResponseEntity<WarehouseLocation> updateWarehouseLocation(@RequestBody WarehouseLocation warehouseLocation) throws URISyntaxException {
         log.debug("REST request to update WarehouseLocation : {}", warehouseLocation);
         if (warehouseLocation.getId() == null) {
+
             return createWarehouseLocation(warehouseLocation);
         }
         WarehouseLocation result = warehouseLocationService.save(warehouseLocation);

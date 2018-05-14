@@ -2,12 +2,18 @@ package com.project.web.rest;
 
 import com.project.config.Constants;
 import com.codahale.metrics.annotation.Timed;
+import com.project.domain.Employee;
+import com.project.domain.Person;
 import com.project.domain.User;
+import com.project.domain.Vendor;
+import com.project.repository.EmployeeRepository;
 import com.project.repository.UserRepository;
 import com.project.security.AuthoritiesConstants;
-import com.project.service.MailService;
-import com.project.service.UserService;
+import com.project.service.*;
+import com.project.service.dto.EmployeeDTO;
+import com.project.service.dto.PersonDTO;
 import com.project.service.dto.UserDTO;
+import com.project.service.dto.VendorDTO;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.errors.EmailAlreadyUsedException;
 import com.project.web.rest.errors.LoginAlreadyUsedException;
@@ -66,12 +72,26 @@ public class UserResource {
 
     private final MailService mailService;
 
-    public UserResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final EmployeeService employeeService;
+
+    private final VendorService vendorService;
+
+    private final PersonService personService;
+
+    private final EmployeeRepository employeeRepository;
+
+
+    public UserResource(UserRepository userRepository, UserService userService, MailService mailService, VendorService vendorService, PersonService personService, EmployeeService employeeService, EmployeeRepository employeeRepository) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.employeeService = employeeService;
+        this.personService = personService;
+        this.employeeRepository = employeeRepository;
+        this.vendorService = vendorService;
     }
+
 
     /**
      * POST  /users  : Creates a new user.
@@ -82,7 +102,7 @@ public class UserResource {
      *
      * @param userDTO the user to create
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException       if the Location URI syntax is incorrect
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
      */
     @PostMapping("/users")
@@ -102,8 +122,121 @@ public class UserResource {
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert( "A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
+                .headers(HeaderUtil.createAlert("A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
                 .body(newUser);
+        }
+    }
+
+    @PostMapping("/users/employee")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) throws URISyntaxException {
+        log.debug("REST request to save Employee : {}", employeeDTO);
+
+//        UserRepository employeeResource;
+        if (employeeDTO.getEmployeeid() != null) {
+            throw new BadRequestAlertException("A new employee cannot already have an ID", "userManagement", "idexists");
+            // Lowercase the user login before comparing with database
+//        } else if (employeeRepository.findOneByLogin(employeeDTO.getLogin().toLowerCase()).isPresent()) {
+//            throw new LoginAlreadyUsedException();
+//        } else if (employeeRepository.findOneByEmailIgnoreCase(employeeDTO.getEmail()).isPresent()) {
+//            throw new EmailAlreadyUsedException();
+        } else {
+            User user = new User(employeeDTO.getLogin(), employeeDTO.getLastName(), employeeDTO.getEmail(), employeeDTO.getName());
+            User registerUser = userService.registerUser(new UserDTO(user), "user");
+            //User newUser= userService.createUser(new UserDTO(user));
+
+            Employee employee = new Employee()
+                .name(employeeDTO.getName())
+                .age(employeeDTO.getAge())
+                .tel(employeeDTO.getTel())
+                .email(employeeDTO.getEmail())
+                .lastName(employeeDTO.getLastName());
+            employee.setUser(registerUser);
+
+            employeeService.save(employee);
+
+
+            //  mailService.sendCreationEmail(newUser);
+            return ResponseEntity.created(new URI("/api/users/" + user.getLogin()))
+                .headers(HeaderUtil.createAlert("A Employee is created with identifier " + user.getLogin(), user.getLogin()))
+                .body(employee);
+        }
+    }
+
+
+    @PostMapping("/users/person")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody PersonDTO personDTO) throws URISyntaxException {
+        log.debug("REST request to save Person : {}", personDTO);
+
+//        UserRepository employeeResource;
+        if (personDTO.getPersonId() != null) {
+            throw new BadRequestAlertException("A new person cannot already have an ID", "userManagement", "idexists");
+            // Lowercase the user login before comparing with database
+//        } else if (employeeRepository.findOneByLogin(employeeDTO.getLogin().toLowerCase()).isPresent()) {
+//            throw new LoginAlreadyUsedException();
+//        } else if (employeeRepository.findOneByEmailIgnoreCase(employeeDTO.getEmail()).isPresent()) {
+//            throw new EmailAlreadyUsedException();
+        } else {
+            User user = new User(personDTO.getLogin(), personDTO.getLastName(), personDTO.getEmail(), personDTO.getFirstName());
+            User registerUser = userService.registerUser(new UserDTO(user), "user");
+            //User newUser= userService.createUser(new UserDTO(user));
+
+            Person person = new Person()
+                .fullName(personDTO.getFullName())
+                .zipCode(personDTO.getZipCode())
+                .tel(personDTO.getTel())
+                .email(personDTO.getEmail())
+                .address(personDTO.getAddress());
+            person.setUser(registerUser);
+
+            personService.save(person);
+
+
+            //  mailService.sendCreationEmail(newUser);
+            return ResponseEntity.created(new URI("/api/users/" + user.getLogin()))
+                .headers(HeaderUtil.createAlert("A Person is created with identifier " + user.getLogin(), user.getLogin()))
+                .body(person);
+        }
+    }
+
+    @PostMapping("/users/vendor")
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<Vendor> createVendor(@Valid @RequestBody VendorDTO vendorDTO) throws URISyntaxException {
+        log.debug("REST request to save Vendor : {}", vendorDTO);
+
+//        UserRepository employeeResource;
+        if (vendorDTO.getVendorId() != null) {
+            throw new BadRequestAlertException("A new person cannot already have an ID", "userManagement", "idexists");
+            // Lowercase the user login before comparing with database
+//        } else if (employeeRepository.findOneByLogin(employeeDTO.getLogin().toLowerCase()).isPresent()) {
+//            throw new LoginAlreadyUsedException();
+//        } else if (employeeRepository.findOneByEmailIgnoreCase(employeeDTO.getEmail()).isPresent()) {
+//            throw new EmailAlreadyUsedException();
+        } else {
+            User user = new User(vendorDTO.getLogin(), vendorDTO.getLastName(), vendorDTO.getEmail(), vendorDTO.getFirstName());
+            User registerUser = userService.registerUser(new UserDTO(user), "user");
+            //User newUser= userService.createUser(new UserDTO(user));
+
+            Vendor vendor = new Vendor();
+            vendor.setFirstName(vendorDTO.getFirstName());
+            vendor.zipCode(vendorDTO.getZipCode());
+            vendor.contactPerson(vendorDTO.getContactPerson());
+            vendor.email(vendorDTO.getEmail());
+            vendor.address(vendorDTO.getAddress());
+            vendor.website(vendorDTO.getWebsite());
+            vendor.setUser(registerUser);
+
+            vendorService.save(vendor);
+
+
+            //  mailService.sendCreationEmail(newUser);
+            return ResponseEntity.created(new URI("/api/users/" + user.getLogin()))
+                .headers(HeaderUtil.createAlert("A Person is created with identifier " + user.getLogin(), user.getLogin()))
+                .body(vendor);
         }
     }
 
@@ -185,6 +318,6 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "A user is deleted with identifier " + login, login)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("A user is deleted with identifier " + login, login)).build();
     }
 }

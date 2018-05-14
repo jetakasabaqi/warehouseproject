@@ -2,8 +2,11 @@ package com.project.web.rest;
 
 import com.project.Jeta123App;
 
+import com.project.domain.Price;
 import com.project.domain.Product;
+import com.project.repository.PriceRepository;
 import com.project.repository.ProductRepository;
+import com.project.service.PriceService;
 import com.project.service.ProductService;
 import com.project.web.rest.errors.ExceptionTranslator;
 
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.project.web.rest.TestUtil.createFormattingConversionService;
@@ -53,18 +57,28 @@ public class ProductResourceIntTest {
 
     @Autowired
     private ExceptionTranslator exceptionTranslator;
-
+    private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private PriceRepository priceRepository;
+
+    @Autowired
+    private PriceService priceService;
+
 
     private MockMvc restProductMockMvc;
 
     private Product product;
 
+
+    private Price price;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProductResource productResource = new ProductResource(productService);
+        final ProductResource productResource = new ProductResource(productService, priceService);
         this.restProductMockMvc = MockMvcBuilders.standaloneSetup(productResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -74,7 +88,7 @@ public class ProductResourceIntTest {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -83,9 +97,19 @@ public class ProductResourceIntTest {
         return product;
     }
 
+    public Price createPrice() {
+        Price price = new Price()
+            .price(DEFAULT_PRICE);
+        return price;
+    }
+
     @Before
     public void initTest() {
         product = createEntity(em);
+        price = createPrice();
+//        priceRepository.save(price);
+
+        product.setPrice(price);
     }
 
     @Test

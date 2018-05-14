@@ -4,6 +4,7 @@ import com.project.Jeta123App;
 
 import com.project.domain.WarehouseLocation;
 import com.project.repository.WarehouseLocationRepository;
+import com.project.service.CityService;
 import com.project.service.WarehouseLocationService;
 import com.project.web.rest.errors.ExceptionTranslator;
 
@@ -66,11 +67,11 @@ public class WarehouseLocationResourceIntTest {
     private MockMvc restWarehouseLocationMockMvc;
 
     private WarehouseLocation warehouseLocation;
-
+ private CityService cityService;
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WarehouseLocationResource warehouseLocationResource = new WarehouseLocationResource(warehouseLocationService);
+        final WarehouseLocationResource warehouseLocationResource = new WarehouseLocationResource(warehouseLocationService, cityService);
         this.restWarehouseLocationMockMvc = MockMvcBuilders.standaloneSetup(warehouseLocationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
