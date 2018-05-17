@@ -131,14 +131,14 @@ public class UserServiceIntTest {
         userRepository.delete(user);
     }
 
-    @Ignore
+    //@Ignore
     @Test
     @Transactional
     public void testFindNotActivatedUsersByCreationDateBefore() {
         Instant now = Instant.now();
         user.setActivated(false);
         User dbUser = userRepository.saveAndFlush(user);
-       // dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
+       dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
         userRepository.saveAndFlush(user);
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isNotEmpty();

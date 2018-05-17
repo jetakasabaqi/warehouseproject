@@ -2,13 +2,17 @@ package com.project.web.rest;
 
 import com.project.Jeta123App;
 import com.project.config.CacheConfiguration;
-import com.project.domain.Authority;
-import com.project.domain.User;
+import com.project.domain.*;
 import com.project.repository.EmployeeRepository;
+import com.project.repository.PersonRepository;
 import com.project.repository.UserRepository;
+import com.project.repository.VendorRepository;
 import com.project.security.AuthoritiesConstants;
 import com.project.service.*;
+import com.project.service.dto.EmployeeDTO;
+import com.project.service.dto.PersonDTO;
 import com.project.service.dto.UserDTO;
+import com.project.service.dto.VendorDTO;
 import com.project.service.mapper.UserMapper;
 import com.project.web.rest.errors.ExceptionTranslator;
 import com.project.web.rest.vm.ManagedUserVM;
@@ -52,10 +56,12 @@ public class UserResourceIntTest {
 
     private static final Long DEFAULT_ID = 1L;
 
-    private static final String DEFAULT_PASSWORD = "passjohndoe";
+    private static final String DEFAULT_PASSWORD = "user";
     private static final String UPDATED_PASSWORD = "passjhipster";
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
+
+    private static final String default_Email="jeta@gmail.com";
     private static final String UPDATED_EMAIL = "jhipster@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
@@ -69,6 +75,20 @@ public class UserResourceIntTest {
 
     private static final String DEFAULT_LANGKEY = "en";
     private static final String UPDATED_LANGKEY = "fr";
+
+    private static final String DEFAULT_ADDRESS = "MEHEMTE";
+
+    private static final String DEFAULT_WEBSITE = "WWW.JHIPSTER.COM";
+
+    private static final String DEFAULT_CONTACTPERSON = "jetakasa@gmail.com";
+
+    private static final String DEFAULT_ZIPCODE = "10000";
+
+    private static final String DEFAULT_TEL="04562314";
+
+    private static final String DEFAULT_AGE="53";
+
+
 
     @Autowired
     private UserRepository userRepository;
@@ -89,6 +109,13 @@ public class UserResourceIntTest {
 
     @Autowired
     private VendorService vendorService;
+
+    @Autowired
+    private VendorRepository vendorRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
+
 
     @Autowired
     private UserMapper userMapper;
@@ -112,12 +139,24 @@ public class UserResourceIntTest {
 
     private User user;
 
+    private Vendor vendor;
+
+    private Employee employee;
+
+    private Person person;
+
+    private VendorDTO vendorDTO;
+
+    private EmployeeDTO employeeDTO;
+
+    private PersonDTO personDTO;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).clear();
-        UserResource userResource = new UserResource(userRepository, userService, mailService,vendorService,personService,employeeService,employeeRepository);
+        UserResource userResource = new UserResource(userRepository, userService, mailService, vendorService, personService, employeeService, employeeRepository);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -127,7 +166,7 @@ public class UserResourceIntTest {
 
     /**
      * Create a User.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
@@ -149,6 +188,11 @@ public class UserResourceIntTest {
         user = createEntity(em);
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
+        user.setLangKey(DEFAULT_LANGKEY);
+        user.setImageUrl(DEFAULT_IMAGEURL);
+
+        //   employee.setUser(user);
+        // person.setUser(user);
     }
 
     @Test
@@ -183,6 +227,147 @@ public class UserResourceIntTest {
         assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+    }
+
+    private Vendor vendorCreate() throws Exception {
+        Vendor vendor = new Vendor().website(DEFAULT_WEBSITE).contactPerson(DEFAULT_CONTACTPERSON).address(DEFAULT_ADDRESS).email(default_Email)
+            .zipCode(DEFAULT_ZIPCODE).firstName(DEFAULT_FIRSTNAME).lastName(DEFAULT_LASTNAME);
+        vendor.setUser(user);
+        vendor.getUser().setLogin(DEFAULT_LOGIN);
+        vendor.getUser().setEmail(DEFAULT_EMAIL);
+
+        return vendor;
+    }
+
+    private VendorDTO vendorDTOCreate() throws Exception {
+       Vendor vendor=vendorCreate();
+        VendorDTO vendorDTO = new VendorDTO();
+        vendorDTO.setActivated(user.getActivated());
+        vendorDTO.setAddress(vendor.getAddress());
+        vendorDTO.setContactPerson(vendor.getContactPerson());
+        vendorDTO.setEmail(vendor.getEmail());
+        vendorDTO.setFirstName(vendor.getFirstName());
+        vendorDTO.setLastName(vendor.getLastName());
+        vendorDTO.setLogin(user.getLogin());
+        vendorDTO.setZipCode(vendor.getZipCode());
+        vendorDTO.setCreatedDate(user.getCreatedDate());
+        return vendorDTO;
+    }
+
+    @Test
+    @Transactional
+    public void createVendor() throws Exception {
+        int databaseSizeBeforeCreate = vendorRepository.findAll().size();
+        vendorDTO = vendorDTOCreate();
+
+
+        restUserMockMvc.perform(post("/api/users/vendor")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(vendorDTO)))
+            .andExpect(status().isCreated());
+
+        // Validate the User in the database
+        List<Vendor> vendors = vendorRepository.findAll();
+        assertThat(vendors).hasSize(databaseSizeBeforeCreate + 1);
+        Vendor testVendor = vendors.get(vendors.size() - 1);
+        assertThat(testVendor.getUser().getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(testVendor.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(testVendor.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(testVendor.getEmail()).isEqualTo(default_Email);
+   //     assertThat(testVendor.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        assertThat(testVendor.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+    }
+    private Employee employeeCreate() throws Exception {
+        Employee employee = new Employee().email(DEFAULT_EMAIL).name(DEFAULT_FIRSTNAME).lastName(DEFAULT_LASTNAME).tel(DEFAULT_TEL).age(DEFAULT_AGE);
+        employee.setUser(user);
+        employee.getUser().setLogin(DEFAULT_LOGIN);
+        employee.getUser().setEmail(DEFAULT_EMAIL);
+        employee.getUser().setImageUrl(DEFAULT_IMAGEURL);
+        employee.getUser().setLangKey(DEFAULT_LANGKEY);
+
+        return employee;
+    }
+
+    private EmployeeDTO employeeDTOCreate() throws Exception {
+        Employee employee=employeeCreate();
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setActivated(user.getActivated());
+        employeeDTO.setEmail(employee.getEmail());
+        employeeDTO.setName(employee.getName());
+        employeeDTO.setLastName(employee.getLastName());
+        employeeDTO.setLogin(user.getLogin());
+        employeeDTO.setCreatedDate(user.getCreatedDate());
+        return employeeDTO;
+    }
+
+    @Test
+    @Transactional
+    public void createEmployee() throws Exception {
+        int databaseSizeBeforeCreate = employeeRepository.findAll().size();
+        employeeDTO = employeeDTOCreate();
+
+
+        restUserMockMvc.perform(post("/api/users/employee")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(employeeDTO)))
+            .andExpect(status().isCreated());
+
+        // Validate the User in the database
+        List<Employee> employees = employeeRepository.findAll();
+        assertThat(employees).hasSize(databaseSizeBeforeCreate + 1);
+        Employee testEmployee = employees.get(employees.size() - 1);
+        assertThat(testEmployee.getUser().getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(testEmployee.getName()).isEqualTo(DEFAULT_FIRSTNAME);
+        assertThat(testEmployee.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(testEmployee.getEmail()).isEqualTo(DEFAULT_EMAIL);
+       // assertThat(testEmployee.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+      //  assertThat(testEmployee.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+    }
+
+    private Person personCreate() throws Exception {
+        Person person = new Person().email(DEFAULT_EMAIL).fullName(DEFAULT_FIRSTNAME).tel(DEFAULT_TEL).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE).tel(DEFAULT_TEL);
+        person.setUser(user);
+        person.getUser().setLogin(DEFAULT_LOGIN);
+        person.getUser().setEmail(DEFAULT_EMAIL);
+        person.getUser().setImageUrl(DEFAULT_IMAGEURL);
+        person.getUser().setLangKey(DEFAULT_LANGKEY);
+
+        return person;
+    }
+
+    private PersonDTO personDTOcreate() throws Exception {
+        Person person=personCreate();
+        PersonDTO personDTO = new PersonDTO();
+        personDTO.setActivated(user.getActivated());
+        personDTO.setEmail(person.getEmail());
+        personDTO.setFullName(person.getFullName());
+        personDTO.setLogin(user.getLogin());
+        personDTO.setCreatedDate(user.getCreatedDate());
+        return personDTO;
+    }
+
+    @Test
+    @Transactional
+    public void createPerson() throws Exception {
+        int databaseSizeBeforeCreate = personRepository.findAll().size();
+        personDTO = personDTOcreate();
+
+
+        restUserMockMvc.perform(post("/api/users/person")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(personDTO)))
+            .andExpect(status().isCreated());
+
+        // Validate the User in the database
+        List<Person> personList = personRepository.findAll();
+        assertThat(personList).hasSize(databaseSizeBeforeCreate + 1);
+        Person testPerson = personList.get(personList.size() - 1);
+        assertThat(testPerson.getUser().getLogin()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(testPerson.getFullName()).isEqualTo(DEFAULT_FIRSTNAME);
+       // assertThat(testPerson.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(testPerson.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        // assertThat(testEmployee.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        //  assertThat(testEmployee.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
     @Test
@@ -594,10 +779,10 @@ public class UserResourceIntTest {
         assertThat(userDTO.isActivated()).isEqualTo(true);
         assertThat(userDTO.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-        assertThat(userDTO.getCreatedBy()).isEqualTo(DEFAULT_LOGIN);
-//        assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
-        assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
-//        assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
+        //  assertThat(userDTO.getCreatedBy()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getCreatedDate()).isEqualTo(user.getCreatedDate());
+        //   assertThat(userDTO.getLastModifiedBy()).isEqualTo(DEFAULT_LOGIN);
+        assertThat(userDTO.getLastModifiedDate()).isEqualTo(user.getLastModifiedDate());
         assertThat(userDTO.getAuthorities()).containsExactly(AuthoritiesConstants.USER);
         assertThat(userDTO.toString()).isNotNull();
     }

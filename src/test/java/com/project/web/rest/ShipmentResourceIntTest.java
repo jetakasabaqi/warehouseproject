@@ -2,11 +2,12 @@ package com.project.web.rest;
 
 import com.project.Jeta123App;
 
-import com.project.domain.Shipment;
-import com.project.repository.ShipmentRepository;
+import com.project.domain.*;
+import com.project.repository.*;
 import com.project.service.*;
 import com.project.web.rest.errors.ExceptionTranslator;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,10 +20,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.StatusResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.project.web.rest.TestUtil.createFormattingConversionService;
@@ -66,7 +69,7 @@ public class ShipmentResourceIntTest {
     @Autowired
     private VendorService vendorService;
     @Autowired
-    private ReceiverInfoService receiverInfo;
+    private ReceiverInfoService receiverInfoService;
     @Autowired
     private EmployeeService employeeService;
     @Autowired
@@ -76,10 +79,67 @@ public class ShipmentResourceIntTest {
     @Autowired
     private WarehouseLocationService warehouseLocationService;
 
+    @Autowired
+    private PersonRepository personRepository;
+    @Autowired
+    private VendorRepository vendorRepository;
+    @Autowired
+    private ReceiverInfoRepository repository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+    @Autowired
+    private StatusRepository statusRepository;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private WarehouseLocationRepository warehouseLocationRepository;
+    @Autowired
+    private  ReceiverInfoRepository receiverInfoRepository;
+
+    private static final String DEFAULT_NAME="Blerim";
+
+    private static final String DEFAULT_LASTNAME="Kabashi";
+
+    private static final String DEFAULT_ADDRESS="Dardania";
+
+    private static final String DEFAULT_TEL="044896571";
+
+    private static final String DEFAULT_EMAIL="BlerimKabashi@live.com";
+
+    private static final String DEFAULT_AGE="35";
+
+    private static final String DEFAULT_WEBSITE="www.projekti.com";
+
+    private static final String DEFAULT_CONTACTPERSON="artab@gmail.com";
+
+    private static final String DEFAULT_ZIPCODE="10000";
+
+    private static final String DEFAULT_STATUS="Delivered";
+
+    private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
+
+    private static final String DEFAULT_COUNTRY="Kosova";
+
+    private Employee employee;
+
+    private Vendor vendor;
+
+    private Person person;
+
+    private Status status;
+
+    private Product product;
+
+    private ReceiverInfo receiverInfo;
+
+    private WarehouseLocation warehouseLocation;
+
+
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService, personService, receiverInfo, vendorService, employeeService, statusService, productService, warehouseLocationService);
+        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService, personService, receiverInfoService, vendorService, employeeService, statusService, productService, warehouseLocationService);
         this.restShipmentMockMvc = MockMvcBuilders.standaloneSetup(shipmentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -98,10 +158,101 @@ public class ShipmentResourceIntTest {
         return shipment;
     }
 
+    public Employee createEmployee()
+    {Employee employee= new Employee()
+        .name(DEFAULT_NAME)
+        .lastName(DEFAULT_LASTNAME)
+        .tel(DEFAULT_TEL)
+        .email(DEFAULT_EMAIL)
+        .age(DEFAULT_AGE);
+    return employee;}
+
+    public Vendor createVendor()
+    {
+        Vendor senderV=new Vendor()
+            .firstName(DEFAULT_NAME)
+            .lastName(DEFAULT_LASTNAME)
+            .address(DEFAULT_ADDRESS)
+            .email(DEFAULT_EMAIL)
+            .website(DEFAULT_WEBSITE)
+            .contactPerson(DEFAULT_CONTACTPERSON).zipCode(DEFAULT_ZIPCODE);
+        return senderV;
+    }
+
+    public Person createPerson()
+    {
+        Person senderP=new Person()
+            .fullName(DEFAULT_NAME)
+            .tel(DEFAULT_TEL).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE).email(DEFAULT_EMAIL);
+        return senderP;
+    }
+    public Status createStatus(){
+        Status status=new Status()
+            .statusName(DEFAULT_STATUS);
+       return status;
+    }
+
+    public Price createPrice()
+    {
+        Price price=new Price().price(DEFAULT_PRICE);
+        return price;
+    }
+
+    public Product createProduct()
+    {
+        Product product=new Product();
+        return  product;
+    }
+
+    public ReceiverInfo createReceiver()
+    {
+        ReceiverInfo receiverInfo=new ReceiverInfo().fullName(DEFAULT_NAME).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE);
+        return receiverInfo;
+    }
+
+    public WarehouseLocation createWarehouseLoc()
+    {
+        WarehouseLocation warehouseLocation=new WarehouseLocation().address(DEFAULT_ADDRESS).country(DEFAULT_COUNTRY);
+        return warehouseLocation;
+
+    }
+
     @Before
     public void initTest() {
         shipment = createEntity(em);
+
+        employee=createEmployee();
+        employeeRepository.save(employee);
+
+        vendor=createVendor();
+        vendorRepository.save(vendor);
+
+        person=createPerson();
+        personRepository.save(person);
+
+        status=createStatus();
+        statusRepository.save(status);
+
+        product=createProduct();
+        productRepository.save(product);
+
+        receiverInfo=createReceiver();
+        receiverInfoRepository.save(receiverInfo);
+
+        warehouseLocation=createWarehouseLoc();
+        warehouseLocationRepository.save(warehouseLocation);
+
+        shipment.setStatus(status);
+        shipment.setSenderV(vendor);
+        shipment.setSenderP(person);
+        shipment.setReceiver(receiverInfo);
+        shipment.setProduct(product);
+        shipment.setLocation(warehouseLocation);
+        shipment.setEmployee(employee);
+
+
     }
+
 
     @Test
     @Transactional

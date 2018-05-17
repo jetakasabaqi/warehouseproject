@@ -2,12 +2,15 @@ package com.project.web.rest;
 
 import com.project.Jeta123App;
 
+import com.project.domain.City;
 import com.project.domain.WarehouseLocation;
+import com.project.repository.CityRepository;
 import com.project.repository.WarehouseLocationRepository;
 import com.project.service.CityService;
 import com.project.service.WarehouseLocationService;
 import com.project.web.rest.errors.ExceptionTranslator;
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,7 +70,14 @@ public class WarehouseLocationResourceIntTest {
     private MockMvc restWarehouseLocationMockMvc;
 
     private WarehouseLocation warehouseLocation;
- private CityService cityService;
+    @Autowired
+    private CityService cityService;
+
+    private City city;
+
+    @Autowired
+    private CityRepository cityRepository;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -91,10 +101,20 @@ public class WarehouseLocationResourceIntTest {
             .country(DEFAULT_COUNTRY);
         return warehouseLocation;
     }
-
+    private  City createCity()
+    {
+        City city=new City().cityName(DEFAULT_COUNTRY);
+        return city;
+    }
     @Before
     public void initTest() {
+
         warehouseLocation = createEntity(em);
+
+        city=createCity();
+        cityRepository.save(city);
+        warehouseLocation.setCity(city);
+
     }
 
     @Test

@@ -151,7 +151,8 @@ public class UserResource {
                 .age(employeeDTO.getAge())
                 .tel(employeeDTO.getTel())
                 .email(employeeDTO.getEmail())
-                .lastName(employeeDTO.getLastName());
+                .lastName(employeeDTO.getLastName())
+                .age(employeeDTO.getAge());
             employee.setUser(registerUser);
 
             employeeService.save(employee);
@@ -181,6 +182,7 @@ public class UserResource {
 //            throw new EmailAlreadyUsedException();
         } else {
             User user = new User(personDTO.getLogin(), personDTO.getLastName(), personDTO.getEmail(), personDTO.getFirstName());
+            user.setLangKey("en");
             User registerUser = userService.registerUser(new UserDTO(user), "user");
             //User newUser= userService.createUser(new UserDTO(user));
 
@@ -218,6 +220,7 @@ public class UserResource {
 //            throw new EmailAlreadyUsedException();
         } else {
             User user = new User(vendorDTO.getLogin(), vendorDTO.getLastName(), vendorDTO.getEmail(), vendorDTO.getFirstName());
+            user.setLangKey("en");
             User registerUser = userService.registerUser(new UserDTO(user), "user");
             //User newUser= userService.createUser(new UserDTO(user));
 
@@ -229,6 +232,7 @@ public class UserResource {
             vendor.address(vendorDTO.getAddress());
             vendor.website(vendorDTO.getWebsite());
             vendor.setUser(registerUser);
+            vendor.setLastName(vendorDTO.getLastName());
 
             vendorService.save(vendor);
 

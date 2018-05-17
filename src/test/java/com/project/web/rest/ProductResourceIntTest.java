@@ -107,7 +107,7 @@ public class ProductResourceIntTest {
     public void initTest() {
         product = createEntity(em);
         price = createPrice();
-//        priceRepository.save(price);
+        priceRepository.save(price);
 
         product.setPrice(price);
     }
