@@ -27,6 +27,8 @@ public class Price implements Serializable {
     @Column(name = "price", precision=10, scale=2)
     private BigDecimal price;
 
+
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;

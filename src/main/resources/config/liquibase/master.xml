@@ -23,4 +23,5 @@
     <include file="config/liquibase/changelog/20180507135542_added_entity_constraints_Employee.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20180507135546_added_entity_constraints_Vendor.xml" relativeToChangelogFile="false"/>
      <!--jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/00000000000001_load_price.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

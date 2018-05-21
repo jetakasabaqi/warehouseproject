@@ -1,14 +1,21 @@
 package com.project.service.impl;
 
+import com.project.rsql.GenericRsqlSpecBuilder;
 import com.project.service.PriceService;
 import com.project.domain.Price;
 import com.project.repository.PriceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.criteria.CriteriaQuery;
+import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -19,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PriceServiceImpl implements PriceService {
 
     private final Logger log = LoggerFactory.getLogger(PriceServiceImpl.class);
-
+    @Autowired
     private final PriceRepository priceRepository;
 
     public PriceServiceImpl(PriceRepository priceRepository) {
@@ -74,4 +81,29 @@ public class PriceServiceImpl implements PriceService {
         log.debug("Request to delete Price : {}", id);
         priceRepository.delete(id);
     }
+
+    @Override
+    public List<Price> findAll(String search) {
+        return priceRepository.findAll();
+
+    }
+
+    @Override
+    public List<Price> findAll(Specification<Price> spec) {
+       return priceRepository.findAll(spec);
+    }
+
+
+//
+//    @Override
+//    public List<Price> findAll(Specification<Price> spec) {
+//        return priceRepository.findAll(spec);
+//    }
+
+//    @Override
+//    public List<Price> findAll(String search) {
+//      return priceRepository.findAll();
+//    }
+
+
 }

@@ -1,8 +1,12 @@
 package com.project.service;
 
 import com.project.domain.Person;
+import com.project.domain.Price;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 /**
  * Service Interface for managing Person.
@@ -39,4 +43,8 @@ public interface PersonService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    List<Person> findAll(Specification<Person> spec);
+
+
 }

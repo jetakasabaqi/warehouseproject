@@ -2,15 +2,20 @@ package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Person;
+import com.project.domain.Price;
+import com.project.rsql.CustomRsqlVisitor;
 import com.project.service.PersonService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -122,5 +127,14 @@ public class PersonResource {
         log.debug("REST request to delete Person : {}", id);
         personService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+    @RequestMapping(method = RequestMethod.GET, value = "/persons")
+    @ResponseBody
+    public List<Person> findAllByRsql(@RequestParam(value = "search") String search) {
+
+        Node rootNode = new RSQLParser().parse(search);
+        Specification<Person> spec = rootNode.accept(new CustomRsqlVisitor<>());
+
+        return personService.findAll(spec);
     }
 }

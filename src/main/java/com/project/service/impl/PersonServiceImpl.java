@@ -1,5 +1,6 @@
 package com.project.service.impl;
 
+import com.project.domain.Price;
 import com.project.service.PersonService;
 import com.project.domain.Person;
 import com.project.repository.PersonRepository;
@@ -7,8 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 /**
@@ -73,5 +77,10 @@ public class PersonServiceImpl implements PersonService {
     public void delete(Long id) {
         log.debug("Request to delete Person : {}", id);
         personRepository.delete(id);
+    }
+
+    @Override
+    public List<Person> findAll(Specification<Person> spec) {
+        return personRepository.findAll(spec);
     }
 }

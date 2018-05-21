@@ -197,7 +197,7 @@ public class UserResource {
             personService.save(person);
 
 
-            //  mailService.sendCreationEmail(newUser);
+            // mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + user.getLogin()))
                 .headers(HeaderUtil.createAlert("A Person is created with identifier " + user.getLogin(), user.getLogin()))
                 .body(person);

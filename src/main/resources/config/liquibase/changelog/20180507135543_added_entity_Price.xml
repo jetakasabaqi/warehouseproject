@@ -27,7 +27,10 @@
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/price.csv" separator=";" identityInsertEnabled="true" tableName="price">-->
+
+        <!--</ext:loadData>-->
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
