@@ -1,9 +1,9 @@
 package com.project.service.impl;
 
-import com.project.domain.Price;
-import com.project.service.ProductService;
 import com.project.domain.Product;
 import com.project.repository.ProductRepository;
+import com.project.service.ProductService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 
@@ -28,14 +28,13 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
 
+    @Autowired
+    private EntityManager entityManager;
 
 
-
-    public ProductServiceImpl(ProductRepository productRepository)
-    {
-        this.productRepository=productRepository;
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
-
 
 
     /**
@@ -87,23 +86,10 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(id);
     }
 
+    @Override
+    public List<Product> findAll(CriteriaQuery<Product> query) {
+        return ParseRsql.findAll(query, entityManager);
+    }
 
-
-//    @Override
-//    public List<Product> getAllByPrice(BigDecimal price) {
-//        List<Product> productByPrice=new ArrayList();
-//        List<Product> products=productRepository.findAll();
-//
-//        for (Product product:products)
-//        {
-//            List<Price> prices= (List<Price>) product.getPrice();
-//            for (Price price1:prices)
-//            {if(price.equals(price1))
-//            {
-//
-//            }}
-//        }
-//        return productByPrice;
-//    }
 
 }

@@ -1,16 +1,20 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.project.domain.Price;
 import com.project.domain.Product;
+import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.PriceService;
 import com.project.service.ProductService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
+import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -18,11 +22,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.QueryParam;
-import java.math.BigDecimal;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +42,8 @@ public class ProductResource {
 
     private final ProductService productService;
     private final PriceService priceService;
+    @Autowired
+    private EntityManager entityManager;
 
     public ProductResource(ProductService productService, PriceService priceService) {
         this.productService = productService;
@@ -59,7 +64,7 @@ public class ProductResource {
         if (product.getId() != null) {
             throw new BadRequestAlertException("A new product cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if(product.getPrice().getId() == null)
+        if (product.getPrice().getId() == null)
             priceService.save(product.getPrice());
 
         Product result = productService.save(product);
@@ -133,5 +138,22 @@ public class ProductResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @ResponseBody
+    public ResponseEntity<List<Product>> findAllByRsql(@RequestParam(value = "search") String search) {
+
+
+        // if (search == null) {
+//            Page<City> page = cityService.findAll(pageable);
+//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
+//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //} else {
+        RSQLVisitor<CriteriaQuery<Product>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Product>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<Product> query = rootNode.accept(visitor, entityManager);
+        List<Product> products = productService.findAll(query);
+
+
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
 
 }

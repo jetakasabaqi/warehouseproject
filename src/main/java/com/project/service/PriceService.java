@@ -3,9 +3,8 @@ package com.project.service;
 import com.project.domain.Price;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
-import java.math.BigDecimal;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 /**
@@ -45,9 +44,5 @@ public interface PriceService {
     void delete(Long id);
 
 
-//    List<Price> findAll(Specification<Price> spec);
-
-    List<Price> findAll(String search);
-
-    List<Price> findAll(Specification<Price> spec);
+    List<Price> findAll(CriteriaQuery<Price> query);
 }

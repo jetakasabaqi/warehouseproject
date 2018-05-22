@@ -1,14 +1,19 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.project.domain.*;
+import com.project.domain.Shipment;
+import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
+import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -16,9 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +50,9 @@ public class ShipmentResource {
     private final EmployeeService employeeService;
 
     private final StatusService statusService;
+
+    @Autowired
+    private EntityManager entityManager;
 
     private final ProductService productService;
 
@@ -74,18 +83,16 @@ public class ShipmentResource {
         if (shipment.getId() != null) {
             throw new BadRequestAlertException("A new shipment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        boolean ok=shipmentService.shipmentValidation(shipment);
-       if(ok)
-       {
-        Shipment result = shipmentService.save(shipment);
-        return ResponseEntity.created(new URI("/api/shipments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);}
-            else
-       {
-         return  ResponseEntity.badRequest()
-             .body(shipment);
-       }
+        boolean ok = shipmentService.shipmentValidation(shipment);
+        if (ok) {
+            Shipment result = shipmentService.save(shipment);
+            return ResponseEntity.created(new URI("/api/shipments/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            return ResponseEntity.badRequest()
+                .body(shipment);
+        }
     }
 
     /**
@@ -151,5 +158,38 @@ public class ShipmentResource {
         log.debug("REST request to delete Shipment : {}", id);
         shipmentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+//    @RequestMapping(method = RequestMethod.GET, value = "/shipment")
+//    @ResponseBody
+//    public List<Shipment> findAllByRsql(@RequestParam(value = "search") String search) {
+//
+//        Node rootNode = new RSQLParser().parse(search);
+//        Specification<Shipment> spec = rootNode.accept(new CustomRsqlVisitor<>());
+//
+//        return shipmentService.findAll(spec);
+//    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/shipment")
+    @ResponseBody
+    public ResponseEntity<List<Shipment>> findAllByRsql(@RequestParam(value = "search") String search) {
+//
+//        Node rootNode = new RSQLParser().parse(search);
+//        Specification<City> spec = rootNode.accept(new CustomRsqlVisitor<>());
+//
+//        return cityService.findAll(spec);
+//    }
+        // if (search == null) {
+//            Page<City> page = cityService.findAll(pageable);
+//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
+//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //} else {
+        RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
+        List<Shipment> shipments = shipmentService.findAll(query);
+
+
+        return new ResponseEntity<>(shipments, HttpStatus.OK);
     }
 }

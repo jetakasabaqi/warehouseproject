@@ -4,6 +4,9 @@ import com.project.domain.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
+
 /**
  * Service Interface for managing Status.
  */
@@ -39,4 +42,6 @@ public interface StatusService {
      * @param id the id of the entity
      */
     void delete(Long id);
+
+    List<Status> findAll(CriteriaQuery<Status> query);
 }

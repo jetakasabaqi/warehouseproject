@@ -1,14 +1,20 @@
 package com.project.service.impl;
 
-import com.project.service.ReceiverInfoService;
 import com.project.domain.ReceiverInfo;
 import com.project.repository.ReceiverInfoRepository;
+import com.project.service.ReceiverInfoService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 
 /**
@@ -21,6 +27,8 @@ public class ReceiverInfoServiceImpl implements ReceiverInfoService {
     private final Logger log = LoggerFactory.getLogger(ReceiverInfoServiceImpl.class);
 
     private final ReceiverInfoRepository receiverInfoRepository;
+    @Autowired
+    private EntityManager entityManager;
 
     public ReceiverInfoServiceImpl(ReceiverInfoRepository receiverInfoRepository) {
         this.receiverInfoRepository = receiverInfoRepository;
@@ -74,4 +82,11 @@ public class ReceiverInfoServiceImpl implements ReceiverInfoService {
         log.debug("Request to delete ReceiverInfo : {}", id);
         receiverInfoRepository.delete(id);
     }
+
+    @Override
+    public List<ReceiverInfo> findAll(CriteriaQuery<ReceiverInfo> query) {
+        return ParseRsql.findAll(query, entityManager);
+    }
+
+
 }

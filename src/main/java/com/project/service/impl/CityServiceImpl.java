@@ -3,12 +3,19 @@ package com.project.service.impl;
 import com.project.service.CityService;
 import com.project.domain.City;
 import com.project.repository.CityRepository;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 
 /**
@@ -21,6 +28,9 @@ public class CityServiceImpl implements CityService {
     private final Logger log = LoggerFactory.getLogger(CityServiceImpl.class);
 
     private final CityRepository cityRepository;
+
+    @Autowired
+    EntityManager entityManager;
 
     public CityServiceImpl(CityRepository cityRepository) {
         this.cityRepository = cityRepository;
@@ -74,4 +84,11 @@ public class CityServiceImpl implements CityService {
         log.debug("Request to delete City : {}", id);
         cityRepository.delete(id);
     }
+
+    @Override
+    public List<City> findAll(CriteriaQuery<City> query) {
+        return ParseRsql.findAll(query, entityManager);
+    }
+
+
 }

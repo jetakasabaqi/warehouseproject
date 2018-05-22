@@ -1,13 +1,14 @@
 package com.project.web.rest;
 
-import com.project.config.Constants;
 import com.codahale.metrics.annotation.Timed;
+import com.project.config.Constants;
 import com.project.domain.Employee;
 import com.project.domain.Person;
 import com.project.domain.User;
 import com.project.domain.Vendor;
 import com.project.repository.EmployeeRepository;
 import com.project.repository.UserRepository;
+import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.security.AuthoritiesConstants;
 import com.project.service.*;
 import com.project.service.dto.EmployeeDTO;
@@ -19,10 +20,13 @@ import com.project.web.rest.errors.EmailAlreadyUsedException;
 import com.project.web.rest.errors.LoginAlreadyUsedException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
+import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -31,10 +35,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST controller for managing users.
@@ -79,6 +86,8 @@ public class UserResource {
     private final PersonService personService;
 
     private final EmployeeRepository employeeRepository;
+    @Autowired
+    private EntityManager entityManager;
 
 
     public UserResource(UserRepository userRepository, UserService userService, MailService mailService, VendorService vendorService, PersonService personService, EmployeeService employeeService, EmployeeRepository employeeRepository) {
@@ -324,4 +333,23 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("A user is deleted with identifier " + login, login)).build();
     }
+
+    @ResponseBody
+    public ResponseEntity<List<User>> findAllByRsql(@RequestParam(value = "search") String search) {
+
+
+        // if (search == null) {
+//            Page<City> page = cityService.findAll(pageable);
+//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
+//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //} else {
+        RSQLVisitor<CriteriaQuery<User>, EntityManager> visitor = new JpaCriteriaQueryVisitor<User>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<User> query = rootNode.accept(visitor, entityManager);
+        List<User> users = userService.findAll(query);
+
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }
+

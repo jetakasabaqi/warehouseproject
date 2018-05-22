@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.*;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ReceiverInfoRepository extends JpaRepository<ReceiverInfo, Long> {
+public interface ReceiverInfoRepository extends JpaRepository<ReceiverInfo, Long>,JpaSpecificationExecutor {
 
 }

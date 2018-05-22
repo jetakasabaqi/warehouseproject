@@ -3,29 +3,29 @@ package com.project.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Price;
 import com.project.repository.PriceRepository;
-import com.project.rsql.CustomRsqlVisitor;
+import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.PriceService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
+import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -99,7 +99,7 @@ public class PriceResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of prices in body
      */
-    @GetMapping("/price")
+    @GetMapping("/prices")
     @Timed
     public ResponseEntity<List<Price>> getAllPrices(Pageable pageable) {
         log.debug("REST request to get a page of Prices");
@@ -136,13 +136,21 @@ public class PriceResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/prices")
     @ResponseBody
-    public List<Price> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Price>> findAllByRsql(@RequestParam(value = "search") String search) {
 
-        Node rootNode = new RSQLParser().parse(search);
-        Specification<Price> spec = rootNode.accept(new CustomRsqlVisitor<>());
 
-        return priceService.findAll(spec);
+        // if (search == null) {
+//            Page<City> page = cityService.findAll(pageable);
+//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
+//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //} else {
+        RSQLVisitor<CriteriaQuery<Price>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Price>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<Price> query = rootNode.accept(visitor, entityManager);
+        List<Price> prices = priceService.findAll(query);
+
+
+        return new ResponseEntity<>(prices, HttpStatus.OK);
     }
 }

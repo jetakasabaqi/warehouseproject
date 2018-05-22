@@ -1,14 +1,20 @@
 package com.project.service.impl;
 
-import com.project.service.WarehouseLocationService;
 import com.project.domain.WarehouseLocation;
 import com.project.repository.WarehouseLocationRepository;
+import com.project.service.WarehouseLocationService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 
 /**
@@ -21,6 +27,9 @@ public class WarehouseLocationServiceImpl implements WarehouseLocationService {
     private final Logger log = LoggerFactory.getLogger(WarehouseLocationServiceImpl.class);
 
     private final WarehouseLocationRepository warehouseLocationRepository;
+
+    @Autowired
+    private EntityManager entityManger;
 
     public WarehouseLocationServiceImpl(WarehouseLocationRepository warehouseLocationRepository) {
         this.warehouseLocationRepository = warehouseLocationRepository;
@@ -74,4 +83,10 @@ public class WarehouseLocationServiceImpl implements WarehouseLocationService {
         log.debug("Request to delete WarehouseLocation : {}", id);
         warehouseLocationRepository.delete(id);
     }
+
+    @Override
+    public List<WarehouseLocation> findAll(CriteriaQuery<WarehouseLocation> query) {
+        return ParseRsql.findAll(query, entityManger);
+    }
+
 }

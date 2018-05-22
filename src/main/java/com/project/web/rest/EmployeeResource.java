@@ -2,13 +2,18 @@ package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Employee;
+import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.EmployeeService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
+import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -16,9 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +40,8 @@ public class EmployeeResource {
     private static final String ENTITY_NAME = "employee";
 
     private final EmployeeService employeeService;
+    @Autowired
+    private EntityManager entityManager;
 
     public EmployeeResource(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -122,6 +130,24 @@ public class EmployeeResource {
         log.debug("REST request to delete Employee : {}", id);
         employeeService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    @ResponseBody
+    public ResponseEntity<List<Employee>> findAllByRsql(@RequestParam(value = "search") String search) {
+
+
+        // if (search == null) {
+//            Page<City> page = cityService.findAll(pageable);
+//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
+//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //} else {
+        RSQLVisitor<CriteriaQuery<Employee>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Employee>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<Employee> query = rootNode.accept(visitor, entityManager);
+        List<Employee> employees = employeeService.findAll(query);
+
+
+        return new ResponseEntity<>(employees, HttpStatus.OK);
     }
 }
 

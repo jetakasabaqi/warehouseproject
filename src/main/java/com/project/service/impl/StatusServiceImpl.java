@@ -1,14 +1,20 @@
 package com.project.service.impl;
 
-import com.project.service.StatusService;
 import com.project.domain.Status;
 import com.project.repository.StatusRepository;
+import com.project.service.StatusService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 
 /**
@@ -21,6 +27,9 @@ public class StatusServiceImpl implements StatusService {
     private final Logger log = LoggerFactory.getLogger(StatusServiceImpl.class);
 
     private final StatusRepository statusRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     public StatusServiceImpl(StatusRepository statusRepository) {
         this.statusRepository = statusRepository;
@@ -74,4 +83,11 @@ public class StatusServiceImpl implements StatusService {
         log.debug("Request to delete Status : {}", id);
         statusRepository.delete(id);
     }
+
+    @Override
+    public List<Status> findAll(CriteriaQuery<Status> query) {
+        return ParseRsql.findAll(query, entityManager);
+    }
+
+
 }

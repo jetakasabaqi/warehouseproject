@@ -1,11 +1,10 @@
 package com.project.service;
 
 import com.project.domain.Person;
-import com.project.domain.Price;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 /**
@@ -44,7 +43,7 @@ public interface PersonService {
      */
     void delete(Long id);
 
-    List<Person> findAll(Specification<Person> spec);
+    List<Person> findAll(CriteriaQuery<Person> query);
 
 
 }

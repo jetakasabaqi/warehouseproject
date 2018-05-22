@@ -1,8 +1,13 @@
 package com.project.service;
 
 import com.project.domain.Shipment;
+import com.project.domain.Vendor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 /**
  * Service Interface for managing Shipment.
@@ -41,4 +46,10 @@ public interface ShipmentService {
     void delete(Long id);
 
     boolean shipmentValidation(Shipment shipment) throws Exception;
+
+    List<Shipment> findAll(Specification spec);
+
+    Vendor jeta(Long id);
+
+    List<Shipment> findAll(CriteriaQuery<Shipment> query);
 }

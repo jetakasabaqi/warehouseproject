@@ -2,28 +2,29 @@ package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Person;
-import com.project.domain.Price;
-import com.project.rsql.CustomRsqlVisitor;
+import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.PersonService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
+import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,8 @@ public class PersonResource {
     private static final String ENTITY_NAME = "person";
 
     private final PersonService personService;
+    @Autowired
+    private EntityManager entityManager;
 
     public PersonResource(PersonService personService) {
         this.personService = personService;
@@ -128,13 +131,22 @@ public class PersonResource {
         personService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
-    @RequestMapping(method = RequestMethod.GET, value = "/persons")
+
     @ResponseBody
-    public List<Person> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search") String search) {
 
-        Node rootNode = new RSQLParser().parse(search);
-        Specification<Person> spec = rootNode.accept(new CustomRsqlVisitor<>());
 
-        return personService.findAll(spec);
+        // if (search == null) {
+//            Page<City> page = cityService.findAll(pageable);
+//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
+//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        //} else {
+        RSQLVisitor<CriteriaQuery<Person>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Person>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<Person> query = rootNode.accept(visitor, entityManager);
+        List<Person> personList = personService.findAll(query);
+
+
+        return new ResponseEntity<>(personList, HttpStatus.OK);
     }
 }

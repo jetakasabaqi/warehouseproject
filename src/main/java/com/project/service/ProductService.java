@@ -4,7 +4,7 @@ import com.project.domain.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.math.BigDecimal;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 /**
@@ -43,5 +43,6 @@ public interface ProductService {
      */
     void delete(Long id);
 
+    List<Product> findAll(CriteriaQuery<Product> query);
 
 }

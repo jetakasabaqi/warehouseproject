@@ -1,14 +1,22 @@
 package com.project.service.impl;
 
-import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
+import com.project.domain.Vendor;
 import com.project.repository.ShipmentRepository;
+import com.project.service.ShipmentService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 
 /**
@@ -21,6 +29,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     private final Logger log = LoggerFactory.getLogger(ShipmentServiceImpl.class);
 
     private final ShipmentRepository shipmentRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository) {
         this.shipmentRepository = shipmentRepository;
@@ -77,27 +88,46 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public boolean shipmentValidation(Shipment shipment) throws Exception {
-        boolean ok=true;
-        if(shipment.getSenderP().getId() == null && shipment.getSenderV().getId()== null){
-            ok=false;
-            throw new Exception("SenderPerson && SenderVendor  ID must not be null!"); }
-        else if (shipment.getReceiver().getId()==null){
-            ok=false;
-            throw new Exception("Receiver ID must not be null!");}
-        else if (shipment.getEmployee().getId()==null){
-            ok=false;
-            throw new Exception("Employee ID must not be null!");}
-        else if (shipment.getStatus().getId()==null){
-            ok=false;
-            throw new Exception("Status ID must not be null!");}
-        else if(shipment.getProduct().getId()==null){
-            ok=false;
-            throw new Exception("Product ID must not be null!");}
-        else if(shipment.getLocation().getId()==null){
-            ok=false;
-            throw new Exception("WarehouseLocation ID must not be null!");}
+        boolean ok = true;
+        if (shipment.getSenderP().getId() == null && shipment.getSenderV().getId() == null) {
+            ok = false;
+            throw new Exception("SenderPerson && SenderVendor  ID must not be null!");
+        } else if (shipment.getReceiver().getId() == null) {
+            ok = false;
+            throw new Exception("Receiver ID must not be null!");
+        } else if (shipment.getEmployee().getId() == null) {
+            ok = false;
+            throw new Exception("Employee ID must not be null!");
+        } else if (shipment.getStatus().getId() == null) {
+            ok = false;
+            throw new Exception("Status ID must not be null!");
+        } else if (shipment.getProduct().getId() == null) {
+            ok = false;
+            throw new Exception("Product ID must not be null!");
+        } else if (shipment.getLocation().getId() == null) {
+            ok = false;
+            throw new Exception("WarehouseLocation ID must not be null!");
+        }
 
 
         return ok;
     }
+
+    @Override
+    public List<Shipment> findAll(Specification spec) {
+        log.debug(("Request to get all shipments by " + spec));
+        return shipmentRepository.findAll(spec);
+    }
+
+    @Override
+    public Vendor jeta(Long id) {
+        return shipmentRepository.jeta(id);
+    }
+
+    @Override
+    public List<Shipment> findAll(CriteriaQuery<Shipment> query) {
+        return ParseRsql.findAll(query, entityManager);
+    }
+
+
 }
