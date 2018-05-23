@@ -10,6 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 
 /**
  * Service Implementation for managing Product.
@@ -73,5 +76,10 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
         log.debug("Request to delete Product : {}", id);
         productRepository.delete(id);
+    }
+
+    @Override
+    public List<BigDecimal> getAllShipmentsByClientId(Long person_id) {
+        return null;
     }
 }

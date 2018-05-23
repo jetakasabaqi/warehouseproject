@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -151,5 +152,15 @@ public class ShipmentResource {
         log.debug("REST request to delete Shipment : {}", id);
         shipmentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+
+    @GetMapping("/shipment/{person_id}/packages")
+    @Timed
+    public ResponseEntity<List<BigDecimal>> getShipmentsByClientId(@PathVariable Long person_id)
+    {
+        log.debug("REST request to get Shipments by Clients :{}",person_id);
+        List<BigDecimal>products=shipmentService.getAllShipmentsByClientId(person_id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(products));
     }
 }

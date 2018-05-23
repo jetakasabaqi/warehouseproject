@@ -1,8 +1,12 @@
 package com.project.service;
 
+import com.project.domain.Product;
 import com.project.domain.Shipment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Service Interface for managing Shipment.
@@ -41,4 +45,6 @@ public interface ShipmentService {
     void delete(Long id);
 
     boolean shipmentValidation(Shipment shipment) throws Exception;
+
+    List<BigDecimal> getAllShipmentsByClientId(Long person_id);
 }
