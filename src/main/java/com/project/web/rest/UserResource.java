@@ -286,13 +286,13 @@ public class UserResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body all users
      */
-    @GetMapping("/users")
-    @Timed
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/users")
+//    @Timed
+//    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
+//        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * @return a string list of the all of the roles
@@ -333,16 +333,16 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("A user is deleted with identifier " + login, login)).build();
     }
-
+    @RequestMapping(method = RequestMethod.GET, value = "/users")
     @ResponseBody
-    public ResponseEntity<List<User>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<User>> findAllByRsql(@RequestParam(value = "search",required = false) String search,Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
+         if (search == null) {
+            Page<User> page = userService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
         RSQLVisitor<CriteriaQuery<User>, EntityManager> visitor = new JpaCriteriaQueryVisitor<User>();
         final Node rootNode = new RSQLParser().parse(search);
         CriteriaQuery<User> query = rootNode.accept(visitor, entityManager);
@@ -351,5 +351,6 @@ public class UserResource {
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+}
 }
 

@@ -101,14 +101,14 @@ public class ProductResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of products in body
      */
-    @GetMapping("/products")
-    @Timed
-    public ResponseEntity<List<Product>> getAllProducts(Pageable pageable) {
-        log.debug("REST request to get a page of Products");
-        Page<Product> page = productService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/products")
+//    @Timed
+//    public ResponseEntity<List<Product>> getAllProducts(Pageable pageable) {
+//        log.debug("REST request to get a page of Products");
+//        Page<Product> page = productService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /products/:id : get the "id" product.
@@ -138,22 +138,24 @@ public class ProductResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/products")
     @ResponseBody
-    public ResponseEntity<List<Product>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Product>> findAllByRsql(@RequestParam(value = "search",required = false) String search,Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Product>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Product>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Product> query = rootNode.accept(visitor, entityManager);
-        List<Product> products = productService.findAll(query);
+        if (search == null) {
+            Page<Product> page = productService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<Product>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Product>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Product> query = rootNode.accept(visitor, entityManager);
+            List<Product> products = productService.findAll(query);
 
 
-        return new ResponseEntity<>(products, HttpStatus.OK);
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        }
+
     }
-
 }

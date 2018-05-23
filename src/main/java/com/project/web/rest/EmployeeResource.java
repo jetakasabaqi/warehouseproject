@@ -95,14 +95,14 @@ public class EmployeeResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of employees in body
      */
-    @GetMapping("/employees")
-    @Timed
-    public ResponseEntity<List<Employee>> getAllEmployees(Pageable pageable) {
-        log.debug("REST request to get a page of Employees");
-        Page<Employee> page = employeeService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employees");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/employees")
+//    @Timed
+//    public ResponseEntity<List<Employee>> getAllEmployees(Pageable pageable) {
+//        log.debug("REST request to get a page of Employees");
+//        Page<Employee> page = employeeService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employees");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /employees/:id : get the "id" employee.
@@ -131,23 +131,24 @@ public class EmployeeResource {
         employeeService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
-
+    @RequestMapping(method = RequestMethod.GET, value = "/employees")
     @ResponseBody
-    public ResponseEntity<List<Employee>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Employee>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Employee>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Employee>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Employee> query = rootNode.accept(visitor, entityManager);
-        List<Employee> employees = employeeService.findAll(query);
+        if (search == null) {
+            Page<Employee> page = employeeService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employees");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<Employee>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Employee>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Employee> query = rootNode.accept(visitor, entityManager);
+            List<Employee> employees = employeeService.findAll(query);
 
 
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+            return new ResponseEntity<>(employees, HttpStatus.OK);
+        }
     }
 }
 

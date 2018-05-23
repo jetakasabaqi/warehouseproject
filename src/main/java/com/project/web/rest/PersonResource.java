@@ -95,14 +95,14 @@ public class PersonResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of people in body
      */
-    @GetMapping("/people")
-    @Timed
-    public ResponseEntity<List<Person>> getAllPeople(Pageable pageable) {
-        log.debug("REST request to get a page of People");
-        Page<Person> page = personService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/people");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/people")
+//    @Timed
+//    public ResponseEntity<List<Person>> getAllPeople(Pageable pageable) {
+//        log.debug("REST request to get a page of People");
+//        Page<Person> page = personService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/people");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /people/:id : get the "id" person.
@@ -132,21 +132,23 @@ public class PersonResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/persons")
     @ResponseBody
-    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Person>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Person>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Person> query = rootNode.accept(visitor, entityManager);
-        List<Person> personList = personService.findAll(query);
+        if (search == null) {
+            Page<Person> page = personService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/persons");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<Person>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Person>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Person> query = rootNode.accept(visitor, entityManager);
+            List<Person> personList = personService.findAll(query);
 
 
-        return new ResponseEntity<>(personList, HttpStatus.OK);
+            return new ResponseEntity<>(personList, HttpStatus.OK);
+        }
     }
 }

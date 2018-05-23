@@ -156,7 +156,7 @@ public class PersonResourceIntTest {
         personRepository.saveAndFlush(person);
 
         // Get all the personList
-        restPersonMockMvc.perform(get("/api/people?sort=id,desc"))
+        restPersonMockMvc.perform(get("/api/persons?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(person.getId().intValue())))

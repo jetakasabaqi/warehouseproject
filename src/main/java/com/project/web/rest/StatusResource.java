@@ -96,14 +96,14 @@ public class StatusResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of statuses in body
      */
-    @GetMapping("/statuses")
-    @Timed
-    public ResponseEntity<List<Status>> getAllStatuses(Pageable pageable) {
-        log.debug("REST request to get a page of Statuses");
-        Page<Status> page = statusService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statuses");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/statuses")
+//    @Timed
+//    public ResponseEntity<List<Status>> getAllStatuses(Pageable pageable) {
+//        log.debug("REST request to get a page of Statuses");
+//        Page<Status> page = statusService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statuses");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /statuses/:id : get the "id" status.
@@ -133,21 +133,23 @@ public class StatusResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/statuses")
     @ResponseBody
-    public ResponseEntity<List<Status>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Status>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Status>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Status>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Status> query = rootNode.accept(visitor, entityManager);
-        List<Status> statuses = statusService.findAll(query);
+        if (search == null) {
+            Page<Status> page = statusService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statuses");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<Status>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Status>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Status> query = rootNode.accept(visitor, entityManager);
+            List<Status> statuses = statusService.findAll(query);
 
 
-        return new ResponseEntity<>(statuses, HttpStatus.OK);
+            return new ResponseEntity<>(statuses, HttpStatus.OK);
+        }
     }
 }

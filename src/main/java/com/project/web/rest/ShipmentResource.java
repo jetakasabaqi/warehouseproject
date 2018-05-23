@@ -123,14 +123,14 @@ public class ShipmentResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of shipments in body
      */
-    @GetMapping("/shipments")
-    @Timed
-    public ResponseEntity<List<Shipment>> getAllShipments(Pageable pageable) {
-        log.debug("REST request to get a page of Shipments");
-        Page<Shipment> page = shipmentService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/shipments")
+//    @Timed
+//    public ResponseEntity<List<Shipment>> getAllShipments(Pageable pageable) {
+//        log.debug("REST request to get a page of Shipments");
+//        Page<Shipment> page = shipmentService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /shipments/:id : get the "id" shipment.
@@ -170,26 +170,23 @@ public class ShipmentResource {
 //        return shipmentService.findAll(spec);
 //    }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/shipment")
+    @RequestMapping(method = RequestMethod.GET, value = "/shipments")
     @ResponseBody
-    public ResponseEntity<List<Shipment>> findAllByRsql(@RequestParam(value = "search") String search) {
-//
-//        Node rootNode = new RSQLParser().parse(search);
-//        Specification<City> spec = rootNode.accept(new CustomRsqlVisitor<>());
-//
-//        return cityService.findAll(spec);
-//    }
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
-        List<Shipment> shipments = shipmentService.findAll(query);
+    public ResponseEntity<List<Shipment>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        return new ResponseEntity<>(shipments, HttpStatus.OK);
+        if (search == null) {
+            Page<Shipment> page = shipmentService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
+            List<Shipment> shipments = shipmentService.findAll(query);
+
+
+            return new ResponseEntity<>(shipments, HttpStatus.OK);
+        }
     }
 }

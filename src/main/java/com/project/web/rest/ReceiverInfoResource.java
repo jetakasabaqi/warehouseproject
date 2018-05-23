@@ -95,14 +95,14 @@ public class ReceiverInfoResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of receiverInfos in body
      */
-    @GetMapping("/receiver-infos")
-    @Timed
-    public ResponseEntity<List<ReceiverInfo>> getAllReceiverInfos(Pageable pageable) {
-        log.debug("REST request to get a page of ReceiverInfos");
-        Page<ReceiverInfo> page = receiverInfoService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/receiver-infos");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/receiver-infos")
+//    @Timed
+//    public ResponseEntity<List<ReceiverInfo>> getAllReceiverInfos(Pageable pageable) {
+//        log.debug("REST request to get a page of ReceiverInfos");
+//        Page<ReceiverInfo> page = receiverInfoService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/receiver-infos");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /receiver-infos/:id : get the "id" receiverInfo.
@@ -132,21 +132,23 @@ public class ReceiverInfoResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/receivers")
     @ResponseBody
-    public ResponseEntity<List<ReceiverInfo>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<ReceiverInfo>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<ReceiverInfo>, EntityManager> visitor = new JpaCriteriaQueryVisitor<ReceiverInfo>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<ReceiverInfo> query = rootNode.accept(visitor, entityManager);
-        List<ReceiverInfo> receiverInfos = receiverInfoService.findAll(query);
+        if (search == null) {
+            Page<ReceiverInfo> page = receiverInfoService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/reveivers");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<ReceiverInfo>, EntityManager> visitor = new JpaCriteriaQueryVisitor<ReceiverInfo>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<ReceiverInfo> query = rootNode.accept(visitor, entityManager);
+            List<ReceiverInfo> receiverInfos = receiverInfoService.findAll(query);
 
 
-        return new ResponseEntity<>(receiverInfos, HttpStatus.OK);
+            return new ResponseEntity<>(receiverInfos, HttpStatus.OK);
+        }
     }
 }

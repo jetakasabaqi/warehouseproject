@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,14 +97,14 @@ public class CityResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of cities in body
      */
-    @GetMapping("/cities")
-    @Timed
-    public ResponseEntity<List<City>> getAllCities(Pageable pageable) {
-        log.debug("REST request to get a page of Cities");
-        Page<City> page = cityService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/cities")
+//    @Timed
+//    public ResponseEntity<List<City>> getAllCities(Pageable pageable) {
+//        log.debug("REST request to get a page of Cities");
+//        Page<City> page = cityService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /cities/:id : get the "id" city.
@@ -133,26 +134,22 @@ public class CityResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/city")
+    @RequestMapping(method = RequestMethod.GET, value = "/cities")
     @ResponseBody
-    public ResponseEntity<List<City>> findAllByRsql(@RequestParam(value = "search", required = false) String search) {
-//
-//        Node rootNode = new RSQLParser().parse(search);
-//        Specification<City> spec = rootNode.accept(new CustomRsqlVisitor<>());
-//
-//        return cityService.findAll(spec);
-//    }
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<City>, EntityManager> visitor = new JpaCriteriaQueryVisitor<City>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<City> query = rootNode.accept(visitor, entityManager);
-        List<City> cities = cityService.findAll(query);
+    public ResponseEntity<List<City>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
+
+        if (search == null) {
+            Page<City> page = cityService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<City>, EntityManager> visitor = new JpaCriteriaQueryVisitor<City>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<City> query = rootNode.accept(visitor, entityManager);
+            List<City> cities = cityService.findAll(query);
 
 
-        return new ResponseEntity<>(cities, HttpStatus.OK);
+            return new ResponseEntity<>(cities, HttpStatus.OK);
+        }
     }
 }

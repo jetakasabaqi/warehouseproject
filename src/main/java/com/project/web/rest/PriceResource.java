@@ -99,14 +99,14 @@ public class PriceResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of prices in body
      */
-    @GetMapping("/prices")
-    @Timed
-    public ResponseEntity<List<Price>> getAllPrices(Pageable pageable) {
-        log.debug("REST request to get a page of Prices");
-        Page<Price> page = priceService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prices");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/prices")
+//    @Timed
+//    public ResponseEntity<List<Price>> getAllPrices(Pageable pageable) {
+//        log.debug("REST request to get a page of Prices");
+//        Page<Price> page = priceService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prices");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /prices/:id : get the "id" price.
@@ -136,21 +136,23 @@ public class PriceResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/prices")
     @ResponseBody
-    public ResponseEntity<List<Price>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Price>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Price>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Price>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Price> query = rootNode.accept(visitor, entityManager);
-        List<Price> prices = priceService.findAll(query);
+        if (search == null) {
+            Page<Price> page = priceService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prices");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<Price>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Price>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Price> query = rootNode.accept(visitor, entityManager);
+            List<Price> prices = priceService.findAll(query);
 
 
-        return new ResponseEntity<>(prices, HttpStatus.OK);
+            return new ResponseEntity<>(prices, HttpStatus.OK);
+        }
     }
 }

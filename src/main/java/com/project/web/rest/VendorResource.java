@@ -95,14 +95,14 @@ public class VendorResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of vendors in body
      */
-    @GetMapping("/vendors")
-    @Timed
-    public ResponseEntity<List<Vendor>> getAllVendors(Pageable pageable) {
-        log.debug("REST request to get a page of Vendors");
-        Page<Vendor> page = vendorService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/vendors");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/vendors")
+//    @Timed
+//    public ResponseEntity<List<Vendor>> getAllVendors(Pageable pageable) {
+//        log.debug("REST request to get a page of Vendors");
+//        Page<Vendor> page = vendorService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/vendors");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /vendors/:id : get the "id" vendor.
@@ -132,21 +132,23 @@ public class VendorResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/vendors")
     @ResponseBody
-    public ResponseEntity<List<Vendor>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<Vendor>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<Vendor>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Vendor>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Vendor> query = rootNode.accept(visitor, entityManager);
-        List<Vendor> vendors = vendorService.findAll(query);
+        if (search == null) {
+            Page<Vendor> page = vendorService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/vendors");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+            } else {
+            RSQLVisitor<CriteriaQuery<Vendor>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Vendor>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<Vendor> query = rootNode.accept(visitor, entityManager);
+            List<Vendor> vendors = vendorService.findAll(query);
 
 
-        return new ResponseEntity<>(vendors, HttpStatus.OK);
+            return new ResponseEntity<>(vendors, HttpStatus.OK);
+        }
     }
 }

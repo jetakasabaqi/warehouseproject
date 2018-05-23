@@ -146,7 +146,7 @@ public class ReceiverInfoResourceIntTest {
         receiverInfoRepository.saveAndFlush(receiverInfo);
 
         // Get all the receiverInfoList
-        restReceiverInfoMockMvc.perform(get("/api/receiver-infos?sort=id,desc"))
+        restReceiverInfoMockMvc.perform(get("/api/receivers?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(receiverInfo.getId().intValue())))

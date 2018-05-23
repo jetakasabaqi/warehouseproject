@@ -100,14 +100,14 @@ public class WarehouseLocationResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of warehouseLocations in body
      */
-    @GetMapping("/warehouse-locations")
-    @Timed
-    public ResponseEntity<List<WarehouseLocation>> getAllWarehouseLocations(Pageable pageable) {
-        log.debug("REST request to get a page of WarehouseLocations");
-        Page<WarehouseLocation> page = warehouseLocationService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/warehouse-locations");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+//    @GetMapping("/warehouse-locations")
+//    @Timed
+//    public ResponseEntity<List<WarehouseLocation>> getAllWarehouseLocations(Pageable pageable) {
+//        log.debug("REST request to get a page of WarehouseLocations");
+//        Page<WarehouseLocation> page = warehouseLocationService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/warehouse-locations");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /warehouse-locations/:id : get the "id" warehouseLocation.
@@ -137,21 +137,23 @@ public class WarehouseLocationResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/warehouses")
     @ResponseBody
-    public ResponseEntity<List<WarehouseLocation>> findAllByRsql(@RequestParam(value = "search") String search) {
+    public ResponseEntity<List<WarehouseLocation>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
-        // if (search == null) {
-//            Page<City> page = cityService.findAll(pageable);
-//            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assets");
-//            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-        //} else {
-        RSQLVisitor<CriteriaQuery<WarehouseLocation>, EntityManager> visitor = new JpaCriteriaQueryVisitor<WarehouseLocation>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<WarehouseLocation> query = rootNode.accept(visitor, entityManager);
-        List<WarehouseLocation> employees = warehouseLocationService.findAll(query);
+        if (search == null) {
+            Page<WarehouseLocation> page = warehouseLocationService.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/warehouses");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            RSQLVisitor<CriteriaQuery<WarehouseLocation>, EntityManager> visitor = new JpaCriteriaQueryVisitor<WarehouseLocation>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<WarehouseLocation> query = rootNode.accept(visitor, entityManager);
+            List<WarehouseLocation> employees = warehouseLocationService.findAll(query);
 
 
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+            return new ResponseEntity<>(employees, HttpStatus.OK);
+        }
     }
 }

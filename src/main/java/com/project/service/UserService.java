@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.config.Constants;
 import com.project.domain.Authority;
+import com.project.domain.City;
 import com.project.domain.User;
 import com.project.repository.AuthorityRepository;
 import com.project.repository.UserRepository;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.time.Instant;
@@ -274,6 +276,11 @@ public class UserService {
      */
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
+    }
+
+    public Page<User> findAll(Pageable pageable){
+        return userRepository.findAll(pageable);
+
     }
 
     public List<User> findAll(CriteriaQuery<User> query) {

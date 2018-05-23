@@ -162,7 +162,7 @@ public class WarehouseLocationResourceIntTest {
         warehouseLocationRepository.saveAndFlush(warehouseLocation);
 
         // Get all the warehouseLocationList
-        restWarehouseLocationMockMvc.perform(get("/api/warehouse-locations?sort=id,desc"))
+        restWarehouseLocationMockMvc.perform(get("/api/warehouses?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(warehouseLocation.getId().intValue())))
