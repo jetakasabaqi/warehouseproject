@@ -78,7 +78,7 @@ public class ProductResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ProductResource productResource = new ProductResource(productService, priceService);
+        final ProductResource productResource = new ProductResource(productService, priceService, em);
         this.restProductMockMvc = MockMvcBuilders.standaloneSetup(productResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -160,6 +160,23 @@ public class ProductResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())));
     }
+
+    @Test
+    @Transactional
+    public void getAllProductsSearch() throws Exception {
+        // Initialize the database
+        productRepository.saveAndFlush(product);
+
+        // Get all the cityList
+        restProductMockMvc.perform(get("/api/products?search=price.price==" + product.getPrice().getPrice() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())));
+
+    }
+
+
+
 
     @Test
     @Transactional

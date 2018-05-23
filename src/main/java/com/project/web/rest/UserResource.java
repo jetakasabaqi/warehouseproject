@@ -26,7 +26,6 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -86,11 +85,11 @@ public class UserResource {
     private final PersonService personService;
 
     private final EmployeeRepository employeeRepository;
-    @Autowired
-    private EntityManager entityManager;
+
+    private final EntityManager entityManager;
 
 
-    public UserResource(UserRepository userRepository, UserService userService, MailService mailService, VendorService vendorService, PersonService personService, EmployeeService employeeService, EmployeeRepository employeeRepository) {
+    public UserResource(UserRepository userRepository, UserService userService, MailService mailService, VendorService vendorService, PersonService personService, EmployeeService employeeService, EmployeeRepository employeeRepository, EntityManager entityManager) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -99,6 +98,7 @@ public class UserResource {
         this.personService = personService;
         this.employeeRepository = employeeRepository;
         this.vendorService = vendorService;
+        this.entityManager = entityManager;
     }
 
 

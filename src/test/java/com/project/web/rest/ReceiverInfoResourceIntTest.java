@@ -73,7 +73,7 @@ public class ReceiverInfoResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ReceiverInfoResource receiverInfoResource = new ReceiverInfoResource(receiverInfoService);
+        final ReceiverInfoResource receiverInfoResource = new ReceiverInfoResource(receiverInfoService, em);
         this.restReceiverInfoMockMvc = MockMvcBuilders.standaloneSetup(receiverInfoResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -153,6 +153,22 @@ public class ReceiverInfoResourceIntTest {
             .andExpect(jsonPath("$.[*].fullName").value(hasItem(DEFAULT_FULL_NAME.toString())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].zipCode").value(hasItem(DEFAULT_ZIP_CODE.toString())));
+    }
+    @Test
+    @Transactional
+    public void getAllReceiversSearch() throws Exception {
+        // Initialize the database
+        receiverInfoRepository.saveAndFlush(receiverInfo);
+
+        // Get all the cityList
+        restReceiverInfoMockMvc.perform(get("/api/receivers?search=address==" + receiverInfo.getAddress() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(receiverInfo.getId().intValue())))
+            .andExpect(jsonPath("$.[*].fullName").value(hasItem(DEFAULT_FULL_NAME.toString())))
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
+            .andExpect(jsonPath("$.[*].zipCode").value(hasItem(DEFAULT_ZIP_CODE.toString())));
+
     }
 
     @Test

@@ -14,7 +14,6 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -42,12 +41,12 @@ public class ProductResource {
 
     private final ProductService productService;
     private final PriceService priceService;
-    @Autowired
-    private EntityManager entityManager;
+    private  final EntityManager entityManager;
 
-    public ProductResource(ProductService productService, PriceService priceService) {
+    public ProductResource(ProductService productService, PriceService priceService, EntityManager entityManager) {
         this.productService = productService;
         this.priceService = priceService;
+        this.entityManager = entityManager;
     }
 
     /**

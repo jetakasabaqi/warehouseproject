@@ -42,11 +42,11 @@ public class CityResource {
 
     private final CityService cityService;
 
-    @Autowired
-    EntityManager entityManager;
+    private final EntityManager entityManager;
 
-    public CityResource(CityService cityService) {
+    public CityResource(CityService cityService, EntityManager entityManager) {
         this.cityService = cityService;
+        this.entityManager = entityManager;
     }
 
     /**

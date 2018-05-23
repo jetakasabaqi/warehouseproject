@@ -42,13 +42,14 @@ public class PriceResource {
 
     private final PriceService priceService;
 
-    @Autowired
-    private EntityManager entityManager;
+
+    private final EntityManager entityManager;
     @Autowired
     private PriceRepository priceRepository;
 
-    public PriceResource(PriceService priceService) {
+    public PriceResource(PriceService priceService, EntityManager entityManager) {
         this.priceService = priceService;
+        this.entityManager = entityManager;
     }
 
     /**

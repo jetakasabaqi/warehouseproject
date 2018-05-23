@@ -68,7 +68,7 @@ public class PriceResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PriceResource priceResource = new PriceResource(priceService);
+        final PriceResource priceResource = new PriceResource(priceService, em);
         this.restPriceMockMvc = MockMvcBuilders.standaloneSetup(priceResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -83,9 +83,9 @@ public class PriceResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static Price createEntity(EntityManager em) {
-        Price price = new Price()
+        Price price1 = new Price()
             .price(DEFAULT_PRICE);
-        return price;
+        return price1;
     }
 
     @Before
@@ -143,6 +143,22 @@ public class PriceResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(price.getId().intValue())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())));
     }
+
+    @Test
+    @Transactional
+    public void getAllPricesSearch() throws Exception {
+        // Initialize the database
+        priceRepository.saveAndFlush(price);
+
+        // Get all the cityList
+        restPriceMockMvc.perform(get("/api/prices?search=price==" + price.getPrice() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(price.getId().intValue())))
+            .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())));
+
+    }
+
 
     @Test
     @Transactional

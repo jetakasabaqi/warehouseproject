@@ -39,6 +39,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Jeta123App.class)
 public class CityResourceIntTest {
 
+
+
     private static final String DEFAULT_CITY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_CITY_NAME = "BBBBBBBBBB";
 
@@ -67,7 +69,7 @@ public class CityResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final CityResource cityResource = new CityResource(cityService);
+        final CityResource cityResource = new CityResource(cityService, em);
         this.restCityMockMvc = MockMvcBuilders.standaloneSetup(cityResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -77,7 +79,7 @@ public class CityResourceIntTest {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -141,6 +143,20 @@ public class CityResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
             .andExpect(jsonPath("$.[*].cityName").value(hasItem(DEFAULT_CITY_NAME.toString())));
+    }
+
+    @Test
+    @Transactional
+    public void getAllCitiesSearch() throws Exception {
+        // Initialize the database
+        cityRepository.saveAndFlush(city);
+
+        // Get all the cityList
+        restCityMockMvc.perform(get("/api/cities?search=cityName==" + city.getCityName() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
+            .andExpect(jsonPath("$.[*].cityName").value(hasItem(DEFAULT_CITY_NAME)));
     }
 
     @Test

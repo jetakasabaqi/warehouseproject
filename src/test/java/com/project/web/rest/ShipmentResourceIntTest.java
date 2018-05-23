@@ -7,9 +7,7 @@ import com.project.repository.*;
 import com.project.service.*;
 import com.project.web.rest.errors.ExceptionTranslator;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -20,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.StatusResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,7 +136,7 @@ public class ShipmentResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService, personService, receiverInfoService, vendorService, employeeService, statusService, productService, warehouseLocationService);
+        final ShipmentResource shipmentResource = new ShipmentResource(shipmentService, personService, receiverInfoService, vendorService, employeeService, statusService, em, productService, warehouseLocationService);
         this.restShipmentMockMvc = MockMvcBuilders.standaloneSetup(shipmentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -303,6 +300,20 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())));
     }
 
+    @Test
+    @Transactional
+    public void getAllShipmentsSearch() throws Exception {
+        // Initialize the database
+        shipmentRepository.saveAndFlush(shipment);
+
+        // Get all the cityList
+        restShipmentMockMvc.perform(get("/api/shipments?search=senderP.tel==" + shipment.getSenderP().getTel() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())));
+
+
+    }
     @Test
     @Transactional
     public void getShipment() throws Exception {

@@ -40,11 +40,12 @@ public class PersonResource {
     private static final String ENTITY_NAME = "person";
 
     private final PersonService personService;
-    @Autowired
-    private EntityManager entityManager;
 
-    public PersonResource(PersonService personService) {
+    private final EntityManager entityManager;
+
+    public PersonResource(PersonService personService,EntityManager entityManager) {
         this.personService = personService;
+        this.entityManager=entityManager;
     }
 
     /**
@@ -139,7 +140,7 @@ public class PersonResource {
 
         if (search == null) {
             Page<Person> page = personService.findAll(pageable);
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/persons");
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/people");
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
             RSQLVisitor<CriteriaQuery<Person>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Person>();

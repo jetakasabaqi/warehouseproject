@@ -10,7 +10,6 @@ import com.project.service.CityService;
 import com.project.service.WarehouseLocationService;
 import com.project.web.rest.errors.ExceptionTranslator;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,7 +80,7 @@ public class WarehouseLocationResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final WarehouseLocationResource warehouseLocationResource = new WarehouseLocationResource(warehouseLocationService, cityService);
+        final WarehouseLocationResource warehouseLocationResource = new WarehouseLocationResource(warehouseLocationService, cityService, em);
         this.restWarehouseLocationMockMvc = MockMvcBuilders.standaloneSetup(warehouseLocationResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -168,6 +167,22 @@ public class WarehouseLocationResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(warehouseLocation.getId().intValue())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY.toString())));
+    }
+    @Test
+    @Transactional
+    public void getAllWarehousesSearch() throws Exception {
+        // Initialize the database
+        warehouseLocationRepository.saveAndFlush(warehouseLocation);
+
+        // Get all the cityList
+        restWarehouseLocationMockMvc.perform(get("/api/warehouses?search=id==" + warehouseLocation.getId() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY.toString())));
+
+
+
     }
 
     @Test

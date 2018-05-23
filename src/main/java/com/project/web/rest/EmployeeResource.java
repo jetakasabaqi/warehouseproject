@@ -40,11 +40,12 @@ public class EmployeeResource {
     private static final String ENTITY_NAME = "employee";
 
     private final EmployeeService employeeService;
-    @Autowired
-    private EntityManager entityManager;
 
-    public EmployeeResource(EmployeeService employeeService) {
+    private final EntityManager entityManager;
+
+    public EmployeeResource(EmployeeService employeeService,EntityManager entityManager) {
         this.employeeService = employeeService;
+        this.entityManager = entityManager;
     }
 
     /**

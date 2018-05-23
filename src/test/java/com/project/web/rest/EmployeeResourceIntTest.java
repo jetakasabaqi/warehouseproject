@@ -79,7 +79,7 @@ public class EmployeeResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final EmployeeResource employeeResource = new EmployeeResource(employeeService);
+        final EmployeeResource employeeResource = new EmployeeResource(employeeService,em);
         this.restEmployeeMockMvc = MockMvcBuilders.standaloneSetup(employeeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -166,7 +166,24 @@ public class EmployeeResourceIntTest {
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].age").value(hasItem(DEFAULT_AGE.toString())));
     }
+    @Test
+    @Transactional
+    public void getAllEmployeesSearch() throws Exception {
+        // Initialize the database
+        employeeRepository.saveAndFlush(employee);
 
+        // Get all the cityList
+        restEmployeeMockMvc.perform(get("/api/employees?search=name==" + employee.getName() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(employee.getId().intValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
+            .andExpect(jsonPath("$.[*].tel").value(hasItem(DEFAULT_TEL)))
+            .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
+            .andExpect(jsonPath("$.[*].age").value(hasItem(DEFAULT_AGE)));
+
+    }
     @Test
     @Transactional
     public void getEmployee() throws Exception {

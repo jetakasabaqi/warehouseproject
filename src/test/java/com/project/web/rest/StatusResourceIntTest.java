@@ -67,7 +67,7 @@ public class StatusResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final StatusResource statusResource = new StatusResource(statusService);
+        final StatusResource statusResource = new StatusResource(statusService, em);
         this.restStatusMockMvc = MockMvcBuilders.standaloneSetup(statusResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -141,6 +141,21 @@ public class StatusResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(status.getId().intValue())))
             .andExpect(jsonPath("$.[*].statusName").value(hasItem(DEFAULT_STATUS_NAME.toString())));
+    }
+    @Test
+    @Transactional
+    public void getAllStatusesSearch() throws Exception {
+        // Initialize the database
+        statusRepository.saveAndFlush(status);
+
+        // Get all the cityList
+        restStatusMockMvc.perform(get("/api/statuses?search=statusName==" + status.getStatusName() + "&sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(status.getId().intValue())))
+            .andExpect(jsonPath("$.[*].statusName").value(hasItem(DEFAULT_STATUS_NAME.toString())));
+
+
     }
 
     @Test

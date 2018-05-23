@@ -13,7 +13,6 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -51,20 +50,21 @@ public class ShipmentResource {
 
     private final StatusService statusService;
 
-    @Autowired
-    private EntityManager entityManager;
+
+    private final  EntityManager entityManager;
 
     private final ProductService productService;
 
     private final WarehouseLocationService warehouseLocationService;
 
-    public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, ProductService productService, WarehouseLocationService warehouseLocationService) {
+    public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, EntityManager entityManager, ProductService productService, WarehouseLocationService warehouseLocationService) {
         this.shipmentService = shipmentService;
         this.personService = personService;
         this.receiverInfo = receiverInfo;
         this.vendorService = vendorService;
         this.employeeService = employeeService;
         this.statusService = statusService;
+        this.entityManager = entityManager;
         this.productService = productService;
         this.warehouseLocationService = warehouseLocationService;
     }
