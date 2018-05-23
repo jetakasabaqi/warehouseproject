@@ -4,6 +4,7 @@ import com.project.domain.Product;
 import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
 import com.project.repository.ShipmentRepository;
+import com.project.service.dto.PackageDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -106,7 +107,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public List<BigDecimal> getAllShipmentsByClientId(Long person_id) {
+    public List<PackageDTO> getAllShipmentsByClientId(Long person_id) {
         return shipmentRepository.findAllBySenderPId(person_id);
     }
 }

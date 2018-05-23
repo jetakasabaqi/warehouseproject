@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.domain.Product;
 import com.project.domain.Shipment;
+import com.project.service.dto.PackageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -46,5 +47,5 @@ public interface ShipmentService {
 
     boolean shipmentValidation(Shipment shipment) throws Exception;
 
-    List<BigDecimal> getAllShipmentsByClientId(Long person_id);
+    List<PackageDTO> getAllShipmentsByClientId(Long person_id);
 }

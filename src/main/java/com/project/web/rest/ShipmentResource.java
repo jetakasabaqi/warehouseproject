@@ -3,6 +3,7 @@ package com.project.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.*;
 import com.project.service.*;
+import com.project.service.dto.PackageDTO;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -75,18 +76,16 @@ public class ShipmentResource {
         if (shipment.getId() != null) {
             throw new BadRequestAlertException("A new shipment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        boolean ok=shipmentService.shipmentValidation(shipment);
-       if(ok)
-       {
-        Shipment result = shipmentService.save(shipment);
-        return ResponseEntity.created(new URI("/api/shipments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);}
-            else
-       {
-         return  ResponseEntity.badRequest()
-             .body(shipment);
-       }
+        boolean ok = shipmentService.shipmentValidation(shipment);
+        if (ok) {
+            Shipment result = shipmentService.save(shipment);
+            return ResponseEntity.created(new URI("/api/shipments/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            return ResponseEntity.badRequest()
+                .body(shipment);
+        }
     }
 
     /**
@@ -157,10 +156,11 @@ public class ShipmentResource {
 
     @GetMapping("/shipment/{person_id}/packages")
     @Timed
-    public ResponseEntity<List<BigDecimal>> getShipmentsByClientId(@PathVariable Long person_id)
-    {
-        log.debug("REST request to get Shipments by Clients :{}",person_id);
-        List<BigDecimal>products=shipmentService.getAllShipmentsByClientId(person_id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(products));
+    public ResponseEntity<List<PackageDTO>> getShipmentsByClientId(@PathVariable Long person_id) {
+        log.debug("REST request to get Shipments by Clients :{}", person_id);
+        List<PackageDTO> results = shipmentService.getAllShipmentsByClientId(person_id);
+
+
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
     }
 }
