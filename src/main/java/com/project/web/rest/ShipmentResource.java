@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
+import com.project.service.dto.PackageDTO;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -188,5 +189,16 @@ public class ShipmentResource {
 
             return new ResponseEntity<>(shipments, HttpStatus.OK);
         }
+    }
+
+
+    @GetMapping("/shipment/{person_id}/packages")
+    @Timed
+    public ResponseEntity<List<PackageDTO>> getShipmentsByClientId(@PathVariable Long person_id) {
+        log.debug("REST request to get Shipments by Clients :{}", person_id);
+        List<PackageDTO> results = shipmentService.getAllShipmentsByClientId(person_id);
+
+
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
 
-import java.math.BigDecimal;
+
 import java.util.List;
 
 
@@ -19,4 +19,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>,JpaSpeci
 
 
 
+    List<Product> findAllById(Long person_id);
 }

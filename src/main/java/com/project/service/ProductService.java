@@ -7,6 +7,9 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 /**
  * Service Interface for managing Product.
  */
@@ -45,4 +48,6 @@ public interface ProductService {
 
     List<Product> findAll(CriteriaQuery<Product> query);
 
+
+    List<BigDecimal> getAllShipmentsByClientId(Long person_id);
 }

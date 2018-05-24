@@ -22,7 +22,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="senderp_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="senderv_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>            <column name="receiver_id" type="bigint">

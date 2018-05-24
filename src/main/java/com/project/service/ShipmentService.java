@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
+import com.project.service.dto.PackageDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -52,4 +53,6 @@ public interface ShipmentService {
     Vendor jeta(Long id);
 
     List<Shipment> findAll(CriteriaQuery<Shipment> query);
+
+    List<PackageDTO> getAllShipmentsByClientId(Long person_id);
 }

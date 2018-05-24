@@ -1,10 +1,13 @@
 package com.project.service.impl;
 
+import com.project.domain.Product;
+import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.repository.ShipmentRepository;
 import com.project.service.ShipmentService;
 import com.project.service.util.ParseRsql;
+import com.project.service.dto.PackageDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -130,4 +136,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
 
+
+    @Override
+    public List<PackageDTO> getAllShipmentsByClientId(Long person_id) {
+        return shipmentRepository.getAllRecordsBySender(person_id);
+    }
 }
