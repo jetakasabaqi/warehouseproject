@@ -94,31 +94,38 @@ public class ShipmentResourceIntTest {
     @Autowired
     private WarehouseLocationRepository warehouseLocationRepository;
     @Autowired
-    private  ReceiverInfoRepository receiverInfoRepository;
+    private ReceiverInfoRepository receiverInfoRepository;
 
-    private static final String DEFAULT_NAME="Blerim";
+    @Autowired
+    private PriceRepository priceRepository;
 
-    private static final String DEFAULT_LASTNAME="Kabashi";
+    @Autowired CityRepository cityRepository;
 
-    private static final String DEFAULT_ADDRESS="Dardania";
+    private static final String DEFAULT_NAME = "Blerim";
 
-    private static final String DEFAULT_TEL="044896571";
+    private static final String DEFAULT_LASTNAME = "Kabashi";
 
-    private static final String DEFAULT_EMAIL="BlerimKabashi@live.com";
+    private static final String DEFAULT_ADDRESS = "Dardania";
 
-    private static final String DEFAULT_AGE="35";
+    private static final String DEFAULT_TEL = "044896571";
 
-    private static final String DEFAULT_WEBSITE="www.projekti.com";
+    private static final String DEFAULT_EMAIL = "BlerimKabashi@live.com";
 
-    private static final String DEFAULT_CONTACTPERSON="artab@gmail.com";
+    private static final String DEFAULT_AGE = "35";
 
-    private static final String DEFAULT_ZIPCODE="10000";
+    private static final String DEFAULT_WEBSITE = "www.projekti.com";
 
-    private static final String DEFAULT_STATUS="Delivered";
+    private static final String DEFAULT_CONTACTPERSON = "artab@gmail.com";
+
+    private static final String DEFAULT_ZIPCODE = "10000";
+
+    private static final String DEFAULT_STATUS = "Delivered";
 
     private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
 
-    private static final String DEFAULT_COUNTRY="Kosova";
+    private static final String DEFAULT_COUNTRY = "Kosova";
+
+    private static  final String DEFAULT_CITY="Prishtina";
 
     private Employee employee;
 
@@ -134,6 +141,9 @@ public class ShipmentResourceIntTest {
 
     private WarehouseLocation warehouseLocation;
 
+    private Price price;
+
+    private City city;
 
 
     @Before
@@ -149,7 +159,7 @@ public class ShipmentResourceIntTest {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -158,18 +168,18 @@ public class ShipmentResourceIntTest {
         return shipment;
     }
 
-    public Employee createEmployee()
-    {Employee employee= new Employee()
-        .name(DEFAULT_NAME)
-        .lastName(DEFAULT_LASTNAME)
-        .tel(DEFAULT_TEL)
-        .email(DEFAULT_EMAIL)
-        .age(DEFAULT_AGE);
-    return employee;}
+    public Employee createEmployee() {
+        Employee employee = new Employee()
+            .name(DEFAULT_NAME)
+            .lastName(DEFAULT_LASTNAME)
+            .tel(DEFAULT_TEL)
+            .email(DEFAULT_EMAIL)
+            .age(DEFAULT_AGE);
+        return employee;
+    }
 
-    public Vendor createVendor()
-    {
-        Vendor senderV=new Vendor()
+    public Vendor createVendor() {
+        Vendor senderV = new Vendor()
             .firstName(DEFAULT_NAME)
             .lastName(DEFAULT_LASTNAME)
             .address(DEFAULT_ADDRESS)
@@ -179,40 +189,40 @@ public class ShipmentResourceIntTest {
         return senderV;
     }
 
-    public Person createPerson()
-    {
-        Person senderP=new Person()
+    public Person createPerson() {
+        Person senderP = new Person()
             .fullName(DEFAULT_NAME)
             .tel(DEFAULT_TEL).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE).email(DEFAULT_EMAIL);
         return senderP;
     }
-    public Status createStatus(){
-        Status status=new Status()
+
+    public Status createStatus() {
+        Status status = new Status()
             .statusName(DEFAULT_STATUS);
-       return status;
+        return status;
     }
 
-    public Price createPrice()
-    {
-        Price price=new Price().price(DEFAULT_PRICE);
+    public Price createPrice() {
+        Price price = new Price().price(DEFAULT_PRICE);
         return price;
     }
 
-    public Product createProduct()
-    {
-        Product product=new Product();
-        return  product;
+    public Product createProduct() {
+        Product product = new Product();
+        return product;
     }
 
-    public ReceiverInfo createReceiver()
-    {
-        ReceiverInfo receiverInfo=new ReceiverInfo().fullName(DEFAULT_NAME).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE);
+    public ReceiverInfo createReceiver() {
+        ReceiverInfo receiverInfo = new ReceiverInfo().fullName(DEFAULT_NAME).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE);
         return receiverInfo;
     }
-
-    public WarehouseLocation createWarehouseLoc()
-    {
-        WarehouseLocation warehouseLocation=new WarehouseLocation().address(DEFAULT_ADDRESS).country(DEFAULT_COUNTRY);
+  public City createCity()
+  {
+      City city=new City().cityName(DEFAULT_CITY);
+      return city;
+  }
+    public WarehouseLocation createWarehouseLoc() {
+        WarehouseLocation warehouseLocation = new WarehouseLocation().address(DEFAULT_ADDRESS).country(DEFAULT_COUNTRY);
         return warehouseLocation;
 
     }
@@ -221,26 +231,38 @@ public class ShipmentResourceIntTest {
     public void initTest() {
         shipment = createEntity(em);
 
-        employee=createEmployee();
+        employee = createEmployee();
         employeeRepository.save(employee);
 
-        vendor=createVendor();
+        vendor = createVendor();
         vendorRepository.save(vendor);
 
-        person=createPerson();
+        person = createPerson();
         personRepository.save(person);
 
-        status=createStatus();
+        status = createStatus();
         statusRepository.save(status);
 
-        product=createProduct();
+        price=createPrice();
+        priceRepository.save(price);
+
+
+
+        product = createProduct();
         productRepository.save(product);
 
-        receiverInfo=createReceiver();
+        product.setPrice(price);
+
+        receiverInfo = createReceiver();
         receiverInfoRepository.save(receiverInfo);
 
-        warehouseLocation=createWarehouseLoc();
+        city=createCity();
+        cityRepository.save(city);
+
+        warehouseLocation = createWarehouseLoc();
         warehouseLocationRepository.save(warehouseLocation);
+
+       warehouseLocation.setCity(city);
 
         shipment.setStatus(status);
         shipment.setSenderV(vendor);
@@ -300,7 +322,52 @@ public class ShipmentResourceIntTest {
         restShipmentMockMvc.perform(get("/api/shipments?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())))
+            .andExpect(jsonPath("$.[*].senderP.id").value(hasItem(shipment.getSenderP().getId().intValue())))
+           .andExpect(jsonPath("$.[*].senderP.fullName").value(hasItem(shipment.getSenderP().getFullName())))
+            .andExpect(jsonPath("$.[*].senderP.tel").value(hasItem(shipment.getSenderP().getTel())))
+            .andExpect(jsonPath("$.[*].senderP.address").value(hasItem(shipment.getSenderP().getAddress())))
+            .andExpect(jsonPath("$.[*].senderP.zipCode").value(hasItem(shipment.getSenderP().getZipCode())))
+            .andExpect(jsonPath("$.[*].senderP.email").value(hasItem(shipment.getSenderP().getEmail())))
+            .andExpect(jsonPath("$.[*].receiver.id").value(hasItem(shipment.getReceiver().getId().intValue())))
+            .andExpect(jsonPath("$.[*].receiver.fullName").value(hasItem(shipment.getReceiver().getFullName())))
+            .andExpect(jsonPath("$.[*].receiver.address").value(hasItem(shipment.getReceiver().getAddress())))
+            .andExpect(jsonPath("$.[*].receiver.zipCode").value(hasItem(shipment.getReceiver().getZipCode())))
+            .andExpect(jsonPath("$.[*].employee.id").value(hasItem(shipment.getEmployee().getId().intValue())))
+            .andExpect(jsonPath("$.[*].employee.name").value(hasItem(shipment.getEmployee().getName())))
+            .andExpect(jsonPath("$.[*].employee.lastName").value(hasItem(shipment.getEmployee().getLastName())))
+            .andExpect(jsonPath("$.[*].employee.email").value(hasItem(shipment.getEmployee().getEmail())))
+            .andExpect(jsonPath("$.[*].employee.age").value(hasItem(shipment.getEmployee().getAge())))
+            .andExpect(jsonPath("$.[*].status.id").value(hasItem(shipment.getStatus().getId().intValue())))
+            .andExpect(jsonPath("$.[*].status.statusName").value(hasItem(shipment.getStatus().getStatusName())))
+            .andExpect(jsonPath("$.[*].product.id").value(hasItem(shipment.getProduct().getId().intValue())))
+            .andExpect(jsonPath("$.[*].product.price.id").value(hasItem(shipment.getProduct().getPrice().getId().intValue())))
+            .andExpect(jsonPath("$.[*].location.id").value(hasItem(shipment.getLocation().getId().intValue())))
+            .andExpect(jsonPath("$.[*].location.address").value(hasItem(shipment.getLocation().getAddress())))
+            .andExpect(jsonPath("$.[*].location.country").value(hasItem(shipment.getLocation().getCountry())))
+            .andExpect(jsonPath("$.[*].location.city.id").value(hasItem(shipment.getLocation().getCity().getId().intValue())))
+            .andExpect(jsonPath("$.[*].location.city.cityName").value(hasItem(shipment.getLocation().getCity().getCityName())))
+        ;
+    }
+
+    @Test
+    @Transactional
+    public void getAllPackagesByClientId() throws Exception {
+        // Initialize the database
+        shipmentRepository.saveAndFlush(shipment);
+
+        // Get all the shipmentList
+        restShipmentMockMvc.perform(get("/api/shipment/{personId}/packages", shipment.getSenderP().getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].productId").value((hasItem(shipment.getProduct().getId().intValue()))))
+            .andExpect(jsonPath("$.[*].statusId").value((hasItem(shipment.getStatus().getId().intValue()))))
+            .andExpect(jsonPath("$.[*].receiverId").value((hasItem(shipment.getReceiver().getId().intValue()))))
+            .andExpect(jsonPath("$.[*].priceId").value((hasItem(shipment.getProduct().getPrice().getId().intValue()))))
+            .andExpect(jsonPath("$.[*].statusName").value((hasItem(shipment.getStatus().getStatusName()))))
+            .andExpect(jsonPath("$.[*].receiverFullName").value((hasItem(shipment.getReceiver().getFullName()))))
+            .andExpect(jsonPath("$.[*].receiverAddress").value((hasItem(shipment.getReceiver().getAddress()))))
+            .andExpect(jsonPath("$.[*].receiverZipCode").value((hasItem(shipment.getReceiver().getZipCode()))));
     }
 
     @Test

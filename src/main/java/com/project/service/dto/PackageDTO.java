@@ -35,6 +35,19 @@ public class PackageDTO {
         this.receiverAddress=shipment.getReceiver().getAddress();
         this.receiverZipCode=shipment.getReceiver().getZipCode();
     }
+    public  PackageDTO(Long productId,Long statusId,long receiverId,long priceId,String statusName, String receiverFullName, String receiverAddress, String receiverZipCode,BigDecimal price)
+    {
+        this.productId=productId;
+        this.statusId=statusId;
+        this.receiverId=receiverId;
+        this.priceId=priceId;
+        this.statusName=statusName;
+        this.receiverFullName=receiverFullName;
+        this.receiverAddress=receiverAddress;
+        this.receiverZipCode=receiverZipCode;
+        this.price=price;
+
+    }
 
     public Long getProductId() {
         return productId;

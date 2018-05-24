@@ -108,6 +108,6 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public List<PackageDTO> getAllShipmentsByClientId(Long person_id) {
-        return shipmentRepository.findAllBySenderPId(person_id);
+        return shipmentRepository.getAllRecordsBySender(person_id);
     }
 }

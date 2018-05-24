@@ -20,13 +20,22 @@ import java.util.List;
 @Repository
 public interface ShipmentRepository extends JpaRepository<Shipment, Long> {
 
-    @Query("select new com.project.service.dto.PackageDTO(p.id, s.id, r.id, pr.id, s.statusName, r.fullName, r.address, r.zipCode)"+
-        "from Shipment sh " +
-        "inner join Product p on sh.product.id = p.id "+
-        "inner join Receiver r on sh.receiver.id = r.id "+
-        "inner join Status s on sh.status.id = s.id  "+
-        "inner join Price pr on p.price.id = pr.id "+
-        "where senderp_id =:senderp_id")
+//    @Query("select new com.project.service.dto.PackageDTO(p.id, s.id, r.id, pr.id, s.statusName, r.fullName, r.address, r.zipCode)"+
+//        "from Shipment sh " +
+//        "inner join Receiver r on sh.receiver.id = r.id "+
+//        "inner join Status s on sh.status.id = s.id  "+
+//        "inner join Product p on sh.product.id = p.id " +
+//        "inner join Price pr on p.price.id = pr.id "+
+//        "where senderp_id =:senderp_id")
+//    List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
+
+    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pr.price)"+
+    "from Shipment sh" +
+    " inner join sh.status s "+
+    " inner join sh.receiver r"+
+    " inner join sh.product p" +
+    " inner join p.price pr"+
+    " where senderp_id=:senderp_id")
     List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
 
 }
