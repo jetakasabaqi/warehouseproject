@@ -284,7 +284,7 @@ public class UserService {
     }
 
     public List<User> findAll(CriteriaQuery<User> query) {
-        return ParseRsql.findAll(query, entityManager);
+        return (List<User>) ParseRsql.findAll(query, entityManager);
     }
 
 }

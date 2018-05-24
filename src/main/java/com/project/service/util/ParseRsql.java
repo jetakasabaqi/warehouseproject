@@ -1,5 +1,8 @@
 package com.project.service.util;
 
+import com.project.domain.Shipment;
+import com.project.service.dto.PackageDTO;
+
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -11,5 +14,9 @@ public class ParseRsql {
     }
 
 
+    public static PackageDTO findAll(List<PackageDTO> packageDTOS, CriteriaQuery<PackageDTO> query, EntityManager entityManager) {
 
+        return entityManager.createQuery(query).getSingleResult();
+
+    }
 }

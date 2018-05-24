@@ -55,4 +55,9 @@ public interface ShipmentService {
     List<Shipment> findAll(CriteriaQuery<Shipment> query);
 
     List<PackageDTO> getAllShipmentsByClientId(Long person_id);
+
+    PackageDTO findOnePackage(CriteriaQuery<PackageDTO> query);
+
+
+    PackageDTO getShipmentsByClientIdAndProductID(Long productid, Long person_id);
 }

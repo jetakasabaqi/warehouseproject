@@ -1,11 +1,9 @@
 package com.project.service.impl;
 
-import com.project.domain.Product;
 import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.repository.ShipmentRepository;
-import com.project.service.ShipmentService;
 import com.project.service.util.ParseRsql;
 import com.project.service.dto.PackageDTO;
 import org.slf4j.Logger;
@@ -19,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -132,13 +127,24 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Override
     public List<Shipment> findAll(CriteriaQuery<Shipment> query) {
-        return ParseRsql.findAll(query, entityManager);
+        return ParseRsql.findAll(query,entityManager);
     }
-
 
 
     @Override
     public List<PackageDTO> getAllShipmentsByClientId(Long person_id) {
         return shipmentRepository.getAllRecordsBySender(person_id);
     }
+
+    @Override
+    public PackageDTO findOnePackage( CriteriaQuery<PackageDTO> query) {
+        return (PackageDTO) ParseRsql.findAll(query,entityManager);
+    }
+
+    @Override
+    public PackageDTO getShipmentsByClientIdAndProductID(Long productid, Long person_id) {
+        return shipmentRepository.getAllByPersonAndProduct(productid,person_id);
+    }
+
+
 }

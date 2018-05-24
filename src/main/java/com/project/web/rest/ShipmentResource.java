@@ -52,7 +52,7 @@ public class ShipmentResource {
     private final StatusService statusService;
 
 
-    private final  EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private final ProductService productService;
 
@@ -118,20 +118,6 @@ public class ShipmentResource {
             .body(result);
     }
 
-    /**
-     * GET  /shipments : get all the shipments.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of shipments in body
-     */
-//    @GetMapping("/shipments")
-//    @Timed
-//    public ResponseEntity<List<Shipment>> getAllShipments(Pageable pageable) {
-//        log.debug("REST request to get a page of Shipments");
-//        Page<Shipment> page = shipmentService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /shipments/:id : get the "id" shipment.
@@ -161,19 +147,10 @@ public class ShipmentResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/shipment")
-//    @ResponseBody
-//    public List<Shipment> findAllByRsql(@RequestParam(value = "search") String search) {
-//
-//        Node rootNode = new RSQLParser().parse(search);
-//        Specification<Shipment> spec = rootNode.accept(new CustomRsqlVisitor<>());
-//
-//        return shipmentService.findAll(spec);
-//    }
 
     @RequestMapping(method = RequestMethod.GET, value = "/shipments")
     @ResponseBody
-    public ResponseEntity<List<Shipment>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Shipment>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {
@@ -201,4 +178,30 @@ public class ShipmentResource {
 
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/shipment/{person_id}/package")
+    @ResponseBody
+    public ResponseEntity<PackageDTO> findOnePackage(@RequestParam(value = "search") String search, @PathVariable(value = "person_id") Long person_id) {
+
+
+        RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
+        final Node rootNode = new RSQLParser().parse(search);
+        CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
+        List<Shipment> shipments = shipmentService.findAll(query);
+        if (shipments.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Long productid = shipments.get(0).getProduct().getId();
+
+        PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(productid, person_id);
+
+
+        return new ResponseEntity<>(packageDTO, HttpStatus.OK);
+    }
+
+
+
+
 }
+
