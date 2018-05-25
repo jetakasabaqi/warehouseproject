@@ -22,7 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -179,27 +181,43 @@ public class ShipmentResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/shipment/{person_id}/package")
+//    @RequestMapping(method = RequestMethod.GET, value = "/shipment/{person_id}/package")
+//    @ResponseBody
+//    public ResponseEntity<PackageDTO> findOnePackage(@RequestParam(value = "search") String search, @PathVariable(value = "person_id") Long person_id) {
+//
+//
+//        RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
+//        final Node rootNode = new RSQLParser().parse(search);
+//        CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
+//        List<Shipment> shipments = shipmentService.findAll(query);
+//        if (shipments.size() == 0) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//
+//        Long productid = shipments.get(0).getProduct().getId();
+//
+//        PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(productid, person_id);
+//
+//
+//        return new ResponseEntity<>(packageDTO, HttpStatus.OK);
+//    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "shipment/{client_id}/package")
     @ResponseBody
-    public ResponseEntity<PackageDTO> findOnePackage(@RequestParam(value = "search") String search, @PathVariable(value = "person_id") Long person_id) {
+    public ResponseEntity<PackageDTO> getOnePackage(@RequestParam(value = "product.id",required = false) Long package_id,@PathVariable(value = "client_id") Long client_id)
+    {
 
 
-        RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
-        List<Shipment> shipments = shipmentService.findAll(query);
-        if (shipments.size() == 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
 
-        Long productid = shipments.get(0).getProduct().getId();
 
-        PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(productid, person_id);
+
+
+            PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(package_id, client_id);
 
 
         return new ResponseEntity<>(packageDTO, HttpStatus.OK);
-    }
 
+    }
 
 
 

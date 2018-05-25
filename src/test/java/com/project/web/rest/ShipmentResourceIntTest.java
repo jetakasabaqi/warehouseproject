@@ -366,7 +366,17 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.[*].receiverAddress").value((hasItem(shipment.getReceiver().getAddress()))))
             .andExpect(jsonPath("$.[*].receiverZipCode").value((hasItem(shipment.getReceiver().getZipCode()))));
     }
+     @Test
+     @Transactional
+     public void getOnePackage() throws Exception
+     {
+         shipmentRepository.saveAndFlush(shipment);
 
+         restShipmentMockMvc.perform(get("/api/shipment/{client_id}/package?product.id="+shipment.getProduct().getId().intValue(),shipment.getSenderP().getId().intValue()))
+             .andExpect(jsonPath("productId").value((hasItem(shipment.getProduct().getId().intValue()))));
+
+
+     }
     @Test
     @Transactional
     public void getAllShipmentsSearch() throws Exception {
