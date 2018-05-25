@@ -3,6 +3,7 @@ package com.project.service;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.service.dto.PackageDTO;
+import com.project.service.dto.PackageStatusDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -55,4 +56,6 @@ public interface ShipmentService {
     List<Shipment> findAll(CriteriaQuery<Shipment> query);
 
     List<PackageDTO> getAllShipmentsByClientId(Long person_id);
+
+    PackageStatusDTO getPackageStatusDetails(Long person_id, Long package_id);
 }

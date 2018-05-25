@@ -5,6 +5,7 @@ import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
 import com.project.service.dto.PackageDTO;
+import com.project.service.dto.PackageStatusDTO;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -200,5 +202,14 @@ public class ShipmentResource {
 
 
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
+    }
+
+    @GetMapping("/shipment/{person_id}/package-status")
+    @Timed
+    public ResponseEntity<PackageStatusDTO> getPackageStatusDetails(@PathVariable(value = "person_id") Long person_id,@RequestParam(value = "product.id") Long packageId )
+    {
+        PackageStatusDTO packageStatusDTO=shipmentService.getPackageStatusDetails(person_id,packageId);
+
+        return  new ResponseEntity<>(packageStatusDTO,HttpStatus.OK);
     }
 }
