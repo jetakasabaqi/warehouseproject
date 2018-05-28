@@ -3,6 +3,7 @@ package com.project.service;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.service.dto.PackageDTO;
+import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,4 +64,6 @@ public interface ShipmentService {
     PackageDTO getShipmentsByClientIdAndProductID(Long productid, Long person_id);
 
     PackageStatusDTO getPackageStatusDetails(Long person_id, Long package_id);
+
+    PackageInfoDTO getPackageInfo(Long person_id, Long product_id);
 }

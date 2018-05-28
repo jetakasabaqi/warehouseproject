@@ -3,12 +3,14 @@ package com.project.repository;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
+import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
 import org.springframework.data.repository.query.Param;
 import com.project.service.dto.PackageDTO;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 import java.util.List;
@@ -26,14 +28,8 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
     @Query("select sh.senderV from Shipment sh inner join Vendor v on sh.senderV.id =:id")
     Vendor jeta(@Param("id") Long id);
 
-//    @Query("select new com.project.service.dto.PackageDTO(p.id, s.id, r.id, pr.id, s.statusName, r.fullName, r.address, r.zipCode)"+
-//        "from Shipment sh " +
-//        "inner join Receiver r on sh.receiver.id = r.id "+
-//        "inner join Status s on sh.status.id = s.id  "+
-//        "inner join Product p on sh.product.id = p.id " +
-//        "inner join Price pr on p.price.id = pr.id "+
-//        "where senderp_id =:senderp_id")
-//    List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
+
+
 
     @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pr.price)" +
         "from Shipment sh" +
@@ -62,4 +58,13 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         " inner join p.price pr" +
         " where senderp_id=:senderp_id and p.id=:productId")
     PackageStatusDTO getPackageDetails(@Param("senderp_id") Long senderp_id,@Param("productId") Long productid);
+
+    @Query("select new com.project.service.dto.PackageInfoDTO(p.id,pr.price,d.id,d.name,d.email,d.tel,c.id,c.name,c.email,c.tel)" +
+        " from Shipment  sh" +
+        " inner join Employee d on (sh.deliverEmployee.id = d.id) "+
+        " inner join Employee c on (sh.contactEmployee.id = c.id) "+
+        " inner join sh.product p"+
+        " inner join p.price pr "+
+        "where senderp_id=:person_id and p.id=:product_id")
+    PackageInfoDTO getPackageInfo(@Param("person_id") Long person_id,@Param("product_id") Long product_id);
 }

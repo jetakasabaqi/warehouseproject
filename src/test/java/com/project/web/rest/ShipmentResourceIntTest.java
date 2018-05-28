@@ -124,7 +124,9 @@ public class ShipmentResourceIntTest {
 
     private static  final String DEFAULT_CITY="Prishtina";
 
-    private Employee employee;
+    private Employee deliverEmployee;
+
+    private Employee contactEmployee;
 
     private Vendor vendor;
 
@@ -165,16 +167,24 @@ public class ShipmentResourceIntTest {
         return shipment;
     }
 
-    public Employee createEmployee() {
-        Employee employee = new Employee()
+    public Employee createDeliverEmployee() {
+        Employee deliveremployee = new Employee()
             .name(DEFAULT_NAME)
             .lastName(DEFAULT_LASTNAME)
             .tel(DEFAULT_TEL)
             .email(DEFAULT_EMAIL)
             .age(DEFAULT_AGE);
-        return employee;
+        return deliveremployee;
     }
-
+    public Employee createContactEmployee() {
+        Employee contactemployee = new Employee()
+            .name(DEFAULT_NAME)
+            .lastName(DEFAULT_LASTNAME)
+            .tel(DEFAULT_TEL)
+            .email(DEFAULT_EMAIL)
+            .age(DEFAULT_AGE);
+        return contactemployee;
+    }
     public Vendor createVendor() {
         Vendor senderV = new Vendor()
             .firstName(DEFAULT_NAME)
@@ -228,8 +238,11 @@ public class ShipmentResourceIntTest {
     public void initTest() {
         shipment = createEntity(em);
 
-        employee = createEmployee();
-        employeeRepository.save(employee);
+        deliverEmployee = createDeliverEmployee();
+        employeeRepository.save(deliverEmployee);
+
+        contactEmployee = createContactEmployee();
+        employeeRepository.save(contactEmployee);
 
         vendor = createVendor();
         vendorRepository.save(vendor);
@@ -267,7 +280,8 @@ public class ShipmentResourceIntTest {
         shipment.setReceiver(receiverInfo);
         shipment.setProduct(product);
         shipment.setLocation(warehouseLocation);
-        shipment.setDeliverEmployee(employee);
+        shipment.setDeliverEmployee(deliverEmployee);
+        shipment.setContactEmployee(contactEmployee);
 
 
     }
@@ -330,11 +344,16 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.[*].receiver.fullName").value(hasItem(shipment.getReceiver().getFullName())))
             .andExpect(jsonPath("$.[*].receiver.address").value(hasItem(shipment.getReceiver().getAddress())))
             .andExpect(jsonPath("$.[*].receiver.zipCode").value(hasItem(shipment.getReceiver().getZipCode())))
-            .andExpect(jsonPath("$.[*].employee.id").value(hasItem(shipment.getDeliverEmployee().getId().intValue())))
-            .andExpect(jsonPath("$.[*].employee.name").value(hasItem(shipment.getDeliverEmployee().getName())))
-            .andExpect(jsonPath("$.[*].employee.lastName").value(hasItem(shipment.getDeliverEmployee().getLastName())))
-            .andExpect(jsonPath("$.[*].employee.email").value(hasItem(shipment.getDeliverEmployee().getEmail())))
-            .andExpect(jsonPath("$.[*].employee.age").value(hasItem(shipment.getDeliverEmployee().getAge())))
+            .andExpect(jsonPath("$.[*].deliverEmployee.id").value(hasItem(shipment.getDeliverEmployee().getId().intValue())))
+            .andExpect(jsonPath("$.[*].deliverEmployee.name").value(hasItem(shipment.getDeliverEmployee().getName())))
+            .andExpect(jsonPath("$.[*].deliverEmployee.lastName").value(hasItem(shipment.getDeliverEmployee().getLastName())))
+            .andExpect(jsonPath("$.[*].deliverEmployee.email").value(hasItem(shipment.getDeliverEmployee().getEmail())))
+            .andExpect(jsonPath("$.[*].deliverEmployee.age").value(hasItem(shipment.getDeliverEmployee().getAge())))
+            .andExpect(jsonPath("$.[*].contactEmployee.id").value(hasItem(shipment.getContactEmployee().getId().intValue())))
+            .andExpect(jsonPath("$.[*].contactEmployee.name").value(hasItem(shipment.getContactEmployee().getName())))
+            .andExpect(jsonPath("$.[*].contactEmployee.lastName").value(hasItem(shipment.getContactEmployee().getLastName())))
+            .andExpect(jsonPath("$.[*].contactEmployee.email").value(hasItem(shipment.getContactEmployee().getEmail())))
+            .andExpect(jsonPath("$.[*].contactEmployee.age").value(hasItem(shipment.getContactEmployee().getAge())))
             .andExpect(jsonPath("$.[*].status.id").value(hasItem(shipment.getStatus().getId().intValue())))
             .andExpect(jsonPath("$.[*].status.statusName").value(hasItem(shipment.getStatus().getStatusName())))
             .andExpect(jsonPath("$.[*].product.id").value(hasItem(shipment.getProduct().getId().intValue())))
@@ -431,6 +450,25 @@ public class ShipmentResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(shipment.getId().intValue()));
+    }
+
+    @Test
+    @Transactional
+    public void getShipmentInfo () throws Exception
+    {
+        shipmentRepository.saveAndFlush(shipment);
+
+        restShipmentMockMvc.perform(get("/api/shipment/{person_id}/package-info?product="+shipment.getProduct().getId().intValue(),shipment.getSenderP().getId().intValue()))
+            .andExpect(status().isOk())
+          //  .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.productId").value(shipment.getProduct().getId().intValue()))
+            .andExpect(jsonPath("$.deliver_employeeId").value(shipment.getDeliverEmployee().getId().intValue()))
+            .andExpect(jsonPath("$.deliver_employeeName").value(shipment.getDeliverEmployee().getName()))
+            .andExpect(jsonPath("$.deliver_employeeEmail").value(shipment.getDeliverEmployee().getEmail()))
+            .andExpect(jsonPath("$.deliverEmployee_tel").value(shipment.getDeliverEmployee().getTel()))
+            .andExpect(jsonPath("$.contact_employeeId").value(shipment.getContactEmployee().getId().intValue()))
+            .andExpect(jsonPath("$.contact_employeeEmail").value(shipment.getContactEmployee().getEmail()))
+            .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()));
     }
 
     @Test

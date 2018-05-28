@@ -19,6 +19,10 @@ public class EmployeeType {
     @Column(name = "type")
     private String type;
 
+
+    public EmployeeType()
+    {}
+
     public EmployeeType(String type) {
         this.type = type;
     }

@@ -5,6 +5,7 @@ import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
 import com.project.service.dto.PackageDTO;
+import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
@@ -212,6 +213,18 @@ public class ShipmentResource {
         PackageStatusDTO packageStatusDTO=shipmentService.getPackageStatusDetails(person_id,packageId);
 
         return  new ResponseEntity<>(packageStatusDTO,HttpStatus.OK);
+    }
+
+
+    @GetMapping("/shipment/{person_id}/package-info")
+    @Timed
+    public ResponseEntity<PackageInfoDTO> getPackageInfo(@PathVariable(value="person_id") Long person_id, @RequestParam(value = "product") Long product_id)
+    {
+       PackageInfoDTO packageInfoDTO=shipmentService.getPackageInfo(person_id,product_id);
+
+
+
+        return new ResponseEntity<>(packageInfoDTO,HttpStatus.OK);
     }
 }
 

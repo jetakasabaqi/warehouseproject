@@ -41,12 +41,12 @@ public class Employee implements Serializable {
     @Column(name = "age")
     private String age;
 
-    @OneToOne()
-    @JoinColumn (name="id",referencedColumnName = "employeeTypeId")
+    @OneToOne
+    @JoinColumn (name="type",referencedColumnName = "id")
     private EmployeeType type;
 
-    @OneToOne()
-    @JoinColumn(name="id",referencedColumnName = "userId")
+    @OneToOne
+    @JoinColumn(name="user_id",referencedColumnName = "id")
     private User user;
 
     public Employee()

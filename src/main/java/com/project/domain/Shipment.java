@@ -1,5 +1,6 @@
 package com.project.domain;
 
+import org.checkerframework.common.reflection.qual.ClassBound;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -36,12 +37,13 @@ public class Shipment implements Serializable {
     private ReceiverInfo receiver;
 
     @OneToOne
-    @JoinColumn(unique = true)
+    @JoinColumn(name="employee_id",referencedColumnName = "id")
     private Employee deliverEmployee;
 
     @OneToOne
-    @JoinColumn(unique = true)
+    @JoinColumn(name="contact_id",referencedColumnName = "id")
     private Employee contactEmployee;
+
     @OneToOne
     @JoinColumn(unique = true)
     private Status status;
