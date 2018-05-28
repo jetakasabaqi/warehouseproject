@@ -45,11 +45,12 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
     List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
 
 
-    @Query("select new com.project.service.dto.PackageStatusDTO(p.id,s.id,pr.id,s.statusName,pr.price)" +
+    @Query("select new com.project.service.dto.PackageStatusDTO(p.id,pr.id,s.id,e.id,e.name,s.statusName,pr.price)" +
         "from Shipment sh " +
+        " inner join sh.employee e "+
         " inner join sh.status s" +
         " inner join sh.product p" +
         " inner join p.price pr" +
-        " where senderp_id=?1 and p.id=?2")
-    PackageStatusDTO getPackageDetails(Long senderp_id, Long productid);
+        " where senderp_id=:senderp_id and p.id=:productId")
+    PackageStatusDTO getPackageDetails(@Param("senderp_id") Long senderp_id,@Param("productId") Long productid);
 }

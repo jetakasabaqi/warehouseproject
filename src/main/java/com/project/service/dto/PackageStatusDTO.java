@@ -12,15 +12,23 @@ public class PackageStatusDTO {
 
     private Long statusId;
 
+    private Long employeeId;
+
+    private String employeeName;
+
     private String statusName;
 
     private BigDecimal price;
 
 
-    public PackageStatusDTO(Long productId, Long priceId, Long statusId, String statusName, BigDecimal price) {
+
+
+    public PackageStatusDTO(Long productId, Long priceId, Long statusId,Long employeeId,String employeeName, String statusName, BigDecimal price) {
         this.productId = productId;
         this.priceId = priceId;
         this.statusId = statusId;
+        this.employeeId=employeeId;
+        this.employeeName=employeeName;
         this.statusName = statusName;
         this.price = price;
     }
@@ -47,6 +55,22 @@ public class PackageStatusDTO {
 
     public void setStatusId(Long statusId) {
         this.statusId = statusId;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
     public String getStatusName() {
