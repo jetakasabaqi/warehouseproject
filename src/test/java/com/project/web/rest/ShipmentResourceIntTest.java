@@ -400,6 +400,26 @@ public class ShipmentResourceIntTest {
 
 
     }
+
+    @Test
+    @Transactional
+    public void getShipmentStatusDetails() throws Exception
+       {
+           shipmentRepository.saveAndFlush(shipment);
+
+           restShipmentMockMvc.perform(get("/api/shipment/{client_id}/package-status?product.id="+shipment.getProduct().getId().intValue(),shipment.getSenderP().getId().intValue()))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+               .andExpect(jsonPath("$.productId").value(shipment.getProduct().getId().intValue()))
+               .andExpect(jsonPath("$.priceId").value(shipment.getProduct().getPrice().getId().intValue()))
+               .andExpect(jsonPath("$.statusId").value(shipment.getStatus().getId().intValue()))
+               .andExpect(jsonPath("$.employeeId").value(shipment.getEmployee().getId().intValue()))
+               .andExpect(jsonPath("$.employeeName").value(shipment.getEmployee().getName()))
+               .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()));
+       }
+
+
+
     @Test
     @Transactional
     public void getShipment() throws Exception {

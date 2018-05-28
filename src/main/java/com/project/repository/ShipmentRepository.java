@@ -3,6 +3,7 @@ package com.project.repository;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
+import com.project.service.dto.PackageStatusDTO;
 import org.springframework.data.repository.query.Param;
 import com.project.service.dto.PackageDTO;
 import org.springframework.stereotype.Repository;
@@ -34,13 +35,13 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
 //        "where senderp_id =:senderp_id")
 //    List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
 
-    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pr.price)"+
-    "from Shipment sh" +
-    " inner join sh.status s "+
-    " inner join sh.receiver r"+
-    " inner join sh.product p" +
-    " inner join p.price pr"+
-    " where senderp_id=:senderp_id")
+    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pr.price)" +
+        "from Shipment sh" +
+        " inner join sh.status s " +
+        " inner join sh.receiver r" +
+        " inner join sh.product p" +
+        " inner join p.price pr" +
+        " where senderp_id=:senderp_id")
     List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
 
 
@@ -52,4 +53,13 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         " inner join p.price pr"+
         " where senderp_id=:senderp_id and p.id=:productid")
     PackageDTO getAllByPersonAndProduct(@Param("productid")Long productid,@Param("senderp_id") Long person_id);
+
+    @Query("select new com.project.service.dto.PackageStatusDTO(p.id,pr.id,s.id,e.id,e.name,s.statusName,pr.price)" +
+        "from Shipment sh " +
+        " inner join sh.employee e "+
+        " inner join sh.status s" +
+        " inner join sh.product p" +
+        " inner join p.price pr" +
+        " where senderp_id=:senderp_id and p.id=:productId")
+    PackageStatusDTO getPackageDetails(@Param("senderp_id") Long senderp_id,@Param("productId") Long productid);
 }

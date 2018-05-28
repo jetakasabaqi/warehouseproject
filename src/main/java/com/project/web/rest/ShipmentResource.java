@@ -5,6 +5,7 @@ import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
 import com.project.service.dto.PackageDTO;
+import com.project.service.dto.PackageStatusDTO;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -22,9 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.ws.rs.QueryParam;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -120,6 +119,20 @@ public class ShipmentResource {
             .body(result);
     }
 
+    /**
+     * GET  /shipments : get all the shipments.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of shipments in body
+     */
+//    @GetMapping("/shipments")
+//    @Timed
+//    public ResponseEntity<List<Shipment>> getAllShipments(Pageable pageable) {
+//        log.debug("REST request to get a page of Shipments");
+//        Page<Shipment> page = shipmentService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
+//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+//    }
 
     /**
      * GET  /shipments/:id : get the "id" shipment.
@@ -148,6 +161,7 @@ public class ShipmentResource {
         shipmentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/shipments")
@@ -181,26 +195,6 @@ public class ShipmentResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
     }
 
-//    @RequestMapping(method = RequestMethod.GET, value = "/shipment/{person_id}/package")
-//    @ResponseBody
-//    public ResponseEntity<PackageDTO> findOnePackage(@RequestParam(value = "search") String search, @PathVariable(value = "person_id") Long person_id) {
-//
-//
-//        RSQLVisitor<CriteriaQuery<Shipment>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Shipment>();
-//        final Node rootNode = new RSQLParser().parse(search);
-//        CriteriaQuery<Shipment> query = rootNode.accept(visitor, entityManager);
-//        List<Shipment> shipments = shipmentService.findAll(query);
-//        if (shipments.size() == 0) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//
-//        Long productid = shipments.get(0).getProduct().getId();
-//
-//        PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(productid, person_id);
-//
-//
-//        return new ResponseEntity<>(packageDTO, HttpStatus.OK);
-//    }
 
     @RequestMapping(method = RequestMethod.GET,value = "shipment/{client_id}/package")
     @ResponseBody
@@ -218,6 +212,16 @@ public class ShipmentResource {
         return new ResponseEntity<>(packageDTO, HttpStatus.OK);
 
     }
+
+    @GetMapping("/shipment/{person_id}/package-status")
+    @Timed
+    public ResponseEntity<PackageStatusDTO> getPackageStatusDetails(@PathVariable(value = "person_id") Long person_id,@RequestParam(value = "product.id") Long packageId )
+    {
+        PackageStatusDTO packageStatusDTO=shipmentService.getPackageStatusDetails(person_id,packageId);
+
+        return  new ResponseEntity<>(packageStatusDTO,HttpStatus.OK);
+    }
+}
 
 
 

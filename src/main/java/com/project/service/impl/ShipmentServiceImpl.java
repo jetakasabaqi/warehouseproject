@@ -4,6 +4,8 @@ import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.repository.ShipmentRepository;
+import com.project.service.ShipmentService;
+import com.project.service.dto.PackageStatusDTO;
 import com.project.service.util.ParseRsql;
 import com.project.service.dto.PackageDTO;
 import org.slf4j.Logger;
@@ -146,5 +148,11 @@ public class ShipmentServiceImpl implements ShipmentService {
         return shipmentRepository.getAllByPersonAndProduct(productid,person_id);
     }
 
+
+
+    @Override
+    public PackageStatusDTO getPackageStatusDetails(Long person_id, Long packageId) {
+        return shipmentRepository.getPackageDetails(person_id,packageId);
+    }
 
 }
