@@ -191,7 +191,6 @@ public class ShipmentResource {
         log.debug("REST request to get Shipments by Clients :{}", person_id);
         List<PackageDTO> results = shipmentService.getAllShipmentsByClientId(person_id);
 
-
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(results));
     }
 
@@ -200,14 +199,7 @@ public class ShipmentResource {
     @ResponseBody
     public ResponseEntity<PackageDTO> getOnePackage(@RequestParam(value = "product.id",required = false) Long package_id,@PathVariable(value = "client_id") Long client_id)
     {
-
-
-
-
-
-
-            PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(package_id, client_id);
-
+        PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(package_id, client_id);
 
         return new ResponseEntity<>(packageDTO, HttpStatus.OK);
 
@@ -225,5 +217,5 @@ public class ShipmentResource {
 
 
 
-}
+
 

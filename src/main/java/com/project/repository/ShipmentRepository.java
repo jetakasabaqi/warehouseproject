@@ -56,7 +56,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
 
     @Query("select new com.project.service.dto.PackageStatusDTO(p.id,pr.id,s.id,e.id,e.name,s.statusName,pr.price)" +
         "from Shipment sh " +
-        " inner join sh.employee e "+
+        " inner join sh.deliverEmployee e "+
         " inner join sh.status s" +
         " inner join sh.product p" +
         " inner join p.price pr" +

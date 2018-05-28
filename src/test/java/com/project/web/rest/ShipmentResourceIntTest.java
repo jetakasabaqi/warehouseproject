@@ -267,7 +267,7 @@ public class ShipmentResourceIntTest {
         shipment.setReceiver(receiverInfo);
         shipment.setProduct(product);
         shipment.setLocation(warehouseLocation);
-        shipment.setEmployee(employee);
+        shipment.setDeliverEmployee(employee);
 
 
     }
@@ -330,11 +330,11 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.[*].receiver.fullName").value(hasItem(shipment.getReceiver().getFullName())))
             .andExpect(jsonPath("$.[*].receiver.address").value(hasItem(shipment.getReceiver().getAddress())))
             .andExpect(jsonPath("$.[*].receiver.zipCode").value(hasItem(shipment.getReceiver().getZipCode())))
-            .andExpect(jsonPath("$.[*].employee.id").value(hasItem(shipment.getEmployee().getId().intValue())))
-            .andExpect(jsonPath("$.[*].employee.name").value(hasItem(shipment.getEmployee().getName())))
-            .andExpect(jsonPath("$.[*].employee.lastName").value(hasItem(shipment.getEmployee().getLastName())))
-            .andExpect(jsonPath("$.[*].employee.email").value(hasItem(shipment.getEmployee().getEmail())))
-            .andExpect(jsonPath("$.[*].employee.age").value(hasItem(shipment.getEmployee().getAge())))
+            .andExpect(jsonPath("$.[*].employee.id").value(hasItem(shipment.getDeliverEmployee().getId().intValue())))
+            .andExpect(jsonPath("$.[*].employee.name").value(hasItem(shipment.getDeliverEmployee().getName())))
+            .andExpect(jsonPath("$.[*].employee.lastName").value(hasItem(shipment.getDeliverEmployee().getLastName())))
+            .andExpect(jsonPath("$.[*].employee.email").value(hasItem(shipment.getDeliverEmployee().getEmail())))
+            .andExpect(jsonPath("$.[*].employee.age").value(hasItem(shipment.getDeliverEmployee().getAge())))
             .andExpect(jsonPath("$.[*].status.id").value(hasItem(shipment.getStatus().getId().intValue())))
             .andExpect(jsonPath("$.[*].status.statusName").value(hasItem(shipment.getStatus().getStatusName())))
             .andExpect(jsonPath("$.[*].product.id").value(hasItem(shipment.getProduct().getId().intValue())))
@@ -413,8 +413,8 @@ public class ShipmentResourceIntTest {
                .andExpect(jsonPath("$.productId").value(shipment.getProduct().getId().intValue()))
                .andExpect(jsonPath("$.priceId").value(shipment.getProduct().getPrice().getId().intValue()))
                .andExpect(jsonPath("$.statusId").value(shipment.getStatus().getId().intValue()))
-               .andExpect(jsonPath("$.employeeId").value(shipment.getEmployee().getId().intValue()))
-               .andExpect(jsonPath("$.employeeName").value(shipment.getEmployee().getName()))
+               .andExpect(jsonPath("$.employeeId").value(shipment.getDeliverEmployee().getId().intValue()))
+               .andExpect(jsonPath("$.employeeName").value(shipment.getDeliverEmployee().getName()))
                .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()));
        }
 

@@ -37,8 +37,11 @@ public class Shipment implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
-    private Employee employee;
+    private Employee deliverEmployee;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Employee contactEmployee;
     @OneToOne
     @JoinColumn(unique = true)
     private Status status;
@@ -50,6 +53,19 @@ public class Shipment implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private WarehouseLocation location;
+
+   public Shipment()
+   {}
+    public Shipment(Person senderP, Vendor senderV, ReceiverInfo receiver, Employee deliverEmployee, Employee contactEmployee, Status status, Product product, WarehouseLocation location) {
+        this.senderP = senderP;
+        this.senderV = senderV;
+        this.receiver = receiver;
+        this.deliverEmployee = deliverEmployee;
+        this.contactEmployee = contactEmployee;
+        this.status = status;
+        this.product = product;
+        this.location = location;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -99,17 +115,20 @@ public class Shipment implements Serializable {
         this.receiver = receiverInfo;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Employee getDeliverEmployee() {
+        return deliverEmployee;
     }
 
-    public Shipment employee(Employee employee) {
-        this.employee = employee;
-        return this;
+    public void setDeliverEmployee(Employee deliverEmployee) {
+        this.deliverEmployee = deliverEmployee;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public Employee getContactEmployee() {
+        return contactEmployee;
+    }
+
+    public void setContactEmployee(Employee contactEmployee) {
+        this.contactEmployee = contactEmployee;
     }
 
     public Status getStatus() {
@@ -175,7 +194,16 @@ public class Shipment implements Serializable {
     @Override
     public String toString() {
         return "Shipment{" +
-            "id=" + getId() +
-            "}";
+            "id=" + id +
+            ", senderP=" + senderP +
+            ", senderV=" + senderV +
+            ", receiver=" + receiver +
+            ", deliverEmployee=" + deliverEmployee +
+            ", contactEmployee=" + contactEmployee +
+            ", status=" + status +
+            ", product=" + product +
+            ", location=" + location +
+            '}';
     }
 }
+

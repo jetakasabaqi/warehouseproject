@@ -42,11 +42,25 @@ public class Employee implements Serializable {
     private String age;
 
     @OneToOne()
+    @JoinColumn (name="id",referencedColumnName = "employeeTypeId")
+    private EmployeeType type;
+
+    @OneToOne()
     @JoinColumn(name="id",referencedColumnName = "userId")
     private User user;
 
+    public Employee()
+    {}
 
-
+    public Employee(String name, String lastName, String tel, String email, String age, EmployeeType type, User user) {
+        this.name = name;
+        this.lastName = lastName;
+        this.tel = tel;
+        this.email = email;
+        this.age = age;
+        this.type = type;
+        this.user = user;
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -132,6 +146,14 @@ public class Employee implements Serializable {
 
     }
 
+    public EmployeeType getType() {
+        return type;
+    }
+
+    public void setType(EmployeeType type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -155,12 +177,14 @@ public class Employee implements Serializable {
     @Override
     public String toString() {
         return "Employee{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", tel='" + getTel() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", age='" + getAge() + "'" +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", tel='" + tel + '\'' +
+            ", email='" + email + '\'' +
+            ", age='" + age + '\'' +
+            ", type=" + type +
+            ", user=" + user +
+            '}';
     }
 }

@@ -7,7 +7,7 @@
         Added the constraints for entity Shipment.
     -->
     <changeSet id="20180507135547-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="senderp_id"
                                  baseTableName="shipment"
                                  constraintName="fk_shipment_senderp_id"
@@ -31,6 +31,10 @@
                                  constraintName="fk_shipment_employee_id"
                                  referencedColumnNames="id"
                                  referencedTableName="employee"/>
+        <addForeignKeyConstraint baseTableName="shipment" baseColumnNames="contact_id"
+                                 constraintName="fk_shipment_employee_contact_id"
+                                 referencedTableName="employee"
+                                 referencedColumnNames="type"/>
 
         <addForeignKeyConstraint baseColumnNames="status_id"
                                  baseTableName="shipment"

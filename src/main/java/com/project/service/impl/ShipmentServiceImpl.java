@@ -98,7 +98,7 @@ public class ShipmentServiceImpl implements ShipmentService {
         } else if (shipment.getReceiver().getId() == null) {
             ok = false;
             throw new Exception("Receiver ID must not be null!");
-        } else if (shipment.getEmployee().getId() == null) {
+        } else if (shipment.getDeliverEmployee().getId() == null) {
             ok = false;
             throw new Exception("Employee ID must not be null!");
         } else if (shipment.getStatus().getId() == null) {
