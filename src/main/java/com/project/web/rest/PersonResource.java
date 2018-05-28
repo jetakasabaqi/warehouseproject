@@ -140,7 +140,7 @@ public class PersonResource {
 
         if (search == null) {
             Page<Person> page = personService.findAll(pageable);
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/people");
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/persons");
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
             RSQLVisitor<CriteriaQuery<Person>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Person>();

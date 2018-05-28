@@ -373,7 +373,16 @@ public class ShipmentResourceIntTest {
          shipmentRepository.saveAndFlush(shipment);
 
          restShipmentMockMvc.perform(get("/api/shipment/{client_id}/package?product.id="+shipment.getProduct().getId().intValue(),shipment.getSenderP().getId().intValue()))
-             .andExpect(jsonPath("productId").value((hasItem(shipment.getProduct().getId().intValue()))));
+             .andExpect(status().isOk())
+             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+             .andExpect(jsonPath("$.productId").value(shipment.getProduct().getId().intValue()))
+             .andExpect(jsonPath("$.statusId").value(shipment.getStatus().getId().intValue()))
+             .andExpect(jsonPath("$.receiverId").value(shipment.getReceiver().getId().intValue()))
+             .andExpect(jsonPath("$.priceId").value(shipment.getProduct().getPrice().getId().intValue()))
+             .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()))
+             .andExpect(jsonPath("$.receiverFullName").value(shipment.getReceiver().getFullName()))
+             .andExpect(jsonPath("$.receiverAddress").value(shipment.getReceiver().getAddress()))
+             .andExpect(jsonPath("$.receiverZipCode").value(shipment.getReceiver().getZipCode()));
 
 
      }
