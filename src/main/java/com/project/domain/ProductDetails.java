@@ -158,4 +158,6 @@ public class ProductDetails implements Serializable {
             ", type=" + type +
             '}';
     }
+
+
 }

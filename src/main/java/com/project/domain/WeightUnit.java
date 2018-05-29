@@ -65,5 +65,10 @@ public class WeightUnit implements Serializable {
             ", unit='" + unit + '\'' +
             '}';
     }
+
+    public WeightUnit unit(String kg) {
+        this.unit=unit;
+        return this;
+    }
 }
 

@@ -68,4 +68,9 @@ public class ProductType implements Serializable {
             ", type='" + type + '\'' +
             '}';
     }
+
+    public ProductType type(String envelope) {
+        this.type=type;
+        return this;
+    }
 }

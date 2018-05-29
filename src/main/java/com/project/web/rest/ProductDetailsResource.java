@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.project.domain.ProductDetails;
 import com.project.repository.PriceRepository;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
-import com.project.service.ProductDetailsService;
+import com.project.service.*;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -36,35 +36,46 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class ProductDetailsResource {
 
-    private final Logger log = LoggerFactory.getLogger(PriceResource.class);
+    private final Logger log = LoggerFactory.getLogger(ProductDetailsResource.class);
 
-    private static final String ENTITY_NAME = "price";
+    private static final String ENTITY_NAME = "product_details";
 
     private final ProductDetailsService productDetailsService;
 
+    private final ProductTypeService productTypeService;
+
+    private final PriceService priceService;
+
+    private final WeightUnitService weightUnitService;
+
+    private final ProductService productService;
+
 
     private final EntityManager entityManager;
-    @Autowired
-    private PriceRepository priceRepository;
 
-    public ProductDetailsResource(ProductDetailsService productDetailsService, EntityManager entityManager) {
+
+    public ProductDetailsResource(ProductDetailsService productDetailsService, ProductTypeService productTypeService, PriceService priceService, WeightUnitService weightUnitService, ProductService productService, EntityManager entityManager) {
         this.productDetailsService = productDetailsService;
         this.entityManager = entityManager;
+        this.productService = productService;
+        this.weightUnitService = weightUnitService;
+        this.priceService=priceService;
+        this.productTypeService=productTypeService;
     }
 
     /**
-     * POST  /prices : Create a new price.
+     * POST  /productDetails : Create a new productDetails.
      *
-     * @param productDetails the price to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new price, or with status 400 (Bad Request) if the price has already an ID
+     * @param productDetails the productDetails to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new productDetails, or with status 400 (Bad Request) if the productDetails has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/product_details")
     @Timed
     public ResponseEntity<ProductDetails> createProductDetails(@RequestBody ProductDetails productDetails) throws URISyntaxException {
-        log.debug("REST request to save Price : {}", productDetails);
+        log.debug("REST request to save productDetails : {}", productDetails);
         if (productDetails.getId() != null) {
-            throw new BadRequestAlertException("A new price cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("A new productDetails cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ProductDetails result = productDetailsService.save(productDetails);
         return ResponseEntity.created(new URI("/api/product_details/" + result.getId()))
@@ -73,18 +84,18 @@ public class ProductDetailsResource {
     }
 
     /**
-     * PUT  /prices : Updates an existing price.
+     * PUT  /productDetails : Updates an existing productDetails.
      *
-     * @param productDetails the price to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated price,
-     * or with status 400 (Bad Request) if the price is not valid,
-     * or with status 500 (Internal Server Error) if the price couldn't be updated
+     * @param productDetails the productDetails to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated productDetails,
+     * or with status 400 (Bad Request) if the productDetails is not valid,
+     * or with status 500 (Internal Server Error) if the productDetails couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/product_details")
     @Timed
     public ResponseEntity<ProductDetails> updateProductDetails(@RequestBody ProductDetails productDetails) throws URISyntaxException {
-        log.debug("REST request to update Price : {}", productDetails);
+        log.debug("REST request to update productDetails : {}", productDetails);
         if (productDetails.getId() == null) {
             return createProductDetails(productDetails);
         }
@@ -95,10 +106,10 @@ public class ProductDetailsResource {
     }
 
     /**
-     * GET  /prices : get all the prices.
+     * GET  /prices : get all the productDetails.
      *
      * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of prices in body
+     * @return the ResponseEntity with status 200 (OK) and the list of productDetails in body
      */
 //    @GetMapping("/prices")
 //    @Timed
@@ -110,10 +121,10 @@ public class ProductDetailsResource {
 //    }
 
     /**
-     * GET  /prices/:id : get the "id" price.
+     * GET  /productDetails/:id : get the "id" productDetails.
      *
-     * @param id the id of the price to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the price, or with status 404 (Not Found)
+     * @param id the id of the productDetails to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the productDetails, or with status 404 (Not Found)
      */
     @GetMapping("/product_details/{id}")
     @Timed
@@ -124,12 +135,12 @@ public class ProductDetailsResource {
     }
 
     /**
-     * DELETE  /prices/:id : delete the "id" price.
+     * DELETE  /productDetails/:id : delete the "id" productDetails.
      *
-     * @param id the id of the price to delete
+     * @param id the id of the productDetails to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/product-details/{id}")
+    @DeleteMapping("/product_details/{id}")
     @Timed
     public ResponseEntity<Void> deletePrice(@PathVariable Long id) {
         log.debug("REST request to delete Product Details : {}", id);
@@ -137,14 +148,14 @@ public class ProductDetailsResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/product-details")
+    @RequestMapping(method = RequestMethod.GET, value = "/product_details")
     @ResponseBody
     public ResponseEntity<List<ProductDetails>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
 
 
         if (search == null) {
             Page<ProductDetails> page = productDetailsService.findAll(pageable);
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prices");
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/product_details");
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
             RSQLVisitor<CriteriaQuery<ProductDetails>, EntityManager> visitor = new JpaCriteriaQueryVisitor<ProductDetails>();
