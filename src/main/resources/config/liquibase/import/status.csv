@@ -1,0 +1,4 @@
+id ;status_name
+'1' ;'arriving'
+'2' ;'shipped'
+'3' ;'delivered'
