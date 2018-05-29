@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
+import com.project.service.dto.InboundPackagesDTO;
 import com.project.service.dto.PackageDTO;
 import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
@@ -66,4 +67,6 @@ public interface ShipmentService {
     PackageStatusDTO getPackageStatusDetails(Long person_id, Long package_id);
 
     PackageInfoDTO getPackageInfo(Long person_id, Long product_id);
+
+    Page<InboundPackagesDTO> getInboundPackages(Pageable pageable);
 }

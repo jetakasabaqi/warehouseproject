@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
+import com.project.service.dto.InboundPackagesDTO;
 import com.project.service.dto.PackageDTO;
 import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
@@ -163,7 +164,7 @@ public class ShipmentResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-
+    //Endpoint with filtering
 
     @RequestMapping(method = RequestMethod.GET, value = "/shipments")
     @ResponseBody
@@ -184,7 +185,7 @@ public class ShipmentResource {
             return new ResponseEntity<>(shipments, HttpStatus.OK);
         }
     }
-
+    //Costumer Endpoints
 
     @GetMapping("/shipment/{person_id}/packages")
     @Timed
@@ -227,7 +228,17 @@ public class ShipmentResource {
         return new ResponseEntity<>(packageInfoDTO,HttpStatus.OK);
     }
 
+    //Warehouse Endpoints
 
+    @GetMapping("/shipment/inbound-packages")
+    @Timed
+    public  ResponseEntity<List<InboundPackagesDTO>> getInboundPackages(Pageable pageable)
+    {
+        Page<InboundPackagesDTO> page = shipmentService.getInboundPackages(pageable);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
+       return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 }
 
 
