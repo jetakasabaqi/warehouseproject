@@ -23,19 +23,43 @@ public class PackageDTO {
 
     private String receiverZipCode;
 
+    //product details
+
+    private double productWidth;
+
+    private double productLength;
+
+    private double productHeight;
+
+    private double productWeight;
+
+    private String productWeightUnit;
+
+    private String productType;
+
+
     private BigDecimal price;
 
-    public PackageDTO(Shipment shipment){
-        this.productId=shipment.getProduct().getId();
-        this.statusId=shipment.getStatus().getId();
-        this.receiverId=shipment.getReceiver().getId();
-        this.priceId=shipment.getProduct().getPrice().getId();
-        this.statusName=shipment.getStatus().getStatusName();
-        this.receiverFullName=shipment.getReceiver().getFullName();
-        this.receiverAddress=shipment.getReceiver().getAddress();
-        this.receiverZipCode=shipment.getReceiver().getZipCode();
+
+    public PackageDTO(Long productId, Long statusId, Long receiverId, Long priceId, String statusName, String receiverFullName, String receiverAddress, String receiverZipCode, double productWidth, double productLength, double productHeight, double productWeight, String productWeightUnit, String productType, BigDecimal price) {
+        this.productId = productId;
+        this.statusId = statusId;
+        this.receiverId = receiverId;
+        this.priceId = priceId;
+        this.statusName = statusName;
+        this.receiverFullName = receiverFullName;
+        this.receiverAddress = receiverAddress;
+        this.receiverZipCode = receiverZipCode;
+        this.productWidth = productWidth;
+        this.productLength = productLength;
+        this.productHeight = productHeight;
+        this.productWeight = productWeight;
+        this.productWeightUnit = productWeightUnit;
+        this.productType = productType;
+        this.price = price;
     }
-    public  PackageDTO(Long productId,Long statusId,long receiverId,long priceId,String statusName, String receiverFullName, String receiverAddress, String receiverZipCode,BigDecimal price)
+
+    public  PackageDTO(Long productId, Long statusId, long receiverId, long priceId, String statusName, String receiverFullName, String receiverAddress, String receiverZipCode, BigDecimal price)
     {
         this.productId=productId;
         this.statusId=statusId;
@@ -113,6 +137,54 @@ public class PackageDTO {
         this.receiverZipCode = receiverZipCode;
     }
 
+    public double getProductWidth() {
+        return productWidth;
+    }
+
+    public void setProductWidth(double productWidth) {
+        this.productWidth = productWidth;
+    }
+
+    public double getProductLength() {
+        return productLength;
+    }
+
+    public void setProductLength(double productLength) {
+        this.productLength = productLength;
+    }
+
+    public double getProductHeight() {
+        return productHeight;
+    }
+
+    public void setProductHeight(double productHeight) {
+        this.productHeight = productHeight;
+    }
+
+    public double getProductWeight() {
+        return productWeight;
+    }
+
+    public void setProductWeight(double productWeight) {
+        this.productWeight = productWeight;
+    }
+
+    public String getProductWeightUnit() {
+        return productWeightUnit;
+    }
+
+    public void setProductWeightUnit(String productWeightUnit) {
+        this.productWeightUnit = productWeightUnit;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -120,41 +192,4 @@ public class PackageDTO {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
-//    @Override
-//    public String toString() {
-//        return "PackageDTO{" +
-//            "productId=" + productId +
-//            ", statusId=" + statusId +
-//            ", receiverId=" + receiverId +
-//            ", priceId=" + priceId +
-//            ", statusName='" + statusName + '\'' +
-//            ", receiverFullName='" + receiverFullName + '\'' +
-//            ", receiverAddress='" + receiverAddress + '\'' +
-//            ", receiverZipCode='" + receiverZipCode + '\'' +
-//            ", price=" + price +
-//            '}';
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        PackageDTO that = (PackageDTO) o;
-//        return Objects.equals(productId, that.productId) &&
-//            Objects.equals(statusId, that.statusId) &&
-//            Objects.equals(receiverId, that.receiverId) &&
-//            Objects.equals(priceId, that.priceId) &&
-//            Objects.equals(statusName, that.statusName) &&
-//            Objects.equals(receiverFullName, that.receiverFullName) &&
-//            Objects.equals(receiverAddress, that.receiverAddress) &&
-//            Objects.equals(receiverZipCode, that.receiverZipCode) &&
-//            Objects.equals(price, that.price);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//
-//        return Objects.hash(productId, statusId, receiverId, priceId, statusName, receiverFullName, receiverAddress, receiverZipCode, price);
-//    }
 }

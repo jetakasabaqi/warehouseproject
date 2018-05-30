@@ -34,22 +34,28 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
 
 
 
-    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pr.price)" +
+    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pd.width,pd.length,pd.height,pd.weight,wh.unit,pt.type,pr.price)" +
         "from Shipment sh" +
         " inner join sh.status s " +
         " inner join sh.receiver r" +
-        " inner join sh.product p" +
-        " inner join p.price pr" +
+        " inner join sh.details pd "+
+        " inner join pd.weightUnit wh "+
+        " inner join pd.type pt "+
+        "inner join pd.product p " +
+        " inner join p.price pr " +
         " where senderp_id=:senderp_id")
     List<PackageDTO> getAllRecordsBySender(@Param("senderp_id") Long senderpId);
 
 
-    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pr.price)"+
+    @Query("select new com.project.service.dto.PackageDTO(p.id,s.id,r.id,pr.id,s.statusName,r.fullName,r.address,r.zipCode,pd.width,pd.length,pd.height,pd.weight,wh.unit,pt.type,pr.price)" +
         "from Shipment sh" +
-        " inner join sh.status s "+
-        " inner join sh.receiver r"+
-        " inner join sh.product p" +
-        " inner join p.price pr"+
+        " inner join sh.status s " +
+        " inner join sh.receiver r" +
+        " inner join sh.details pd "+
+        " inner join pd.weightUnit wh "+
+        " inner join pd.type pt "+
+        "inner join pd.product p " +
+        " inner join p.price pr " +
         " where senderp_id=:senderp_id and p.id=:productid")
     PackageDTO getAllByPersonAndProduct(@Param("productid")Long productid,@Param("senderp_id") Long person_id);
 

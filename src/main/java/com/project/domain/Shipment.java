@@ -56,9 +56,13 @@ public class Shipment implements Serializable {
     @JoinColumn(unique = true)
     private WarehouseLocation location;
 
+    @OneToOne
+    @JoinColumn (name="product_details",referencedColumnName = "id")
+    private ProductDetails details;
+
    public Shipment()
    {}
-    public Shipment(Person senderP, Vendor senderV, ReceiverInfo receiver, Employee deliverEmployee, Employee contactEmployee, Status status, Product product, WarehouseLocation location) {
+    public Shipment(Person senderP, Vendor senderV, ReceiverInfo receiver, Employee deliverEmployee, Employee contactEmployee, Status status, Product product, WarehouseLocation location,ProductDetails details) {
         this.senderP = senderP;
         this.senderV = senderV;
         this.receiver = receiver;
@@ -67,6 +71,7 @@ public class Shipment implements Serializable {
         this.status = status;
         this.product = product;
         this.location = location;
+        this.details=details;
     }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -173,6 +178,15 @@ public class Shipment implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+
+    public ProductDetails getDetails() {
+        return details;
+    }
+
+    public void setDetails(ProductDetails details) {
+        this.details = details;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -205,6 +219,7 @@ public class Shipment implements Serializable {
             ", status=" + status +
             ", product=" + product +
             ", location=" + location +
+            ", details=" + details +
             '}';
     }
 }

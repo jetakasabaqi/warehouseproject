@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity WarehouseLocation.
+    -->
+    <changeSet id="20180507135549-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="product_id"
+                                 baseTableName="product_details"
+                                 constraintName="fk_product_id_product_details"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product"/>
+        <addForeignKeyConstraint baseColumnNames="weight_unit"
+                                 baseTableName="product_details"
+                                 constraintName="fk_weight_unit_product_details"
+                                 referencedColumnNames="id"
+                                 referencedTableName="weight_unit"/>
+
+        <addForeignKeyConstraint baseColumnNames="product_type"
+                                 baseTableName="product_details"
+                                 constraintName="fk_product_ty[e_product_details"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product_type"/>
+
+    </changeSet>
+</databaseChangeLog>
