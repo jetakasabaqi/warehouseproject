@@ -56,5 +56,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="warehouse_location"/>
 
+        <addForeignKeyConstraint baseColumnNames="product_details"
+                                 baseTableName="shipment"
+                                 constraintName="fk_shipment_product_details"
+                                 referencedColumnNames="id"
+                                 referencedTableName="product_details"/>
+
     </changeSet>
 </databaseChangeLog>
