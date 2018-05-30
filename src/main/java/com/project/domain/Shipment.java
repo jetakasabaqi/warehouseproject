@@ -155,6 +155,8 @@ public class Shipment implements Serializable {
         return product;
     }
 
+
+
     public Shipment product(Product product) {
         this.product = product;
         return this;

@@ -124,6 +124,22 @@ public class ProductDetails implements Serializable {
         this.type = type;
     }
 
+    public ProductDetails weight(double weight)
+    {
+        this.weight=weight;
+        return this;
+    }
+    public ProductDetails height(double height)
+    {
+        this.height=height;
+        return this;
+    }
+    public ProductDetails length(double length)
+    {
+        this.length=length;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

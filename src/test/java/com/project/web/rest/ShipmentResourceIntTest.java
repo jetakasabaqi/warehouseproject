@@ -7,6 +7,7 @@ import com.project.repository.*;
 import com.project.service.*;
 import com.project.web.rest.errors.ExceptionTranslator;
 
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,6 +78,14 @@ public class ShipmentResourceIntTest {
     private WarehouseLocationService warehouseLocationService;
 
     @Autowired
+    private ProductDetailsService productDetailsService;
+
+    @Autowired
+    private ProductTypeService productTypeService;
+
+    @Autowired WeightUnitService weightUnitService;
+
+    @Autowired
     private PersonRepository personRepository;
     @Autowired
     private VendorRepository vendorRepository;
@@ -96,7 +105,17 @@ public class ShipmentResourceIntTest {
     @Autowired
     private PriceRepository priceRepository;
 
-    @Autowired CityRepository cityRepository;
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private ProductDetailsRepository productDetailsRepository;
+
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
+
+    @Autowired
+    private WeightUnitRepository weightUnitRepository;
 
     private static final String DEFAULT_NAME = "Blerim";
 
@@ -143,6 +162,13 @@ public class ShipmentResourceIntTest {
     private Price price;
 
     private City city;
+
+    private ProductDetails productDetails;
+
+    private ProductType productType;
+
+    private WeightUnit weightUnit;
+
 
 
     @Before
@@ -213,6 +239,21 @@ public class ShipmentResourceIntTest {
         Price price = new Price().price(DEFAULT_PRICE);
         return price;
     }
+    public ProductType createProductType() {
+        ProductType productType = new ProductType().type("Envelope");
+        return productType;
+    }
+
+    public WeightUnit createWeightUnit()
+    {
+        WeightUnit weightUnit=new WeightUnit().unit("kg");
+        return weightUnit;
+    }
+    public ProductDetails createProductDetails() {
+        ProductDetails productDetails = new ProductDetails().height(23.2).length(21.5).weight(15.6);
+        return productDetails;
+    }
+
 
     public Product createProduct() {
         Product product = new Product();
@@ -261,6 +302,18 @@ public class ShipmentResourceIntTest {
         product = createProduct();
         productRepository.save(product);
 
+        weightUnit=createWeightUnit();
+        weightUnitRepository.save(weightUnit);
+
+        productType=createProductType();
+        productTypeRepository.save(productType);
+
+        productDetails=createProductDetails();
+        productDetailsRepository.save(productDetails);
+
+        productDetails.setType(productType);
+        productDetails.setWeightUnit(weightUnit);
+         productDetails.setProduct(product);
         product.setPrice(price);
 
         receiverInfo = createReceiver();
@@ -282,6 +335,7 @@ public class ShipmentResourceIntTest {
         shipment.setLocation(warehouseLocation);
         shipment.setDeliverEmployee(deliverEmployee);
         shipment.setContactEmployee(contactEmployee);
+        shipment.setDetails(productDetails);
 
 
     }
@@ -469,6 +523,29 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.contact_employeeId").value(shipment.getContactEmployee().getId().intValue()))
             .andExpect(jsonPath("$.contact_employeeEmail").value(shipment.getContactEmployee().getEmail()))
             .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()));
+    }
+    @Test
+    @Transactional
+    public void getInboundPackages () throws Exception
+    {
+        shipmentRepository.saveAndFlush(shipment);
+        restShipmentMockMvc.perform(get("/api/shipment/inbound-packages"))
+            .andExpect(status().isOk())
+            //  .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.senderName").value(shipment.getSenderP().getFullName()))
+            .andExpect(jsonPath("$.senderEmail").value(shipment.getSenderP().getEmail()))
+            .andExpect(jsonPath("$.receiverName").value(shipment.getReceiver().getFullName()))
+            .andExpect(jsonPath("$.receiverAddress").value(shipment.getReceiver().getAddress()))
+            .andExpect(jsonPath("$.deliverEmployeeName").value(shipment.getDeliverEmployee().getName()))
+            .andExpect(jsonPath("$.deliverEmployeeTel").value(shipment.getDeliverEmployee().getTel()))
+            .andExpect(jsonPath("$.contactEmployeeName").value(shipment.getContactEmployee().getName()))
+            .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()))
+            .andExpect(jsonPath("$.statusId").value(shipment.getStatus().getId().intValue()))
+        .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()))
+        .andExpect(jsonPath("$.productId").value(shipment.getProduct().getId().intValue()))
+        .andExpect(jsonPath("$.locationId").value(shipment.getLocation().getId()))
+        .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()))
+        .andExpect(jsonPath("$.productType").value(shipment.getDetails().getType().getType()));
     }
 
     @Test

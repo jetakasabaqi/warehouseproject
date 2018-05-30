@@ -24,11 +24,16 @@ public class InboundPackagesDTO {
     private String statusName;
 
     private Long productId;
+
     private BigDecimal price;
 
     private Long locationId;
 
-    public InboundPackagesDTO( String senderName, String senderEmail, String receiverName, String receiverAddress, String deliverEmployeeName, String deliverEmployeeTel, String contactEmployeeName, String contactEmployeeTel, Long statusId, String statusName, Long productId, BigDecimal price, Long locationId) {
+    private String productType;
+
+
+
+    public InboundPackagesDTO(String senderName, String senderEmail, String receiverName, String receiverAddress, String deliverEmployeeName, String deliverEmployeeTel, String contactEmployeeName, String contactEmployeeTel, Long statusId, String statusName, Long productId, BigDecimal price, Long locationId, String type) {
         this.senderName = senderName;
         this.senderEmail = senderEmail;
         this.receiverName = receiverName;
@@ -42,6 +47,7 @@ public class InboundPackagesDTO {
         this.productId = productId;
         this.price = price;
         this.locationId = locationId;
+        this.productType=type;
     }
 
 
@@ -151,10 +157,18 @@ public class InboundPackagesDTO {
         this.locationId = locationId;
     }
 
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
     @Override
     public String toString() {
         return "InboundPackagesDTO{" +
-            ", senderName='" + senderName + '\'' +
+            "senderName='" + senderName + '\'' +
             ", senderEmail='" + senderEmail + '\'' +
             ", receiverName='" + receiverName + '\'' +
             ", receiverAddress='" + receiverAddress + '\'' +
@@ -165,6 +179,7 @@ public class InboundPackagesDTO {
             ", statusId=" + statusId +
             ", statusName='" + statusName + '\'' +
             ", productId=" + productId +
+            ", productType='" + productType + '\'' +
             ", price=" + price +
             ", locationId=" + locationId +
             '}';

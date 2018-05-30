@@ -236,7 +236,7 @@ public class ShipmentResource {
     {
         Page<InboundPackagesDTO> page = shipmentService.getInboundPackages(pageable);
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipment/inbound-packages");
        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 }

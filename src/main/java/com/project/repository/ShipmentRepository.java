@@ -77,7 +77,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         "where senderp_id=:person_id and p.id=:product_id")
     PackageInfoDTO getPackageInfo(@Param("person_id") Long person_id,@Param("product_id") Long product_id);
 
-    @Query("select new com.project.service.dto.InboundPackagesDTO (p.fullName,p.email,r.fullName,r.address,d.name,d.tel,c.name,c.tel,st.id,st.statusName,pr.id,pri.price,l.id) "+
+    @Query("select new com.project.service.dto.InboundPackagesDTO (p.fullName,p.email,r.fullName,r.address,d.name,d.tel,c.name,c.tel,st.id,st.statusName,pr.id,pri.price,l.id,pt.type) "+
         " from Shipment sh " +
         "inner join sh.senderP p " +
         "inner join sh.receiver r " +
@@ -87,6 +87,8 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         "inner join sh.location l " +
         "inner join sh.product pr " +
         "inner join pr.price pri " +
+        "inner join sh.details d1 " +
+        "inner join d1.type pt " +
         "where sh.status.id=1 ")
     Page<InboundPackagesDTO> getInboundPackages(Pageable pageable);
 }
