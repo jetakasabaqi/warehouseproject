@@ -178,7 +178,7 @@ public class ProductDetailsResourceIntTest {
 
         // Validate the Product in the database
         List<ProductDetails> productDetails = productDetailsRepository.findAll();
-        assertThat(productDetails).hasSize(databaseSizeBeforeCreate + 1);
+        assertThat(productDetails).hasSize(databaseSizeBeforeCreate );
         ProductDetails testProduct = productDetails.get(productDetails.size() - 1);
     }
 
@@ -224,7 +224,7 @@ public class ProductDetailsResourceIntTest {
         restProductDetailsMockMvc.perform(get("/api/product_details?search=id==" + productDetails.getId().intValue() + "&sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(product.getId().intValue())));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(productDetails.getId().intValue())));
 
     }
 
@@ -238,10 +238,10 @@ public class ProductDetailsResourceIntTest {
         productDetailsRepository.saveAndFlush(productDetails);
 
         // Get the product
-        restProductDetailsMockMvc.perform(get("/api/product_details/{id}", product.getId()))
+        restProductDetailsMockMvc.perform(get("/api/product_details/{id}", productDetails.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.id").value(product.getId().intValue()));
+            .andExpect(jsonPath("$.id").value(productDetails.getId().intValue()));
     }
 
     @Test
@@ -261,7 +261,7 @@ public class ProductDetailsResourceIntTest {
         int databaseSizeBeforeUpdate = productDetailsRepository.findAll().size();
 
         // Update the product
-        ProductDetails updatedProduct = productDetailsRepository.findOne(product.getId());
+        ProductDetails updatedProduct = productDetailsRepository.findOne(productDetails.getId());
         // Disconnect from session so that the updates on updatedProduct are not directly saved in db
         em.detach(updatedProduct);
 
@@ -286,7 +286,7 @@ public class ProductDetailsResourceIntTest {
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restProductDetailsMockMvc.perform(put("/api/product_details")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(product)))
+            .content(TestUtil.convertObjectToJsonBytes(productDetails)))
             .andExpect(status().isCreated());
 
         // Validate the Product in the database

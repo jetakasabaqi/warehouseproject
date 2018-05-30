@@ -24,19 +24,19 @@
             <column name="product_id" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="width" type="varchar(255)">
+            <column name="width" type="double">
                 <constraints nullable="true" />
             </column>
 
-            <column name="length" type="varchar(255)">
+            <column name="length" type="double">
                 <constraints nullable="true" />
             </column>
 
-            <column name="height" type="varchar(255)">
+            <column name="height" type="double">
                 <constraints nullable="true" />
             </column>
 
-            <column name="weight" type="varchar(255)">
+            <column name="weight" type="double">
                 <constraints nullable="true" />
             </column>
 
