@@ -135,7 +135,7 @@ public class ShipmentResourceIntTest {
 
     private static final String DEFAULT_ZIPCODE = "10000";
 
-    private static final String DEFAULT_STATUS = "Delivered";
+    private static final String DEFAULT_STATUS = "arriving";
 
     private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
 
@@ -430,7 +430,7 @@ public class ShipmentResourceIntTest {
         restShipmentMockMvc.perform(get("/api/shipment/{personId}/packages", shipment.getSenderP().getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.[*].productId").value((hasItem(shipment.getProduct().getId().intValue()))))
+            .andExpect(jsonPath("$.[*].productId").value(hasItem(shipment.getProduct().getId().intValue())))
             .andExpect(jsonPath("$.[*].statusId").value((hasItem(shipment.getStatus().getId().intValue()))))
             .andExpect(jsonPath("$.[*].receiverId").value((hasItem(shipment.getReceiver().getId().intValue()))))
             .andExpect(jsonPath("$.[*].priceId").value((hasItem(shipment.getProduct().getPrice().getId().intValue()))))
@@ -519,33 +519,34 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.deliver_employeeId").value(shipment.getDeliverEmployee().getId().intValue()))
             .andExpect(jsonPath("$.deliver_employeeName").value(shipment.getDeliverEmployee().getName()))
             .andExpect(jsonPath("$.deliver_employeeEmail").value(shipment.getDeliverEmployee().getEmail()))
-            .andExpect(jsonPath("$.deliverEmployee_tel").value(shipment.getDeliverEmployee().getTel()))
-            .andExpect(jsonPath("$.contact_employeeId").value(shipment.getContactEmployee().getId().intValue()))
-            .andExpect(jsonPath("$.contact_employeeEmail").value(shipment.getContactEmployee().getEmail()))
-            .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()));
+            .andExpect(jsonPath("$.deliverEmployee_tel").value(hasItem(shipment.getDeliverEmployee().getTel())))
+            .andExpect(jsonPath("$.contact_employeeId").value(hasItem(shipment.getContactEmployee().getId().intValue())))
+            .andExpect(jsonPath("$.contact_employeeEmail").value(hasItem(shipment.getContactEmployee().getEmail())))
+            .andExpect(jsonPath("$.contact_employeeTel").value(hasItem(shipment.getContactEmployee().getTel())));
     }
     @Test
     @Transactional
     public void getInboundPackages () throws Exception
     {
         shipmentRepository.saveAndFlush(shipment);
+
         restShipmentMockMvc.perform(get("/api/shipment/inbound-packages"))
             .andExpect(status().isOk())
-            //  .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.senderName").value(shipment.getSenderP().getFullName()))
-            .andExpect(jsonPath("$.senderEmail").value(shipment.getSenderP().getEmail()))
-            .andExpect(jsonPath("$.receiverName").value(shipment.getReceiver().getFullName()))
-            .andExpect(jsonPath("$.receiverAddress").value(shipment.getReceiver().getAddress()))
-            .andExpect(jsonPath("$.deliverEmployeeName").value(shipment.getDeliverEmployee().getName()))
-            .andExpect(jsonPath("$.deliverEmployeeTel").value(shipment.getDeliverEmployee().getTel()))
-            .andExpect(jsonPath("$.contactEmployeeName").value(shipment.getContactEmployee().getName()))
-            .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()))
-            .andExpect(jsonPath("$.statusId").value(shipment.getStatus().getId().intValue()))
-        .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()))
-        .andExpect(jsonPath("$.productId").value(shipment.getProduct().getId().intValue()))
-        .andExpect(jsonPath("$.locationId").value(shipment.getLocation().getId()))
-        .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()))
-        .andExpect(jsonPath("$.productType").value(shipment.getDetails().getType().getType()));
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].senderName").value(hasItem(shipment.getSenderP().getFullName())))
+            .andExpect(jsonPath("$.[*].senderEmail").value(hasItem(shipment.getSenderP().getEmail())))
+            .andExpect(jsonPath("$.[*].receiverName").value(hasItem(shipment.getReceiver().getFullName())))
+            .andExpect(jsonPath("$.[*].receiverAddress").value(hasItem(shipment.getReceiver().getAddress())))
+            .andExpect(jsonPath("$.[*].deliverEmployeeName").value(hasItem(shipment.getDeliverEmployee().getName())))
+            .andExpect(jsonPath("$.[*].deliverEmployeeTel").value(hasItem(shipment.getDeliverEmployee().getTel())))
+            .andExpect(jsonPath("$.[*].contactEmployeeName").value(hasItem(shipment.getContactEmployee().getName())))
+            .andExpect(jsonPath("$.[*].contactEmployeeTel").value(hasItem(shipment.getContactEmployee().getTel())))
+            .andExpect(jsonPath("$.[*].statusId").value(hasItem(shipment.getStatus().getId().intValue())))
+            .andExpect(jsonPath("$.[*].statusName").value(hasItem(shipment.getStatus().getStatusName())))
+            .andExpect(jsonPath("$.[*].productId").value(hasItem(shipment.getProduct().getId().intValue())))
+            .andExpect(jsonPath("$.[*].locationId").value(hasItem(shipment.getLocation().getId())))
+            .andExpect(jsonPath("$.[*].contact_employeeTel").value(hasItem(shipment.getContactEmployee().getTel())))
+            .andExpect(jsonPath("$.[*].productType").value(hasItem(shipment.getDetails().getType().getType())));
     }
 
     @Test
