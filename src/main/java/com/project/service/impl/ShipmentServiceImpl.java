@@ -5,6 +5,7 @@ import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.repository.ShipmentRepository;
 import com.project.service.ShipmentService;
+import com.project.service.dto.OutboundPackageDTO;
 import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
 import com.project.service.util.ParseRsql;
@@ -159,5 +160,10 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public PackageInfoDTO getPackageInfo(Long person_id, Long product_id) {
         return shipmentRepository.getPackageInfo(person_id,product_id);
+    }
+
+    @Override
+    public Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable) {
+        return shipmentRepository.getOutboundPackages(pageable);
     }
 }

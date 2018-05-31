@@ -89,6 +89,6 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         "inner join pr.price pri " +
         "inner join sh.details d1 " +
         "inner join d1.type pt " +
-        "where sh.status.id=1 ")
+        "where sh.status.id=3 ")
     Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable);
 }

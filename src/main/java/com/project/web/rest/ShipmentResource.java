@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
+import com.project.service.dto.OutboundPackageDTO;
 import com.project.service.dto.PackageDTO;
 import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
@@ -225,6 +226,16 @@ public class ShipmentResource {
 
 
         return new ResponseEntity<>(packageInfoDTO,HttpStatus.OK);
+    }
+
+    @GetMapping("/shipment/outbound-packages")
+    @Timed
+    public  ResponseEntity<List<OutboundPackageDTO>> getInboundPackages(Pageable pageable)
+    {
+        Page<OutboundPackageDTO> page = shipmentService.getOutboundPackages(pageable);
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipment/outbound-packages");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 

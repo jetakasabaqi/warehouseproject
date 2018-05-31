@@ -77,6 +77,15 @@ public class ShipmentResourceIntTest {
     private WarehouseLocationService warehouseLocationService;
 
     @Autowired
+    private ProductDetailsService productDetailsService;
+
+    @Autowired
+    private ProductTypeService productTypeService;
+
+    @Autowired
+    private WeightUnitService weightUnitService;
+
+    @Autowired
     private PersonRepository personRepository;
     @Autowired
     private VendorRepository vendorRepository;
@@ -96,7 +105,19 @@ public class ShipmentResourceIntTest {
     @Autowired
     private PriceRepository priceRepository;
 
-    @Autowired CityRepository cityRepository;
+    @Autowired
+    private CityRepository cityRepository;
+
+    @Autowired
+    private ProductDetailsRepository productDetailsRepository;
+
+    @Autowired
+    private ProductTypeRepository productTypeRepository;
+
+    @Autowired
+    private WeightUnitRepository weightUnitRepository;
+
+
 
     private static final String DEFAULT_NAME = "Blerim";
 
@@ -116,13 +137,17 @@ public class ShipmentResourceIntTest {
 
     private static final String DEFAULT_ZIPCODE = "10000";
 
-    private static final String DEFAULT_STATUS = "Delivered";
+    private static final String DEFAULT_STATUS = "delivered";
 
     private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
 
     private static final String DEFAULT_COUNTRY = "Kosova";
 
     private static  final String DEFAULT_CITY="Prishtina";
+
+    private static final String DEFAULT_UNIT="kg";
+
+    private static final String DEFAULT_TYPE="enevelope";
 
     private Employee deliverEmployee;
 
@@ -143,6 +168,12 @@ public class ShipmentResourceIntTest {
     private Price price;
 
     private City city;
+
+    private ProductDetails productDetails;
+
+    private ProductType productType;
+
+    private WeightUnit weightUnit;
 
 
     @Before
@@ -219,6 +250,22 @@ public class ShipmentResourceIntTest {
         return product;
     }
 
+    public ProductDetails createProductDetails()
+    {
+        ProductDetails productDetails=new ProductDetails().weight(25.3).length(25.3).height(25.3).width(25.3);
+        return productDetails;
+    }
+
+    public ProductType createProductType()
+    {
+        ProductType productType=new ProductType().type(DEFAULT_TYPE);
+        return productType;
+    }
+    public WeightUnit createWeight()
+    {
+        WeightUnit weightUnit=new WeightUnit().unit(DEFAULT_UNIT);
+        return weightUnit;
+    }
     public ReceiverInfo createReceiver() {
         ReceiverInfo receiverInfo = new ReceiverInfo().fullName(DEFAULT_NAME).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE);
         return receiverInfo;
@@ -263,6 +310,19 @@ public class ShipmentResourceIntTest {
 
         product.setPrice(price);
 
+        productType=createProductType();
+        productTypeRepository.save(productType);
+
+        weightUnit=createWeight();
+        weightUnitRepository.save(weightUnit);
+
+        productDetails=createProductDetails();
+        productDetailsRepository.save(productDetails);
+
+        productDetails.setProduct(product);
+        productDetails.setWeightUnit(weightUnit);
+        productDetails.setType(productType);
+
         receiverInfo = createReceiver();
         receiverInfoRepository.save(receiverInfo);
 
@@ -282,6 +342,7 @@ public class ShipmentResourceIntTest {
         shipment.setLocation(warehouseLocation);
         shipment.setDeliverEmployee(deliverEmployee);
         shipment.setContactEmployee(contactEmployee);
+        shipment.setDetails(productDetails);
 
 
     }
@@ -437,7 +498,48 @@ public class ShipmentResourceIntTest {
                .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()));
        }
 
+    @Test
+    @Transactional
+    public void getOutboundPackages() throws Exception {
+        // Initialize the database
+        shipmentRepository.saveAndFlush(shipment);
 
+        // Get all the shipmentList
+        restShipmentMockMvc.perform(get("/api/shipment/outbound-packages?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+//            .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())))
+//            .andExpect(jsonPath("$.[*].senderP.id").value(hasItem(shipment.getSenderP().getId().intValue())))
+ //           .andExpect(jsonPath("$.[*].senderName").value(hasItem(shipment.getSenderP().getFullName())))
+//            .andExpect(jsonPath("$.[*].senderP.tel").value(hasItem(shipment.getSenderP().getTel())))
+//            .andExpect(jsonPath("$.[*].senderP.address").value(hasItem(shipment.getSenderP().getAddress())))
+//            .andExpect(jsonPath("$.[*].senderP.zipCode").value(hasItem(shipment.getSenderP().getZipCode())))
+//            .andExpect(jsonPath("$.[*].senderP.email").value(hasItem(shipment.getSenderP().getEmail())))
+//            .andExpect(jsonPath("$.[*].receiver.id").value(hasItem(shipment.getReceiver().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].receiver.fullName").value(hasItem(shipment.getReceiver().getFullName())))
+//            .andExpect(jsonPath("$.[*].receiver.address").value(hasItem(shipment.getReceiver().getAddress())))
+//            .andExpect(jsonPath("$.[*].receiver.zipCode").value(hasItem(shipment.getReceiver().getZipCode())))
+//            .andExpect(jsonPath("$.[*].deliverEmployee.id").value(hasItem(shipment.getDeliverEmployee().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].deliverEmployee.name").value(hasItem(shipment.getDeliverEmployee().getName())))
+//            .andExpect(jsonPath("$.[*].deliverEmployee.lastName").value(hasItem(shipment.getDeliverEmployee().getLastName())))
+//            .andExpect(jsonPath("$.[*].deliverEmployee.email").value(hasItem(shipment.getDeliverEmployee().getEmail())))
+//            .andExpect(jsonPath("$.[*].deliverEmployee.age").value(hasItem(shipment.getDeliverEmployee().getAge())))
+//            .andExpect(jsonPath("$.[*].contactEmployee.id").value(hasItem(shipment.getContactEmployee().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].contactEmployee.name").value(hasItem(shipment.getContactEmployee().getName())))
+//            .andExpect(jsonPath("$.[*].contactEmployee.lastName").value(hasItem(shipment.getContactEmployee().getLastName())))
+//            .andExpect(jsonPath("$.[*].contactEmployee.email").value(hasItem(shipment.getContactEmployee().getEmail())))
+//            .andExpect(jsonPath("$.[*].contactEmployee.age").value(hasItem(shipment.getContactEmployee().getAge())))
+//            .andExpect(jsonPath("$.[*].status.id").value(hasItem(shipment.getStatus().getId().intValue())))
+ //          .andExpect(jsonPath("$.[*].statusName").value(hasItem(shipment.getStatus().getStatusName())))
+//            .andExpect(jsonPath("$.[*].product.id").value(hasItem(shipment.getProduct().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].product.price.id").value(hasItem(shipment.getProduct().getPrice().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].location.id").value(hasItem(shipment.getLocation().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].location.address").value(hasItem(shipment.getLocation().getAddress())))
+//            .andExpect(jsonPath("$.[*].location.country").value(hasItem(shipment.getLocation().getCountry())))
+//            .andExpect(jsonPath("$.[*].location.city.id").value(hasItem(shipment.getLocation().getCity().getId().intValue())))
+//            .andExpect(jsonPath("$.[*].location.city.cityName").value(hasItem(shipment.getLocation().getCity().getCityName())))
+        ;
+    }
 
     @Test
     @Transactional
