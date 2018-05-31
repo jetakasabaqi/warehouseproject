@@ -3,8 +3,11 @@ package com.project.repository;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
+import com.project.service.dto.OutboundPackageDTO;
 import com.project.service.dto.PackageInfoDTO;
 import com.project.service.dto.PackageStatusDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import com.project.service.dto.PackageDTO;
 import org.springframework.stereotype.Repository;
@@ -73,4 +76,19 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         " inner join p.price pr "+
         "where senderp_id=:person_id and p.id=:product_id")
     PackageInfoDTO getPackageInfo(@Param("person_id") Long person_id,@Param("product_id") Long product_id);
+
+    @Query("select new com.project.service.dto.OutboundPackageDTO (p.fullName,p.email,r.fullName,r.address,d.name,d.tel,c.name,c.tel,st.id,st.statusName,pr.id,pri.price,l.id,pt.type) "+
+        " from Shipment sh " +
+        "inner join sh.senderP p " +
+        "inner join sh.receiver r " +
+        " inner join Employee d on (sh.deliverEmployee.id = d.id) "+
+        " inner join Employee c on (sh.contactEmployee.id = c.id) "+
+        "inner join sh.status st " +
+        "inner join sh.location l " +
+        "inner join sh.product pr " +
+        "inner join pr.price pri " +
+        "inner join sh.details d1 " +
+        "inner join d1.type pt " +
+        "where sh.status.id=1 ")
+    Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable);
 }
