@@ -237,6 +237,7 @@ public class ShipmentResourceIntTest {
     public Status createStatus() {
         Status status = new Status()
             .statusName(DEFAULT_STATUS);
+        status.setId(3L);
         return status;
     }
 
@@ -508,36 +509,22 @@ public class ShipmentResourceIntTest {
         restShipmentMockMvc.perform(get("/api/shipment/outbound-packages?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-//            .andExpect(jsonPath("$.[*].id").value(hasItem(shipment.getId().intValue())))
-//            .andExpect(jsonPath("$.[*].senderP.id").value(hasItem(shipment.getSenderP().getId().intValue())))
- //           .andExpect(jsonPath("$.[*].senderName").value(hasItem(shipment.getSenderP().getFullName())))
-//            .andExpect(jsonPath("$.[*].senderP.tel").value(hasItem(shipment.getSenderP().getTel())))
-//            .andExpect(jsonPath("$.[*].senderP.address").value(hasItem(shipment.getSenderP().getAddress())))
-//            .andExpect(jsonPath("$.[*].senderP.zipCode").value(hasItem(shipment.getSenderP().getZipCode())))
-//            .andExpect(jsonPath("$.[*].senderP.email").value(hasItem(shipment.getSenderP().getEmail())))
-//            .andExpect(jsonPath("$.[*].receiver.id").value(hasItem(shipment.getReceiver().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].receiver.fullName").value(hasItem(shipment.getReceiver().getFullName())))
-//            .andExpect(jsonPath("$.[*].receiver.address").value(hasItem(shipment.getReceiver().getAddress())))
-//            .andExpect(jsonPath("$.[*].receiver.zipCode").value(hasItem(shipment.getReceiver().getZipCode())))
-//            .andExpect(jsonPath("$.[*].deliverEmployee.id").value(hasItem(shipment.getDeliverEmployee().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].deliverEmployee.name").value(hasItem(shipment.getDeliverEmployee().getName())))
-//            .andExpect(jsonPath("$.[*].deliverEmployee.lastName").value(hasItem(shipment.getDeliverEmployee().getLastName())))
-//            .andExpect(jsonPath("$.[*].deliverEmployee.email").value(hasItem(shipment.getDeliverEmployee().getEmail())))
-//            .andExpect(jsonPath("$.[*].deliverEmployee.age").value(hasItem(shipment.getDeliverEmployee().getAge())))
-//            .andExpect(jsonPath("$.[*].contactEmployee.id").value(hasItem(shipment.getContactEmployee().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].contactEmployee.name").value(hasItem(shipment.getContactEmployee().getName())))
-//            .andExpect(jsonPath("$.[*].contactEmployee.lastName").value(hasItem(shipment.getContactEmployee().getLastName())))
-//            .andExpect(jsonPath("$.[*].contactEmployee.email").value(hasItem(shipment.getContactEmployee().getEmail())))
-//            .andExpect(jsonPath("$.[*].contactEmployee.age").value(hasItem(shipment.getContactEmployee().getAge())))
-//            .andExpect(jsonPath("$.[*].status.id").value(hasItem(shipment.getStatus().getId().intValue())))
- //          .andExpect(jsonPath("$.[*].statusName").value(hasItem(shipment.getStatus().getStatusName())))
-//            .andExpect(jsonPath("$.[*].product.id").value(hasItem(shipment.getProduct().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].product.price.id").value(hasItem(shipment.getProduct().getPrice().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].location.id").value(hasItem(shipment.getLocation().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].location.address").value(hasItem(shipment.getLocation().getAddress())))
-//            .andExpect(jsonPath("$.[*].location.country").value(hasItem(shipment.getLocation().getCountry())))
-//            .andExpect(jsonPath("$.[*].location.city.id").value(hasItem(shipment.getLocation().getCity().getId().intValue())))
-//            .andExpect(jsonPath("$.[*].location.city.cityName").value(hasItem(shipment.getLocation().getCity().getCityName())))
+            .andExpect(jsonPath("$.[*].senderName").value(hasItem(shipment.getSenderP().getFullName())))
+            .andExpect(jsonPath("$.[*].senderEmail").value(hasItem(shipment.getSenderP().getEmail())))
+            .andExpect(jsonPath("$.[*].receiverName").value(hasItem(shipment.getReceiver().getFullName())))
+            .andExpect(jsonPath("$.[*].receiverAddress").value(hasItem(shipment.getReceiver().getAddress())))
+            .andExpect(jsonPath("$.[*].deliverEmployeeName").value(hasItem(shipment.getDeliverEmployee().getName())))
+            .andExpect(jsonPath("$.[*].deliverEmployeeTel").value(hasItem(shipment.getDeliverEmployee().getTel())))
+
+            .andExpect(jsonPath("$.[*].contactEmployeeName").value(hasItem(shipment.getContactEmployee().getName())))
+            .andExpect(jsonPath("$.[*].contactEmployeeTel").value(hasItem(shipment.getContactEmployee().getTel())))
+            .andExpect(jsonPath("$.[*].statusId").value(hasItem(shipment.getStatus().getId().intValue())))
+           .andExpect(jsonPath("$.[*].statusName").value(hasItem(shipment.getStatus().getStatusName())))
+            .andExpect(jsonPath("$.[*].productId").value(hasItem(shipment.getProduct().getId().intValue())))
+
+            .andExpect(jsonPath("$.[*].locationId").value(hasItem(shipment.getLocation().getId().intValue())))
+
+            .andExpect(jsonPath("$.[*].productType").value(hasItem(shipment.getDetails().getType().getType())))
         ;
     }
 
