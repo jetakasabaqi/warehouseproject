@@ -30,7 +30,7 @@
             </column>            <column name="employee_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>            <column name="status_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="product_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>            <column name="location_id" type="bigint">

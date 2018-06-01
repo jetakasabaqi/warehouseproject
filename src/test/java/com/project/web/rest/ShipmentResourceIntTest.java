@@ -232,6 +232,7 @@ public class ShipmentResourceIntTest {
     public Status createStatus() {
         Status status = new Status()
             .statusName(DEFAULT_STATUS);
+        status.setId(1L);
         return status;
     }
 
@@ -519,10 +520,10 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.deliver_employeeId").value(shipment.getDeliverEmployee().getId().intValue()))
             .andExpect(jsonPath("$.deliver_employeeName").value(shipment.getDeliverEmployee().getName()))
             .andExpect(jsonPath("$.deliver_employeeEmail").value(shipment.getDeliverEmployee().getEmail()))
-            .andExpect(jsonPath("$.deliverEmployee_tel").value(hasItem(shipment.getDeliverEmployee().getTel())))
-            .andExpect(jsonPath("$.contact_employeeId").value(hasItem(shipment.getContactEmployee().getId().intValue())))
-            .andExpect(jsonPath("$.contact_employeeEmail").value(hasItem(shipment.getContactEmployee().getEmail())))
-            .andExpect(jsonPath("$.contact_employeeTel").value(hasItem(shipment.getContactEmployee().getTel())));
+            .andExpect(jsonPath("$.deliverEmployee_tel").value(shipment.getDeliverEmployee().getTel()))
+            .andExpect(jsonPath("$.contact_employeeId").value(shipment.getContactEmployee().getId().intValue()))
+            .andExpect(jsonPath("$.contact_employeeEmail").value(shipment.getContactEmployee().getEmail()))
+            .andExpect(jsonPath("$.contact_employeeTel").value(shipment.getContactEmployee().getTel()));
     }
     @Test
     @Transactional
@@ -544,8 +545,7 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.[*].statusId").value(hasItem(shipment.getStatus().getId().intValue())))
             .andExpect(jsonPath("$.[*].statusName").value(hasItem(shipment.getStatus().getStatusName())))
             .andExpect(jsonPath("$.[*].productId").value(hasItem(shipment.getProduct().getId().intValue())))
-            .andExpect(jsonPath("$.[*].locationId").value(hasItem(shipment.getLocation().getId())))
-            .andExpect(jsonPath("$.[*].contact_employeeTel").value(hasItem(shipment.getContactEmployee().getTel())))
+            .andExpect(jsonPath("$.[*].locationId").value(hasItem(shipment.getLocation().getId().intValue())))
             .andExpect(jsonPath("$.[*].productType").value(hasItem(shipment.getDetails().getType().getType())));
     }
 
