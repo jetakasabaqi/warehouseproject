@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.annotation.Timed;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -239,7 +240,7 @@ public class ShipmentResourceIntTest {
     public Status createStatus() {
         Status status = new Status()
             .statusName(DEFAULT_STATUS);
-        status.setId(1L);
+        status.setId(3L);
         return status;
     }
 
@@ -581,6 +582,19 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.[*].productId").value(hasItem(shipment.getProduct().getId().intValue())))
             .andExpect(jsonPath("$.[*].locationId").value(hasItem(shipment.getLocation().getId().intValue())))
             .andExpect(jsonPath("$.[*].productType").value(hasItem(shipment.getDetails().getType().getType())));
+    }
+
+    @Test
+    @Transactional
+    public void getNoOfPacksDelivered() throws Exception
+    {
+        shipment.getStatus().setId(4l);
+        shipmentRepository.saveAndFlush(shipment);
+
+        restShipmentMockMvc.perform(get("/api/shipment/packs_delivered"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.number_of_Packs_delivered").value(1));
     }
 
     @Test

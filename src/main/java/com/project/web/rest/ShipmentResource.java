@@ -4,11 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Shipment;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
-import com.project.service.dto.InboundPackagesDTO;
-import com.project.service.dto.OutboundPackageDTO;
-import com.project.service.dto.PackageDTO;
-import com.project.service.dto.PackageInfoDTO;
-import com.project.service.dto.PackageStatusDTO;
+import com.project.service.dto.*;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -232,7 +228,7 @@ public class ShipmentResource {
     //Warehouse Endpoints
     @GetMapping("/shipment/outbound-packages")
     @Timed
-    public  ResponseEntity<List<OutboundPackageDTO>> getInboundPackages(Pageable pageable)
+    public  ResponseEntity<List<OutboundPackageDTO>> getOutboundPackages(Pageable pageable)
     {
         Page<OutboundPackageDTO> page = shipmentService.getOutboundPackages(pageable);
 
@@ -249,6 +245,16 @@ public class ShipmentResource {
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipment/inbound-packages");
        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/shipment/packs_delivered")
+    @Timed
+    public ResponseEntity<NoOfPacksDeliveredDTO> getNoOFPacksDelivered()
+    {
+        NoOfPacksDeliveredDTO result=shipmentService.getNoOfPacksDelivered();
+        return new ResponseEntity<>(result,HttpStatus.OK);
+
     }
 }
 

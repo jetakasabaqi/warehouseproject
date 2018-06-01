@@ -3,14 +3,10 @@ package com.project.repository;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
-import com.project.service.dto.InboundPackagesDTO;
-import com.project.service.dto.OutboundPackageDTO;
-import com.project.service.dto.PackageInfoDTO;
-import com.project.service.dto.PackageStatusDTO;
+import com.project.service.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
-import com.project.service.dto.PackageDTO;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
@@ -107,4 +103,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
         "inner join d1.type pt " +
         "where sh.status.id=3 ")
     Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable);
+
+    @Query("select new com.project.service.dto.NoOfPacksDeliveredDTO(count(sh)) from Shipment sh inner join sh.status s where s.id=4")
+    NoOfPacksDeliveredDTO getNoOfPacksDelivered();
 }

@@ -2,11 +2,7 @@ package com.project.service;
 
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
-import com.project.service.dto.InboundPackagesDTO;
-import com.project.service.dto.OutboundPackageDTO;
-import com.project.service.dto.PackageDTO;
-import com.project.service.dto.PackageInfoDTO;
-import com.project.service.dto.PackageStatusDTO;
+import com.project.service.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -73,4 +69,6 @@ public interface ShipmentService {
 
 
     Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable);
+
+    NoOfPacksDeliveredDTO getNoOfPacksDelivered();
 }
