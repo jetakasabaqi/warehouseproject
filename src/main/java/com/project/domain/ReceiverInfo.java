@@ -32,6 +32,12 @@ public class ReceiverInfo implements Serializable {
     @Column(name = "zip_code")
     private String zipCode;
 
+    @Column(name="city")
+    private String city;
+
+    @Column(name="country")
+    private String country;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -81,33 +87,51 @@ public class ReceiverInfo implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        ReceiverInfo receiverInfo = (ReceiverInfo) o;
-        if (receiverInfo.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), receiverInfo.getId());
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReceiverInfo that = (ReceiverInfo) o;
+        return Objects.equals(id, that.id) &&
+            Objects.equals(fullName, that.fullName) &&
+            Objects.equals(address, that.address) &&
+            Objects.equals(zipCode, that.zipCode) &&
+            Objects.equals(city, that.city) &&
+            Objects.equals(country, that.country);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+
+        return Objects.hash(id, fullName, address, zipCode, city, country);
     }
 
     @Override
     public String toString() {
         return "ReceiverInfo{" +
-            "id=" + getId() +
-            ", fullName='" + getFullName() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", zipCode='" + getZipCode() + "'" +
-            "}";
+            "id=" + id +
+            ", fullName='" + fullName + '\'' +
+            ", address='" + address + '\'' +
+            ", zipCode='" + zipCode + '\'' +
+            ", city='" + city + '\'' +
+            ", country='" + country + '\'' +
+            '}';
     }
 }

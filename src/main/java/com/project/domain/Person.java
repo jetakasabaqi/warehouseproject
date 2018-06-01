@@ -1,5 +1,6 @@
 package com.project.domain;
 
+import org.checkerframework.checker.units.qual.C;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -37,6 +38,13 @@ public class Person implements Serializable {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name="city")
+    private String city;
+
+    @Column(name="country")
+    private String country;
+
 
     @OneToOne
     @JoinColumn(name="id",referencedColumnName = "userId")
@@ -125,35 +133,56 @@ public class Person implements Serializable {
         this.user = user;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        if (person.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), person.getId());
+        return Objects.equals(id, person.id) &&
+            Objects.equals(fullName, person.fullName) &&
+            Objects.equals(tel, person.tel) &&
+            Objects.equals(address, person.address) &&
+            Objects.equals(zipCode, person.zipCode) &&
+            Objects.equals(email, person.email) &&
+            Objects.equals(city, person.city) &&
+            Objects.equals(country, person.country) &&
+            Objects.equals(user, person.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+
+        return Objects.hash(id, fullName, tel, address, zipCode, email, city, country, user);
     }
 
     @Override
     public String toString() {
         return "Person{" +
-            "id=" + getId() +
-            ", fullName='" + getFullName() + "'" +
-            ", tel='" + getTel() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", zipCode='" + getZipCode() + "'" +
-            ", email='" + getEmail() + "'" +
-            "}";
+            "id=" + id +
+            ", fullName='" + fullName + '\'' +
+            ", tel='" + tel + '\'' +
+            ", address='" + address + '\'' +
+            ", zipCode='" + zipCode + '\'' +
+            ", email='" + email + '\'' +
+            ", city='" + city + '\'' +
+            ", country='" + country + '\'' +
+            ", user=" + user +
+            '}';
     }
 }
