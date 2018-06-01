@@ -529,6 +529,7 @@ public class ShipmentResourceIntTest {
     @Transactional
     public void getInboundPackages () throws Exception
     {
+        shipment.setId(1l);
         shipmentRepository.saveAndFlush(shipment);
 
         restShipmentMockMvc.perform(get("/api/shipment/inbound-packages"))
