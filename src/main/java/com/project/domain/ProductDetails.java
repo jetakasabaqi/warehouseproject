@@ -58,8 +58,29 @@ public class ProductDetails implements Serializable {
         this.weightUnit = weightUnit;
         this.type = type;
     }
+   public ProductDetails weight(double weight)
+    {
+        this.weight=weight;
+        return this;
+    }
 
+    public ProductDetails height(double heigh)
+    {
+        this.height=heigh;
+        return this;
+    }
 
+    public ProductDetails length(double length)
+    {
+        this.length=length;
+        return this;
+    }
+
+    public ProductDetails width(double widht)
+    {
+        this.width=widht;
+        return this;
+    }
     public Long getId() {
         return id;
     }

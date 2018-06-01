@@ -1,13 +1,10 @@
 package com.project.web.rest;
 
 import com.project.Jeta123App;
-
 import com.project.domain.*;
 import com.project.repository.*;
 import com.project.service.*;
 import com.project.web.rest.errors.ExceptionTranslator;
-
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,6 +82,8 @@ public class ShipmentResourceIntTest {
 
     @Autowired WeightUnitService weightUnitService;
 
+
+
     @Autowired
     private PersonRepository personRepository;
     @Autowired
@@ -117,6 +116,8 @@ public class ShipmentResourceIntTest {
     @Autowired
     private WeightUnitRepository weightUnitRepository;
 
+
+
     private static final String DEFAULT_NAME = "Blerim";
 
     private static final String DEFAULT_LASTNAME = "Kabashi";
@@ -135,13 +136,17 @@ public class ShipmentResourceIntTest {
 
     private static final String DEFAULT_ZIPCODE = "10000";
 
-    private static final String DEFAULT_STATUS = "arriving";
+    private static final String DEFAULT_STATUS = "delivered";
 
     private static final BigDecimal DEFAULT_PRICE = new BigDecimal(1);
 
     private static final String DEFAULT_COUNTRY = "Kosova";
 
     private static  final String DEFAULT_CITY="Prishtina";
+
+    private static final String DEFAULT_UNIT="kg";
+
+    private static final String DEFAULT_TYPE="enevelope";
 
     private Employee deliverEmployee;
 
@@ -168,6 +173,8 @@ public class ShipmentResourceIntTest {
     private ProductType productType;
 
     private WeightUnit weightUnit;
+
+
 
 
 
@@ -492,7 +499,34 @@ public class ShipmentResourceIntTest {
                .andExpect(jsonPath("$.statusName").value(shipment.getStatus().getStatusName()));
        }
 
+    @Test
+    @Transactional
+    public void getOutboundPackages() throws Exception {
+        // Initialize the database
+        shipmentRepository.saveAndFlush(shipment);
 
+        // Get all the shipmentList
+        restShipmentMockMvc.perform(get("/api/shipment/outbound-packages?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.[*].senderName").value(hasItem(shipment.getSenderP().getFullName())))
+            .andExpect(jsonPath("$.[*].senderEmail").value(hasItem(shipment.getSenderP().getEmail())))
+            .andExpect(jsonPath("$.[*].receiverName").value(hasItem(shipment.getReceiver().getFullName())))
+            .andExpect(jsonPath("$.[*].receiverAddress").value(hasItem(shipment.getReceiver().getAddress())))
+            .andExpect(jsonPath("$.[*].deliverEmployeeName").value(hasItem(shipment.getDeliverEmployee().getName())))
+            .andExpect(jsonPath("$.[*].deliverEmployeeTel").value(hasItem(shipment.getDeliverEmployee().getTel())))
+
+            .andExpect(jsonPath("$.[*].contactEmployeeName").value(hasItem(shipment.getContactEmployee().getName())))
+            .andExpect(jsonPath("$.[*].contactEmployeeTel").value(hasItem(shipment.getContactEmployee().getTel())))
+            .andExpect(jsonPath("$.[*].statusId").value(hasItem(shipment.getStatus().getId().intValue())))
+           .andExpect(jsonPath("$.[*].statusName").value(hasItem(shipment.getStatus().getStatusName())))
+            .andExpect(jsonPath("$.[*].productId").value(hasItem(shipment.getProduct().getId().intValue())))
+
+            .andExpect(jsonPath("$.[*].locationId").value(hasItem(shipment.getLocation().getId().intValue())))
+
+            .andExpect(jsonPath("$.[*].productType").value(hasItem(shipment.getDetails().getType().getType())))
+        ;
+    }
 
     @Test
     @Transactional
