@@ -503,6 +503,8 @@ public class ShipmentResourceIntTest {
     @Transactional
     public void getOutboundPackages() throws Exception {
         // Initialize the database
+
+        shipment.setId(4L);
         shipmentRepository.saveAndFlush(shipment);
 
         // Get all the shipmentList
