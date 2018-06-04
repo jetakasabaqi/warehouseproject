@@ -9,6 +9,7 @@ import com.project.repository.UserRepository;
 import com.project.security.AuthoritiesConstants;
 import com.project.service.MailService;
 import com.project.service.dto.UserDTO;
+import com.project.service.util.MailServiceTest;
 import com.project.web.rest.errors.ExceptionTranslator;
 import com.project.web.rest.vm.KeyAndPasswordVM;
 import com.project.web.rest.vm.ManagedUserVM;
@@ -51,6 +52,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Jeta123App.class)
 public class AccountResourceIntTest {
+
+    @Autowired
+    private MailServiceTest mailServiceTest;
 
     @Autowired
     private UserRepository userRepository;
@@ -155,6 +159,18 @@ public class AccountResourceIntTest {
         restUserMockMvc.perform(get("/api/account")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    public void setMailServiceTest() throws Exception {
+        User user = new User();
+        user.setLogin("test");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setEmail("john.doe@jhipster.com");
+        user.setImageUrl("http://placehold.it/50x50");
+        user.setLangKey("en");
+        mailServiceTest.sendTemplate(user);
     }
 
     @Test
