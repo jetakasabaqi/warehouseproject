@@ -3,6 +3,7 @@ package com.project.web.rest;
 import com.project.config.Constants;
 import com.project.Jeta123App;
 import com.project.domain.Authority;
+import com.project.domain.Status;
 import com.project.domain.User;
 import com.project.repository.AuthorityRepository;
 import com.project.repository.UserRepository;
@@ -170,8 +171,32 @@ public class AccountResourceIntTest {
         user.setEmail("john.doe@jhipster.com");
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
-        mailServiceTest.sendTemplate(user);
+
+        byte[] bytes= mailServiceTest.sendPdfTemplets(user);
+        assertThat(bytes).isNotEmpty();
     }
+
+    @Test
+    public void setMailServiceLISTTest() throws Exception {
+        User user = new User();
+        user.setLogin("test");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setEmail("john.doe@jhipster.com");
+        user.setImageUrl("http://placehold.it/50x50");
+        user.setLangKey("en");
+
+        List<Status> statuses=new ArrayList<>();
+        Status status=new Status().statusName("Shipped");
+
+        Status status1=new Status().statusName("Arrived");
+        statuses.add(status);
+        statuses.add(status1);
+
+        mailServiceTest.sendPdfTempletsLisy(user,statuses);
+
+    }
+
 
     @Test
     @Transactional

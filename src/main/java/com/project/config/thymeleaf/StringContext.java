@@ -1,6 +1,5 @@
 package com.project.config.thymeleaf;
 
-import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.context.Context;
 
 import java.util.Locale;

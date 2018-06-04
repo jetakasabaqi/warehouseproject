@@ -1,12 +1,12 @@
 package com.project.config;
 
 import com.project.config.thymeleaf.StringAndClassLoaderResourceResolver;
-import javafx.application.Application;
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
@@ -18,11 +18,10 @@ public class ThymeleafConfiguration {
 
     @Bean
     @Description("Thymeleaf template resolver serving HTML 5 emails")
-    public TemplateResolver emailTemplateResolver() {
-      ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
-       emailTemplateResolver.setPrefix("util/");
-        emailTemplateResolver.setPrefix("service/util");
-       emailTemplateResolver.setSuffix(".java");
+    public ClassLoaderTemplateResolver emailTemplateResolver() {
+        ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
+        emailTemplateResolver.setPrefix("mails/");
+        emailTemplateResolver.setSuffix(".html");
         emailTemplateResolver.setTemplateMode("HTML5");
         emailTemplateResolver.setCharacterEncoding(CharEncoding.UTF_8);
         emailTemplateResolver.setOrder(1);

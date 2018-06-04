@@ -1,33 +1,21 @@
 package com.project.service.util;
 
-import com.project.config.thymeleaf.StringAndClassLoaderResourceResolver;
+import com.lowagie.text.DocumentException;
 import com.project.config.thymeleaf.StringContext;
+import com.project.domain.Status;
 import com.project.domain.User;
-import com.sun.javaws.HtmlOptions;
 import io.github.jhipster.config.JHipsterProperties;
-import javafx.fxml.JavaFXBuilderFactory;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.bouncycastle.asn1.cms.MetaData;
-import org.springframework.core.convert.converter.Converter;
-
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
-
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
 import java.util.Locale;
-
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.templateresolver.ITemplateResolver;
-import org.w3c.dom.html.HTMLObjectElement;
-
-import javax.swing.text.StringContent;
-import javax.swing.text.html.HTML;
-
-import static com.project.security.AuthoritiesConstants.USER;
-import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Component
 public class MailServiceTest {
@@ -39,6 +27,8 @@ public class MailServiceTest {
     private static final String USER = "user";
 
     private static final String BASE_URL = "baseUrl";
+
+    private static final String STATUS="status";
 
     private String template = "<!DOCTYPE html>\n" +
         "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
@@ -66,6 +56,31 @@ public class MailServiceTest {
         "    </body>\n" +
         "</html>\n";
 
+       private String templateList="<!DOCTYPE html>\n" +
+           "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
+           "<head>\n" +
+           "<title>JHipster Status List</title>\n" +
+           "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" +
+           "<link rel=\"shortcut icon\" th:href=\"@{|${baseUrl}/favicon.ico|}\" />\n" +
+           "\n" +
+           "</head>\n" +
+           "<body>\n" +
+           "   <p>Here is the status list :</p>\n" +
+           "\n" +
+           "   <ul>\n" +
+           "     <li th:each=\" status : ${status}\" th:text=\"${status.statusName}\">\n" +
+           "         There are no statuses\n" +
+           "     </li>\n" +
+           "\n" +
+           "\n" +
+           "\n" +
+           "\n" +
+           "   </ul>\n" +
+           "\n" +
+           "\n" +
+           "\n" +
+           "</body>\n" +
+           "</html>";
     public MailServiceTest(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {
         this.templateEngine = templateEngine;
         this.jHipsterProperties = jHipsterProperties;
@@ -83,19 +98,62 @@ public class MailServiceTest {
     public void sendTemplate(User user) throws IOException {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
 
-        StringContext context=new StringContext(template,locale);
+        StringContext context = new StringContext(template, locale);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
-        String content = templateEngine.process(template,context);
+        String content = templateEngine.process(template, context);
 
         System.out.print(content);
     }
+
+
+    public byte[] sendPdfTemplets(User user) throws IOException, DocumentException {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+
+        StringContext context = new StringContext(template, locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        String content = templateEngine.process(template, context);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(content);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        byte[] pdfbytes = outputStream.toByteArray();
+        outputStream.close();
+        return pdfbytes;
+    }
+    public void sendPdfTempletsLisy(User user,List<Status> status) throws IOException, DocumentException {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+
+        StringContext context = new StringContext(templateList, locale);
+        context.setVariable(USER, user);
+        context.setVariable(STATUS,status);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        String content = templateEngine.process(templateList, context);
+
+        OutputStream outputStream=new FileOutputStream("messagelist.pdf");
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(content);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+//        byte[] pdfbytes = outputStream.toByteArray();
+          outputStream.close();
+//        return pdfbytes;
+    }
+
     @Override
-    public String toString(){
+    public String toString() {
 
         return new ToStringBuilder(this).append("test.html").append(template).toString();
     }
+
 
 }
 
