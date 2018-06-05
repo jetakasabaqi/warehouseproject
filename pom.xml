@@ -111,7 +111,7 @@
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
             <artifactId>flying-saucer-pdf</artifactId>
-            <version>9.1.13</version>
+            <version>9.1.12</version>
         </dependency>
 
         <dependency>
@@ -345,11 +345,7 @@
             <artifactId>docker-client</artifactId>
             <version>8.8.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.196</version>
-        </dependency>
+
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
 
