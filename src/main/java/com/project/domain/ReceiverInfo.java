@@ -104,17 +104,13 @@ public class ReceiverInfo implements Serializable {
         this.country = country;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReceiverInfo that = (ReceiverInfo) o;
-        return Objects.equals(id, that.id) &&
-            Objects.equals(fullName, that.fullName) &&
-            Objects.equals(address, that.address) &&
-            Objects.equals(zipCode, that.zipCode) &&
-            Objects.equals(city, that.city) &&
-            Objects.equals(country, that.country);
+        return Objects.equals(id, that.id);
     }
 
     @Override
