@@ -46,10 +46,23 @@ spring:
             hibernate.ddl-auto: update
             hibernate.generate_statistics: true
     mail:
-        host: localhost
-        port: 25
-        username:
-        password:
+        host: smtp.gmail.com
+        port: 587
+        username: warehousejeta@outlok.com
+        password: warehouse123
+        default-encoding: UTF-8
+        properties :
+         mail:
+          smtp:
+           auth : true
+           starttls :
+            enable: true
+        protocol: smtp
+        test-connection: false
+
+
+
+
     messages:
         cache-seconds: 1
     thymeleaf:
