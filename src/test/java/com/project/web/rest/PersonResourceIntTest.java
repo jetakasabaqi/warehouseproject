@@ -79,7 +79,7 @@ public class PersonResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PersonResource personResource = new PersonResource(personService,em);
+        final PersonResource personResource = new PersonResource(personService, em);
         this.restPersonMockMvc = MockMvcBuilders.standaloneSetup(personResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -89,7 +89,7 @@ public class PersonResourceIntTest {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -184,7 +184,6 @@ public class PersonResourceIntTest {
             .andExpect(jsonPath("$.[*].zipCode").value(hasItem(DEFAULT_ZIP_CODE.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())));
     }
-
 
 
     @Test
@@ -283,6 +282,7 @@ public class PersonResourceIntTest {
         List<Person> personList = personRepository.findAll();
         assertThat(personList).hasSize(databaseSizeBeforeDelete - 1);
     }
+
 
     @Test
     @Transactional

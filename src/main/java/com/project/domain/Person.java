@@ -50,6 +50,9 @@ public class Person implements Serializable {
     @JoinColumn(name="id",referencedColumnName = "userId")
     private User user;
 
+    public Person() {
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
