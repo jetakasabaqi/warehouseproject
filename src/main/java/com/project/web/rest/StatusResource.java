@@ -3,6 +3,7 @@ package com.project.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Status;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
+import com.project.service.MailService;
 import com.project.service.StatusService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
@@ -13,6 +14,7 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -42,6 +44,8 @@ public class StatusResource {
 
 
     private final EntityManager entityManager;
+    @Autowired
+    private MailService mailService;
 
     public StatusResource(StatusService statusService, EntityManager entityManager) {
         this.statusService = statusService;
@@ -135,7 +139,7 @@ public class StatusResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/statuses")
     @ResponseBody
-    public ResponseEntity<List<Status>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Status>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

@@ -48,8 +48,8 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: warehousejeta@outlok.com
-        password: warehouse123
+        username: warehousejeta@gmail.com
+        password: jetakasabaqi
         default-encoding: UTF-8
         properties :
          mail:

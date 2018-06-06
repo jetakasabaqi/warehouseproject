@@ -1,21 +1,29 @@
 package com.project.service;
 
+import com.lowagie.text.DocumentException;
 import com.project.domain.User;
 
+import com.project.service.util.MailServiceTest;
 import io.github.jhipster.config.JHipsterProperties;
 
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
+import javax.activation.DataSource;
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -72,6 +80,31 @@ public class MailService {
             }
         }
     }
+    @Async
+    public void sendMailWithAttachments(String to, boolean isMultiPart,boolean isHtml, byte[] attachment) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new
+                MimeMessageHelper(mimeMessage, true);
+
+            mimeMessageHelper.setTo(to);
+            mimeMessageHelper.setFrom(jHipsterProperties.getMail().getFrom());
+
+
+
+              mimeMessageHelper.setText("Hi Zana, this email is coming from a Java Application that your dear friend Jeta is developing.Please come faster so we can drink some coffe together.",isHtml);
+
+          //  final InputStreamSource attachmentSource = new ByteArrayResource(attachment);
+            DataSource dataSource = new ByteArrayDataSource(attachment, "application/pdf");
+            mimeMessageHelper.addAttachment("testattachment", dataSource);
+
+
+            javaMailSender.send(mimeMessage);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Async
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
@@ -84,6 +117,17 @@ public class MailService {
         sendEmail(user.getEmail(), subject, content, false, true);
 
     }
+
+    @Async
+    public void sendEmailFromTemplateAttachment(User user) throws IOException, DocumentException {
+
+        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
+
+        byte[] array=  mailServiceTest.sendPdfTemplets(user);
+        sendMailWithAttachments(user.getEmail(),true,false,array);
+    }
+
+
 
     @Async
     public void sendActivationEmail(User user) {
@@ -102,4 +146,6 @@ public class MailService {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
     }
-}
+    }
+
+
