@@ -71,4 +71,6 @@ public interface ShipmentService {
     Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable);
 
     NoOfPacksDeliveredDTO getNoOfPacksDelivered();
+
+    NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country);
 }

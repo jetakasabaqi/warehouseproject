@@ -173,4 +173,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     public NoOfPacksDeliveredDTO getNoOfPacksDelivered() {
         return shipmentRepository.getNoOfPacksDelivered();
     }
+
+    @Override
+    public NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country) {
+        return shipmentRepository.getNoOfPacksDeliveredByCountry(country);
+    }
 }
