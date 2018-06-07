@@ -234,6 +234,7 @@ public class ShipmentResourceIntTest {
         Person senderP = new Person()
             .fullName(DEFAULT_NAME)
             .tel(DEFAULT_TEL).address(DEFAULT_ADDRESS).zipCode(DEFAULT_ZIPCODE).email(DEFAULT_EMAIL);
+        senderP.setCountry("Kosova");
         return senderP;
     }
 
@@ -601,6 +602,18 @@ public class ShipmentResourceIntTest {
             .andExpect(jsonPath("$.number_of_Packs_delivered").value(1));
     }
 
+    @Test
+    @Transactional
+    public void getNoOfPacksDeliveredByCountry() throws Exception
+    {
+        shipment.getStatus().setId(4l);
+        shipmentRepository.saveAndFlush(shipment);
+
+        restShipmentMockMvc.perform(get("/api/shipment/packs_by_country?country="+ shipment.getSenderP().getCountry()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+            .andExpect(jsonPath("$.number_of_Packs_delivered").value(1));
+    }
     @Test
     @Transactional
     public void getNonExistingShipment() throws Exception {

@@ -256,6 +256,17 @@ public class ShipmentResource {
         return new ResponseEntity<>(result,HttpStatus.OK);
 
     }
+
+    @GetMapping("/shipment/packs_by_country")
+    public ResponseEntity<NoOfPacksDeliveredDTO> getNoOfPacksByCountry( @RequestParam(value = "country") String country)
+    {
+        NoOfPacksDeliveredDTO res=shipmentService.getNoOfPacksDeliveredByCountry(country);
+
+        return new ResponseEntity<>(res,HttpStatus.OK);
+
+
+
+    }
 }
 
 
