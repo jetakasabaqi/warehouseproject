@@ -7,7 +7,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "cron_jobs")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CronJobs  {
 

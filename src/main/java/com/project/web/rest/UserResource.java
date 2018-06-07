@@ -359,7 +359,6 @@ public class UserResource {
 
 
     @GetMapping("/user/email")
-    @Scheduled()
     protected boolean sendEmails() throws IOException, DocumentException {
 
         User user=new User();
