@@ -194,10 +194,9 @@ public class ShipmentResource {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET,value = "shipment/{client_id}/package")
+    @RequestMapping(method = RequestMethod.GET, value = "shipment/{client_id}/package")
     @ResponseBody
-    public ResponseEntity<PackageDTO> getOnePackage(@RequestParam(value = "product.id",required = false) Long package_id,@PathVariable(value = "client_id") Long client_id)
-    {
+    public ResponseEntity<PackageDTO> getOnePackage(@RequestParam(value = "product.id", required = false) Long package_id, @PathVariable(value = "client_id") Long client_id) {
         PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(package_id, client_id);
 
         return new ResponseEntity<>(packageDTO, HttpStatus.OK);
@@ -206,30 +205,26 @@ public class ShipmentResource {
 
     @GetMapping("/shipment/{person_id}/package-status")
     @Timed
-    public ResponseEntity<PackageStatusDTO> getPackageStatusDetails(@PathVariable(value = "person_id") Long person_id,@RequestParam(value = "product.id") Long packageId )
-    {
-        PackageStatusDTO packageStatusDTO=shipmentService.getPackageStatusDetails(person_id,packageId);
+    public ResponseEntity<PackageStatusDTO> getPackageStatusDetails(@PathVariable(value = "person_id") Long person_id, @RequestParam(value = "product.id") Long packageId) {
+        PackageStatusDTO packageStatusDTO = shipmentService.getPackageStatusDetails(person_id, packageId);
 
-        return  new ResponseEntity<>(packageStatusDTO,HttpStatus.OK);
+        return new ResponseEntity<>(packageStatusDTO, HttpStatus.OK);
     }
 
 
     @GetMapping("/shipment/{person_id}/package-info")
     @Timed
-    public ResponseEntity<PackageInfoDTO> getPackageInfo(@PathVariable(value="person_id") Long person_id, @RequestParam(value = "product") Long product_id)
-    {
-       PackageInfoDTO packageInfoDTO=shipmentService.getPackageInfo(person_id,product_id);
+    public ResponseEntity<PackageInfoDTO> getPackageInfo(@PathVariable(value = "person_id") Long person_id, @RequestParam(value = "product") Long product_id) {
+        PackageInfoDTO packageInfoDTO = shipmentService.getPackageInfo(person_id, product_id);
 
 
-
-        return new ResponseEntity<>(packageInfoDTO,HttpStatus.OK);
+        return new ResponseEntity<>(packageInfoDTO, HttpStatus.OK);
     }
 
     //Warehouse Endpoints
     @GetMapping("/shipment/outbound-packages")
     @Timed
-    public  ResponseEntity<List<OutboundPackageDTO>> getOutboundPackages(Pageable pageable)
-    {
+    public ResponseEntity<List<OutboundPackageDTO>> getOutboundPackages(Pageable pageable) {
         Page<OutboundPackageDTO> page = shipmentService.getOutboundPackages(pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipment/outbound-packages");
@@ -239,32 +234,45 @@ public class ShipmentResource {
 
     @GetMapping("/shipment/inbound-packages")
     @Timed
-    public  ResponseEntity<List<InboundPackagesDTO>> getInboundPackages(Pageable pageable)
-    {
+    public ResponseEntity<List<InboundPackagesDTO>> getInboundPackages(Pageable pageable) {
         Page<InboundPackagesDTO> page = shipmentService.getInboundPackages(pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipment/inbound-packages");
-       return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 
     @GetMapping("/shipment/packs_delivered")
     @Timed
-    public ResponseEntity<NoOfPacksDeliveredDTO> getNoOFPacksDelivered()
-    {
-        NoOfPacksDeliveredDTO result=shipmentService.getNoOfPacksDelivered();
-        return new ResponseEntity<>(result,HttpStatus.OK);
+    public ResponseEntity<NoOfPacksDeliveredDTO> getNoOFPacksDelivered() {
+        NoOfPacksDeliveredDTO result = shipmentService.getNoOfPacksDelivered();
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
     @GetMapping("/shipment/packs_by_country")
-    public ResponseEntity<NoOfPacksDeliveredDTO> getNoOfPacksByCountry( @RequestParam(value = "country") String country)
+    public ResponseEntity<NoOfPacksDeliveredDTO> getNoOfPacksByCountry(@RequestParam(value = "country") String country) {
+        NoOfPacksDeliveredDTO res = shipmentService.getNoOfPacksDeliveredByCountry(country);
+
+        return new ResponseEntity<>(res, HttpStatus.OK);
+
+
+    }
+
+    @GetMapping("/shipment/packs_pending")
+    @Timed
+    public ResponseEntity<List<NoOfPacksPendingDTO>> getNoOfPacksPending(Pageable pageable) {
+        List<NoOfPacksPendingDTO >result = shipmentService.getNoOfPacksPending(pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/shipment/loyalClients")
+    @Timed
+    public ResponseEntity<List<LoyalClients>> getLoyalClients(Pageable pageable)
     {
-        NoOfPacksDeliveredDTO res=shipmentService.getNoOfPacksDeliveredByCountry(country);
-
-        return new ResponseEntity<>(res,HttpStatus.OK);
-
-
+        List<LoyalClients> result=shipmentService.getLoyalClients(pageable);
+        return new ResponseEntity<>(result,HttpStatus.OK);
 
     }
 }

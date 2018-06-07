@@ -178,4 +178,14 @@ public class ShipmentServiceImpl implements ShipmentService {
     public NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country) {
         return shipmentRepository.getNoOfPacksDeliveredByCountry(country);
     }
+
+    @Override
+    public List<NoOfPacksPendingDTO> getNoOfPacksPending(Pageable pageable) {
+        return shipmentRepository.getNoOfPacksPending(pageable);
+    }
+
+    @Override
+    public List<LoyalClients> getLoyalClients(Pageable pageable) {
+        return shipmentRepository.getLoyalClients(pageable);
+    }
 }

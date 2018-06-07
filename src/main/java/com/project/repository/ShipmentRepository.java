@@ -109,4 +109,12 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Long>, JpaSp
 
     @Query("select new com.project.service.dto.NoOfPacksDeliveredDTO(count(sh)) from Shipment sh inner join sh.status s inner join sh.senderP p  where s.id=4 and p.country=:country")
     NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(@Param(value = "country")String country);
+
+    @Query("select new com.project.service.dto.NoOfPacksPendingDTO(count(sh),r.country) from Shipment sh inner join sh.status s inner join sh.receiver r  where s.id=2 group by r.country")
+    List<NoOfPacksPendingDTO> getNoOfPacksPending(Pageable pageable);
+
+    @Query("select new com.project.service.dto.LoyalClients(sh.senderP.fullName,sh.senderP.tel,sh.senderP.address,count(sh.senderP)) from Shipment sh group by (sh.senderP.fullName,sh.senderP.tel,sh.senderP.address) having count(sh.senderP)>=4")
+    List<LoyalClients> getLoyalClients(Pageable pageable);
+
+
 }

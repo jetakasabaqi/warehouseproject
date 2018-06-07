@@ -614,6 +614,21 @@ public class ShipmentResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.number_of_Packs_delivered").value(1));
     }
+
+    @Test
+    @Transactional
+    public void getNoOfPacksPending() throws Exception
+    {
+        shipment.getStatus().setId(2l);
+        shipmentRepository.saveAndFlush(shipment);
+
+        restShipmentMockMvc.perform(get("/api/shipment/packs_pending"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+           .andExpect(jsonPath("$.[*].numberOfPacksPending").value(hasItem(1)))
+        .andExpect(jsonPath("$.[*].countryDestination").value(hasItem(shipment.getReceiver().getCountry())));
+    }
+
     @Test
     @Transactional
     public void getNonExistingShipment() throws Exception {

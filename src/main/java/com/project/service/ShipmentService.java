@@ -73,4 +73,8 @@ public interface ShipmentService {
     NoOfPacksDeliveredDTO getNoOfPacksDelivered();
 
     NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country);
+
+    List<NoOfPacksPendingDTO> getNoOfPacksPending(Pageable pageable);
+
+    List<LoyalClients> getLoyalClients(Pageable pageable);
 }
