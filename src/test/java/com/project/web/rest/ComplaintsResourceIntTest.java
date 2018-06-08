@@ -3,10 +3,13 @@ package com.project.web.rest;
 import com.project.Jeta123App;
 import com.project.domain.Complaints;
 import com.project.domain.Employee;
+import com.project.domain.User;
 import com.project.repository.ComplaintsRepository;
 import com.project.repository.EmployeeRepository;
+import com.project.repository.UserRepository;
 import com.project.service.ComplaintsService;
 import com.project.service.EmployeeService;
+import com.project.service.UserService;
 import com.project.web.rest.errors.ExceptionTranslator;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +52,7 @@ public class ComplaintsResourceIntTest {
     private static final String DEFAULT_TEL = "AAAAAAAAAA";
     private static final String UPDATED_TEL = "BBBBBBBBBB";
 
-    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String DEFAULT_EMAIL = "jetakasabaqi@gmai.com";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
     private static final String DEFAULT_AGE = "AAAAAAAAAA";
@@ -57,10 +60,13 @@ public class ComplaintsResourceIntTest {
 
     @Autowired
     private ComplaintsRepository complaintsRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ComplaintsService complaintsService;
-
+@Autowired
+private UserService userService;
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -76,6 +82,8 @@ public class ComplaintsResourceIntTest {
     private MockMvc restEmployeeMockMvc;
 
     private Complaints complaints;
+
+    private User user;
 
     @Before
     public void setup() {
@@ -100,9 +108,11 @@ public class ComplaintsResourceIntTest {
      return complaints;
     }
 
+
     @Before
     public void initTest() {
         complaints = createEntity(em);
+
     }
 
     @Test
@@ -144,18 +154,15 @@ public class ComplaintsResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllEmployees() throws Exception {
+    public void getAllComplaints() throws Exception {
         // Initialize the database
         complaintsRepository.saveAndFlush(complaints);
 
         // Get all the employeeList
         restEmployeeMockMvc.perform(get("/api/complaints?sort=id,desc"))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
-//            .andExpect(jsonPath("$.[*].id").value(hasItem(employee.getId().intValue())))
-//            .andExpect(jsonPath("$.[*].user_id").value(hasItem(DEFAULT_NAME.toString())))
-//            .andExpect(jsonPath("$.[*].user_name").value(hasItem(DEFAULT_LAST_NAME.toString())))
-//            .andExpect(jsonPath("$.[*].details").value(hasItem(DEFAULT_TEL.toString())));
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+           .andExpect(jsonPath("$.[*].id").value(hasItem(complaints.getId().intValue())));
 
     }
     @Test
@@ -204,12 +211,6 @@ public class ComplaintsResourceIntTest {
         Complaints updatedComplaint = complaintsRepository.findOne(complaints.getId());
         // Disconnect from session so that the updates on updatedEmployee are not directly saved in db
         em.detach(updatedComplaint);
-       // updatedComplaint()
-//            .name(UPDATED_NAME)
-//            .lastName(UPDATED_LAST_NAME)
-//            .tel(UPDATED_TEL)
-//            .email(UPDATED_EMAIL)
-//            .age(UPDATED_AGE);
 
         restEmployeeMockMvc.perform(put("/api/complaints").contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(updatedComplaint)))
@@ -219,11 +220,7 @@ public class ComplaintsResourceIntTest {
         List<Complaints> complaintsList = complaintsRepository.findAll();
         assertThat(complaintsList).hasSize(databaseSizeBeforeUpdate);
         Complaints testComplaints = complaintsList.get(complaintsList.size() - 1);
-     //   assertThat(testComplaints.getName()).isEqualTo(UPDATED_NAME);
-//        assertThat(testEmployee.getLastName()).isEqualTo(UPDATED_LAST_NAME);
-//        assertThat(testEmployee.getTel()).isEqualTo(UPDATED_TEL);
-//        assertThat(testEmployee.getEmail()).isEqualTo(UPDATED_EMAIL);
-//        assertThat(testEmployee.getAge()).isEqualTo(UPDATED_AGE);
+
     }
 
     @Test
