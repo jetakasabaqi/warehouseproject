@@ -654,9 +654,7 @@ public class ShipmentResourceIntTest {
             .content(TestUtil.convertObjectToJsonBytes(status)))
             .andExpect(status().isAccepted());
 
-        List<Shipment> shipmentList = shipmentRepository.findAll();
-        assertThat(shipmentList).has()
-        Shipment testShipment = shipmentList.get(shipmentList.size() - 1);
+
 
     }
 
