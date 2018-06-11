@@ -2,6 +2,7 @@ package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Shipment;
+import com.project.domain.Status;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
 import com.project.service.dto.*;
@@ -14,6 +15,7 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -57,6 +59,8 @@ public class ShipmentResource {
     private final ProductService productService;
 
     private final WarehouseLocationService warehouseLocationService;
+
+
 
     public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, EntityManager entityManager, ProductService productService, WarehouseLocationService warehouseLocationService) {
         this.shipmentService = shipmentService;
@@ -262,20 +266,43 @@ public class ShipmentResource {
     @GetMapping("/shipment/packs_pending")
     @Timed
     public ResponseEntity<List<NoOfPacksPendingDTO>> getNoOfPacksPending(Pageable pageable) {
-        List<NoOfPacksPendingDTO >result = shipmentService.getNoOfPacksPending(pageable);
+        List<NoOfPacksPendingDTO> result = shipmentService.getNoOfPacksPending(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
     @GetMapping("/shipment/loyalClients")
     @Timed
-    public ResponseEntity<List<LoyalClients>> getLoyalClients(Pageable pageable)
-    {
-        List<LoyalClients> result=shipmentService.getLoyalClients(pageable);
-        return new ResponseEntity<>(result,HttpStatus.OK);
+    public ResponseEntity<List<LoyalClients>> getLoyalClients(Pageable pageable) {
+        List<LoyalClients> result = shipmentService.getLoyalClients(pageable);
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
-}
+
+    @PutMapping("/shipment/{id}/changeStatus")
+    @Timed
+    public ResponseEntity<Boolean> changeStatus(@PathVariable("id")Long id ,@RequestBody Status status ) throws Exception {
+        Shipment shipment = shipmentService.findOne(id);
+
+        if (status.getId() == null) {
+            log.debug("Status should have an id");
+
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+
+        if (status.getId() == 3) {
+            shipment.setStatus(status);
+           updateShipment(shipment);
+        } else if (status.getId() == 4) {
+            shipment.setStatus(status);
+            updateShipment(shipment);
+
+
+        }
+        return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+
+
+    }}
 
 
 

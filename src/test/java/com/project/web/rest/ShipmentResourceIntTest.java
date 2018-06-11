@@ -639,6 +639,29 @@ public class ShipmentResourceIntTest {
 
     @Test
     @Transactional
+    public void changeStatus() throws Exception
+    {
+        Status status=new Status();
+        status.setStatusName("shipped");
+        status.setId(1L);
+        shipment.setStatus(status);
+        shipmentService.save(shipment);
+
+        updateShipment();
+
+        restShipmentMockMvc.perform(put("/api/shipment/{id}/changeStatus",shipment.getId().intValue())
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(status)))
+            .andExpect(status().isAccepted());
+
+        List<Shipment> shipmentList = shipmentRepository.findAll();
+        assertThat(shipmentList).has()
+        Shipment testShipment = shipmentList.get(shipmentList.size() - 1);
+
+    }
+
+    @Test
+    @Transactional
     public void updateShipment() throws Exception {
         // Initialize the database
         shipmentService.save(shipment);

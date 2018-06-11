@@ -26,6 +26,13 @@ public class Status implements Serializable {
     @Column(name = "status_name")
     private String statusName;
 
+    public Status()
+    {}
+
+    public Status(String status) {
+        this.statusName=status;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
