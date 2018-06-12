@@ -144,6 +144,14 @@ public class MailService {
         byte[] array=  mailServiceTest.sendDeliveredSPDFTemplate(shipment);
         sendMailWithAttachments(shipment.getSenderP().getEmail(),true,false,array);
     }
+    @Async
+    public void sendEmailDeliveredR(Shipment shipment) throws IOException, DocumentException {
+
+        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
+
+        byte[] array=  mailServiceTest.sendDeliveredRPDFTemplate(shipment);
+        sendMailWithAttachments(shipment.getReceiver().getEmail(),true,false,array);
+    }
 //    @Async
 //    public void sendEmailFromAttachment(Shipment shipment) throws IOException, DocumentException {
 //
@@ -181,10 +189,10 @@ public class MailService {
         log.debug("Sending status changed email to '{} '",shipment.getSenderP().getEmail());
         sendEmailDeliveredS(shipment);
     }
-//    public void sendDeliveredREmail(Shipment shipment) throws IOException, DocumentException {
-//        log.debug("Sending status changed email to '{} '",shipment.getReceiver().);
-//        sendEmailFromAttachment(shipment);
-//    }
+    public void sendDeliveredREmail(Shipment shipment) throws IOException, DocumentException {
+        log.debug("Sending status changed email to '{} '",shipment.getReceiver().getEmail());
+        sendEmailDeliveredR(shipment);
+    }
 }
 
 
