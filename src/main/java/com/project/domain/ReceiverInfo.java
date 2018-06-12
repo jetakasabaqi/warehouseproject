@@ -38,6 +38,9 @@ public class ReceiverInfo implements Serializable {
     @Column(name="country")
     private String country;
 
+    @Column(name="email")
+    private String email;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -104,24 +107,29 @@ public class ReceiverInfo implements Serializable {
         this.country = country;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReceiverInfo that = (ReceiverInfo) o;
-        return Objects.equals(id, that.id) &&
-            Objects.equals(fullName, that.fullName) &&
-            Objects.equals(address, that.address) &&
-            Objects.equals(zipCode, that.zipCode) &&
-            Objects.equals(city, that.city) &&
-            Objects.equals(country, that.country);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, fullName, address, zipCode, city, country);
+        return Objects.hash(id);
     }
+
 
     @Override
     public String toString() {
@@ -132,6 +140,7 @@ public class ReceiverInfo implements Serializable {
             ", zipCode='" + zipCode + '\'' +
             ", city='" + city + '\'' +
             ", country='" + country + '\'' +
+            ", email='" + email + '\'' +
             '}';
     }
 }
