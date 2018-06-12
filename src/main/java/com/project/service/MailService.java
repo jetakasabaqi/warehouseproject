@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.lowagie.text.DocumentException;
+import com.project.domain.Shipment;
 import com.project.domain.User;
 
 import com.project.service.util.MailServiceTest;
@@ -92,7 +93,7 @@ public class MailService {
 
 
 
-              mimeMessageHelper.setText("Hi Zana, this email is coming from a Java Application that your dear friend Jeta is developing.Please come faster so we can drink some coffe together.",isHtml);
+              mimeMessageHelper.setText("This email is coming from warehouse application",isHtml);
 
           //  final InputStreamSource attachmentSource = new ByteArrayResource(attachment);
             DataSource dataSource = new ByteArrayDataSource(attachment, "application/pdf");
@@ -118,14 +119,39 @@ public class MailService {
 
     }
 
+//    @Async
+//    public void sendEmailFromTemplateAttachment(User user) throws IOException, DocumentException {
+//
+//        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
+//
+//        byte[] array=  mailServiceTest.se(user);
+//        sendMailWithAttachments(user.getEmail(),true,false,array);
+//    }
+
     @Async
-    public void sendEmailFromTemplateAttachment(User user) throws IOException, DocumentException {
+    public void sendEmailShipped(Shipment shipment) throws IOException, DocumentException {
 
         MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
 
-        byte[] array=  mailServiceTest.sendPdfTemplets(user);
-        sendMailWithAttachments(user.getEmail(),true,false,array);
+        byte[] array=  mailServiceTest.sendShippedPdf(shipment);
+        sendMailWithAttachments(shipment.getSenderP().getEmail(),true,false,array);
     }
+    @Async
+    public void sendEmailDeliveredS(Shipment shipment) throws IOException, DocumentException {
+
+        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
+
+        byte[] array=  mailServiceTest.sendDeliveredSPDFTemplate(shipment);
+        sendMailWithAttachments(shipment.getSenderP().getEmail(),true,false,array);
+    }
+//    @Async
+//    public void sendEmailFromAttachment(Shipment shipment) throws IOException, DocumentException {
+//
+//        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
+//
+//        byte[] array=  mailServiceTest.sendPdfTemplets(shipment);
+//        sendMailWithAttachments(shipment.getSenderP().getEmail(),true,false,array);
+//    }
 
 
 
@@ -146,6 +172,19 @@ public class MailService {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
     }
+
+    public void sendShippedStatusEmail(Shipment shipment) throws IOException, DocumentException {
+        log.debug("Sending status changed email to '{} '",shipment.getSenderP().getEmail());
+        sendEmailShipped(shipment);
     }
+    public void sendDeliveredSEmail(Shipment shipment) throws IOException, DocumentException {
+        log.debug("Sending status changed email to '{} '",shipment.getSenderP().getEmail());
+        sendEmailDeliveredS(shipment);
+    }
+//    public void sendDeliveredREmail(Shipment shipment) throws IOException, DocumentException {
+//        log.debug("Sending status changed email to '{} '",shipment.getReceiver().);
+//        sendEmailFromAttachment(shipment);
+//    }
+}
 
 

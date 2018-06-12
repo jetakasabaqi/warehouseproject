@@ -357,18 +357,18 @@ public class UserResource {
     }
 }
 
-
-    @GetMapping("/user/email")
-    protected boolean sendEmails() throws IOException, DocumentException {
-
-        User user=new User();
-        user.setEmail("jetakasabaqi@gmail.com");
-        user.setLangKey("en");
-        user.setFirstName("Zana");
-
-        mailService.sendEmailFromTemplateAttachment(user);
-        return true;
-    }
+//
+//    @GetMapping("/user/email")
+//    protected boolean sendEmails() throws IOException, DocumentException {
+//
+//        User user=new User();
+//        user.setEmail("jetakasabaqi@gmail.com");
+//        user.setLangKey("en");
+//        user.setFirstName("Zana");
+//
+//        mailService.sendEmailFromTemplateAttachment(user);
+//        return true;
+//    }
 
 
 

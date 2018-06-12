@@ -60,6 +60,8 @@ public class ShipmentResource {
 
     private final WarehouseLocationService warehouseLocationService;
 
+    @Autowired
+    private  MailService mailService;
 
 
     public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, EntityManager entityManager, ProductService productService, WarehouseLocationService warehouseLocationService) {
@@ -293,11 +295,12 @@ public class ShipmentResource {
         if (status.getId() == 3) {
             shipment.setStatus(status);
            updateShipment(shipment);
+           mailService.sendShippedStatusEmail(shipment);
         } else if (status.getId() == 4) {
             shipment.setStatus(status);
             updateShipment(shipment);
-
-
+//            mailService.sendDeliveredREmail(shipment);
+            mailService.sendDeliveredSEmail(shipment);
         }
         return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
 
