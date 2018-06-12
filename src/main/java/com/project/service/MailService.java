@@ -97,7 +97,7 @@ public class MailService {
 
           //  final InputStreamSource attachmentSource = new ByteArrayResource(attachment);
             DataSource dataSource = new ByteArrayDataSource(attachment, "application/pdf");
-            mimeMessageHelper.addAttachment("testattachment", dataSource);
+            mimeMessageHelper.addAttachment("pdf", dataSource);
 
 
             javaMailSender.send(mimeMessage);
