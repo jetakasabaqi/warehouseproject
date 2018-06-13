@@ -6,6 +6,7 @@ import com.project.domain.Person;
 import com.project.domain.Shipment;
 import com.project.domain.Status;
 import com.project.domain.User;
+import com.project.service.ShipmentService;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,8 @@ public class MailServiceTest {
     private static final String SENDER="sender";
 
     private static final String SHIPMENT="shipment";
+
+    private ShipmentService shipmentService;
 
     private String shippedTemplate="\n" +
         "<!DOCTYPE html>\n" +
@@ -129,6 +132,8 @@ public class MailServiceTest {
         "\n" +
         "</body>\n" +
         "</html>\n";
+
+
 
 
     public MailServiceTest(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {

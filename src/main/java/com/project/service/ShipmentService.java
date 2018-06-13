@@ -77,4 +77,11 @@ public interface ShipmentService {
     List<NoOfPacksPendingDTO> getNoOfPacksPending(Pageable pageable);
 
     List<LoyalClients> getLoyalClients(Pageable pageable);
+
+    String getMonthlyReport(int no,List<NoOfPacksDeliveredDTO> countries,List<NoOfPacksPendingDTO> number ,List<LoyalClients> clients);
+
+
+
+
+
 }

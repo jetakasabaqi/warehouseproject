@@ -188,4 +188,17 @@ public class ShipmentServiceImpl implements ShipmentService {
     public List<LoyalClients> getLoyalClients(Pageable pageable) {
         return shipmentRepository.getLoyalClients(pageable);
     }
+
+    @Override
+    public String getMonthlyReport(int no, List<NoOfPacksDeliveredDTO> countries, List<NoOfPacksPendingDTO> number, List<LoyalClients> clients) {
+        return "Number of packets delivered :"+no+"\n"
+            +" Number of packets delivered by country :\n"
+            + countries.toString()
+            +" Number of packets pending "
+            + number.toString()
+            +" List of loyal clients :"
+            + clients.toString();
+    }
+
+
 }
