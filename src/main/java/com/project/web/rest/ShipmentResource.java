@@ -264,7 +264,13 @@ public class ShipmentResource {
 
 
     }
+    @GetMapping("/shipment/getPacksByAnyCountry")
+    public ResponseEntity<List<NoOfPackByAnyCountry>> getNoOfPackByAnyCountry(Pageable pageable)
+    {
 
+        List<NoOfPackByAnyCountry> res=shipmentService.getNoOfPacksByAnyCountry(pageable);
+        return new ResponseEntity<>(res,HttpStatus.OK);
+    }
     @GetMapping("/shipment/packs_pending")
     @Timed
     public ResponseEntity<List<NoOfPacksPendingDTO>> getNoOfPacksPending(Pageable pageable) {
@@ -315,7 +321,16 @@ public class ShipmentResource {
         return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
 
 
-    }}
+    }
+
+
+
+
+
+
+
+
+}
 
 
 

@@ -77,4 +77,6 @@ public interface ShipmentService {
     List<NoOfPacksPendingDTO> getNoOfPacksPending(Pageable pageable);
 
     List<LoyalClients> getLoyalClients(Pageable pageable);
+
+    List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry(Pageable pageable);
 }

@@ -2,27 +2,27 @@ package com.project.service.dto;
 
 public class NoOfPacksDeliveredDTO {
 
-    private long Number_of_Packs_delivered ;
+    private long noOfPacksDelivered ;
 
     public NoOfPacksDeliveredDTO()
     {}
 
-    public NoOfPacksDeliveredDTO(long number_of_Packs_delivered) {
-        Number_of_Packs_delivered = number_of_Packs_delivered;
+    public NoOfPacksDeliveredDTO(long noOfPacksDelivered) {
+        this.noOfPacksDelivered = noOfPacksDelivered;
     }
 
     public long getNumber_of_Packs_delivered() {
-        return Number_of_Packs_delivered;
+        return noOfPacksDelivered;
     }
 
-    public void setNumber_of_Packs_delivered(int number_of_Packs_delivered) {
-        Number_of_Packs_delivered = number_of_Packs_delivered;
+    public void setNumber_of_Packs_delivered(int noOfPacksDelivered) {
+        this.noOfPacksDelivered = noOfPacksDelivered;
     }
 
     @Override
     public String toString() {
         return "NoOfPacksDeliveredDTO{" +
-            "Number_of_Packs_delivered=" + Number_of_Packs_delivered +
+            "Number_of_Packs_delivered=" + noOfPacksDelivered +
             '}';
     }
 }

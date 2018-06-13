@@ -188,4 +188,9 @@ public class ShipmentServiceImpl implements ShipmentService {
     public List<LoyalClients> getLoyalClients(Pageable pageable) {
         return shipmentRepository.getLoyalClients(pageable);
     }
+
+    @Override
+    public List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry(Pageable pageable) {
+        return shipmentRepository.getNoOfPacksByAnyCountry(pageable);
+    }
 }
