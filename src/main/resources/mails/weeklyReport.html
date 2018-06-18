@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>WEEKLY REPORT</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <p>
+           Hello
+        </p>
+        <p>
+           This is the your weekly report
+        </p>
+        <p>
+           At a glance :
+        </p>
+        <p>Number of packets delivered :</p>
+        <p th:text="${delivered.number_of_Packs_delivered}"></p>
+        <p>Number of packets delivered by country</p>
+        <table border="5" >
+            <tr>
+                <td>Country</td>
+                <td>Number of packets delivered</td>
+            </tr>
+            <th:block th:each="country : ${country}">
+
+                <tr>
+                    <td th:text="${country.getCountry()}">...</td>
+                    <td th:text="${country.getNumber_of_Packs_delivered()}">...</td>
+
+                </tr>
+            </th:block>
+        </table>
+        <p>Number of packets pending and country destination</p>
+        <table border="5" >
+            <tr>
+                <td>Country</td>
+                <td>Number of packets pending</td>
+            </tr>
+            <th:block th:each="pending : ${pending}">
+
+                <tr>
+                    <td th:text="${pending.getCountryDestination()}">...</td>
+                    <td th:text="${pending.getNumberOfPacksPending()}">...</td>
+
+                </tr>
+            </th:block>
+        </table>
+
+        <p>List of clients with 4 or more packets and number of packets</p>
+        <table border="5" >
+            <tr>
+                <td>Name</td>
+                <td>Tel</td>
+                <td>Address</td>
+                <td>Number of packets sent</td>
+            </tr>
+            <th:block th:each="clients : ${clients}">
+
+                <tr>
+                    <td th:text="${clients.getName()}">...</td>
+                    <td th:text="${clients.getTel()}">...</td>
+                    <td th:text="${clients.getAddress()}">...</td>
+                    <td th:text="${clients.getNumberOfPacksSended()}">...</td>
+
+                </tr>
+            </th:block>
+        </table>
+
+        <p>
+            <span th:text="#{email.activation.text2}">Regards, </span>
+            <br/>
+            <em th:text="#{email.signature}">JHipster.</em>
+        </p>
+    </body>
+</html>

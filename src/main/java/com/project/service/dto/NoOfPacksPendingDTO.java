@@ -33,9 +33,9 @@ public class NoOfPacksPendingDTO {
 
     @Override
     public String toString() {
-        return "NoOfPacksPendingDTO{" +
+        return
             "numberOfPacksPending=" + numberOfPacksPending +
-            ", countryDestination='" + countryDestination + '\'' +
-            '}';
+            ", countryDestination='" + countryDestination + '\''
+            ;
     }
 }

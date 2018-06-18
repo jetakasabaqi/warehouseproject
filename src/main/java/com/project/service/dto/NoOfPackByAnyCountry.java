@@ -34,9 +34,9 @@ public class NoOfPackByAnyCountry {
 
     @Override
     public String toString() {
-        return "NoOfPackByAnyCountry{" +
+        return
             "noOfPacksDelivered=" + noOfPacksDelivered +
-            ", country='" + country + '\'' +
-            '}';
+            ", country='" + country + '\''
+            ;
     }
 }

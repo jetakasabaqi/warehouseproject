@@ -4,6 +4,10 @@ import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
 import com.project.domain.User;
 
+import com.project.service.dto.LoyalClients;
+import com.project.service.dto.NoOfPackByAnyCountry;
+import com.project.service.dto.NoOfPacksDeliveredDTO;
+import com.project.service.dto.NoOfPacksPendingDTO;
 import com.project.service.util.MailServiceTest;
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -25,6 +29,7 @@ import javax.activation.DataSource;
 import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -152,6 +157,16 @@ public class MailService {
         byte[] array=  mailServiceTest.sendDeliveredRPDFTemplate(shipment);
         sendMailWithAttachments(shipment.getReceiver().getEmail(),true,false,array);
     }
+    @Async
+    public void sendEmailWeekly(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountry> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClients> clients) throws IOException, DocumentException {
+   MailServiceTest mailServiceTest=new MailServiceTest(templateEngine,jHipsterProperties);
+
+   byte[] array=mailServiceTest.sendWeeklyPDF(deliveredDTO,country,pendingDTO,clients);
+   sendMailWithAttachments("jetakasabaqi@gmail.com",true,false,array);
+
+
+
+    }
 //    @Async
 //    public void sendEmailFromAttachment(Shipment shipment) throws IOException, DocumentException {
 //
@@ -181,18 +196,29 @@ public class MailService {
         sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
     }
 
+    @Async
     public void sendShippedStatusEmail(Shipment shipment) throws IOException, DocumentException {
         log.debug("Sending status changed email to '{} '",shipment.getSenderP().getEmail());
         sendEmailShipped(shipment);
     }
+    @Async
     public void sendDeliveredSEmail(Shipment shipment) throws IOException, DocumentException {
         log.debug("Sending status changed email to '{} '",shipment.getSenderP().getEmail());
         sendEmailDeliveredS(shipment);
     }
+    @Async
     public void sendDeliveredREmail(Shipment shipment) throws IOException, DocumentException {
         log.debug("Sending status changed email to '{} '",shipment.getReceiver().getEmail());
         sendEmailDeliveredR(shipment);
     }
+
+    @Async
+    public void sendWeeklyReport(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountry> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClients> clients) throws IOException, DocumentException {
+
+        sendEmailWeekly(deliveredDTO,country,pendingDTO,clients);
+    }
+
+
 }
 
 

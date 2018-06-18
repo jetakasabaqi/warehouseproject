@@ -1,6 +1,7 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
 import com.project.domain.Status;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -326,7 +328,15 @@ public class ShipmentResource {
 
 
 
+    @GetMapping("/shipment/weekly")
+    @Timed
+    public ResponseEntity<Boolean> getWeekly() throws IOException, DocumentException {
+        return new ResponseEntity<Boolean>(shipmentService.weeklyReport(),HttpStatus.OK);
 
+
+
+
+    }
 
 
 

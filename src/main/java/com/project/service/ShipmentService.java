@@ -1,5 +1,6 @@
 package com.project.service;
 
+import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
 import com.project.service.dto.*;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaQuery;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -72,6 +74,16 @@ public interface ShipmentService {
 
     NoOfPacksDeliveredDTO getNoOfPacksDelivered();
 
+
+    List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry();
+
+
+    List<NoOfPacksPendingDTO> getNoOfPacksPending();
+
+
+    List<LoyalClients> getLoyalClients();
+
+
     NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country);
 
     List<NoOfPacksPendingDTO> getNoOfPacksPending(Pageable pageable);
@@ -79,4 +91,6 @@ public interface ShipmentService {
     List<LoyalClients> getLoyalClients(Pageable pageable);
 
     List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry(Pageable pageable);
+
+    Boolean weeklyReport() throws IOException, DocumentException;
 }

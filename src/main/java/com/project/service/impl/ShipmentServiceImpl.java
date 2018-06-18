@@ -1,5 +1,7 @@
 package com.project.service.impl;
 
+import com.lowagie.text.DocumentException;
+import com.project.service.MailService;
 import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
 import com.project.domain.Vendor;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -34,6 +37,9 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private MailService mailService;
 
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository) {
         this.shipmentRepository = shipmentRepository;
@@ -175,6 +181,21 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
+    public List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry() {
+        return shipmentRepository.getNoOfPacksByAnyCountry();
+    }
+
+    @Override
+    public List<NoOfPacksPendingDTO> getNoOfPacksPending() {
+        return shipmentRepository.getNoOfPacksPending();
+    }
+
+    @Override
+    public List<LoyalClients> getLoyalClients() {
+        return shipmentRepository.getLoyalClients();
+    }
+
+    @Override
     public NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country) {
         return shipmentRepository.getNoOfPacksDeliveredByCountry(country);
     }
@@ -192,5 +213,17 @@ public class ShipmentServiceImpl implements ShipmentService {
     @Override
     public List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry(Pageable pageable) {
         return shipmentRepository.getNoOfPacksByAnyCountry(pageable);
+    }
+
+    @Override
+    public Boolean weeklyReport() throws IOException, DocumentException {
+        NoOfPacksDeliveredDTO delivered= getNoOfPacksDelivered();
+        List<NoOfPackByAnyCountry> country=getNoOfPacksByAnyCountry();
+        List<NoOfPacksPendingDTO> pending=getNoOfPacksPending();
+        List<LoyalClients> clients=getLoyalClients();
+
+        mailService.sendEmailWeekly(delivered,country,pending,clients);
+
+        return true;
     }
 }

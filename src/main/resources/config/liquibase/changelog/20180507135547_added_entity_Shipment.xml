@@ -24,19 +24,19 @@
             <column name="senderp_id" type="bigint">
                 <constraints unique="false" nullable="true" />
             </column>            <column name="senderv_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="receiver_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="employee_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="status_id" type="bigint">
                 <constraints unique="false" nullable="true" />
             </column>            <column name="product_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="location_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints unique="false" nullable="true" />
             </column>            <column name="contact_id" type="bigint">
-                <constraints unique="true" nullable="true"/>
+                <constraints unique="false" nullable="true"/>
         </column>
             <column name="product_details" type="bigint"><constraints unique="true" nullable="true"/> </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

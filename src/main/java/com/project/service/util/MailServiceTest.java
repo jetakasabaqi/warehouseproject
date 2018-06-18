@@ -2,20 +2,18 @@ package com.project.service.util;
 
 import com.lowagie.text.DocumentException;
 import com.project.config.thymeleaf.StringContext;
-import com.project.domain.Person;
 import com.project.domain.Shipment;
-import com.project.domain.Status;
-import com.project.domain.User;
+import com.project.service.dto.LoyalClients;
+import com.project.service.dto.NoOfPackByAnyCountry;
+import com.project.service.dto.NoOfPacksDeliveredDTO;
+import com.project.service.dto.NoOfPacksPendingDTO;
 import io.github.jhipster.config.JHipsterProperties;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +32,14 @@ public class MailServiceTest {
     private static final String SENDER="sender";
 
     private static final String SHIPMENT="shipment";
+
+    private static final String DElIVERED="delivered";
+
+    private static final String COUNTRY="country";
+
+    private static final  String PENDING="pending";
+
+    private static final String CLIENTS="clients";
 
     private String shippedTemplate="\n" +
         "<!DOCTYPE html>\n" +
@@ -130,7 +136,83 @@ public class MailServiceTest {
         "</body>\n" +
         "</html>\n";
 
-
+    private String weeklyReport="<!DOCTYPE html>\n" +
+        "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
+        "    <head>\n" +
+        "        <title>WEEKLY REPORT</title>\n" +
+        "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" +
+        "        <link rel=\"shortcut icon\" th:href=\"@{|${baseUrl}/favicon.ico|}\" />\n" +
+        "    </head>\n" +
+        "    <body>\n" +
+        "        <p>\n" +
+        "           Hello\n" +
+        "        </p>\n" +
+        "        <p>\n" +
+        "           This is the your weekly report\n" +
+        "        </p>\n" +
+        "        <p>\n" +
+        "           At a glance :\n" +
+        "        </p>\n" +
+        "        <p>Number of packets delivered :</p>\n" +
+        "        <p th:text=\"${delivered.number_of_Packs_delivered}\"></p>\n" +
+        "        <p>Number of packets delivered by country</p>\n" +
+        "        <table border=\"5\" >\n" +
+        "            <tr>\n" +
+        "                <td>Country</td>\n" +
+        "                <td>Number of packets delivered</td>\n" +
+        "            </tr>\n" +
+        "            <th:block th:each=\"country : ${country}\">\n" +
+        "\n" +
+        "                <tr>\n" +
+        "                    <td th:text=\"${country.getCountry()}\">...</td>\n" +
+        "                    <td th:text=\"${country.getNumber_of_Packs_delivered()}\">...</td>\n" +
+        "\n" +
+        "                </tr>\n" +
+        "            </th:block>\n" +
+        "        </table>\n" +
+        "        <p>Number of packets pending and country destination</p>\n" +
+        "        <table border=\"5\" >\n" +
+        "            <tr>\n" +
+        "                <td>Country</td>\n" +
+        "                <td>Number of packets pending</td>\n" +
+        "            </tr>\n" +
+        "            <th:block th:each=\"pending : ${pending}\">\n" +
+        "\n" +
+        "                <tr>\n" +
+        "                    <td th:text=\"${pending.getCountryDestination()}\">...</td>\n" +
+        "                    <td th:text=\"${pending.getNumberOfPacksPending()}\">...</td>\n" +
+        "\n" +
+        "                </tr>\n" +
+        "            </th:block>\n" +
+        "        </table>\n" +
+        "\n" +
+        "        <p>List of clients with 4 or more packets and number of packets</p>\n" +
+        "        <table border=\"5\" >\n" +
+        "            <tr>\n" +
+        "                <td>Name</td>\n" +
+        "                <td>Tel</td>\n" +
+        "                <td>Address</td>\n" +
+        "                <td>Number of packets sent</td>\n" +
+        "            </tr>\n" +
+        "            <th:block th:each=\"clients : ${clients}\">\n" +
+        "\n" +
+        "                <tr>\n" +
+        "                    <td th:text=\"${clients.getName()}\">...</td>\n" +
+        "                    <td th:text=\"${clients.getTel()}\">...</td>\n" +
+        "                    <td th:text=\"${clients.getAddress()}\">...</td>\n" +
+        "                    <td th:text=\"${clients.getNumberOfPacksSended()}\">...</td>\n" +
+        "\n" +
+        "                </tr>\n" +
+        "            </th:block>\n" +
+        "        </table>\n" +
+        "\n" +
+        "        <p>\n" +
+        "            <span th:text=\"#{email.activation.text2}\">Regards, </span>\n" +
+        "            <br/>\n" +
+        "            <em th:text=\"#{email.signature}\">JHipster.</em>\n" +
+        "        </p>\n" +
+        "    </body>\n" +
+        "</html>\n";
     public MailServiceTest(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {
         this.templateEngine = templateEngine;
         this.jHipsterProperties = jHipsterProperties;
@@ -255,6 +337,47 @@ public class MailServiceTest {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
         String content = templateEngine.process(deliveredTemplateReceiver, context);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(content);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        byte[] pdfbytes = outputStream.toByteArray();
+        outputStream.close();
+        return pdfbytes;
+    }
+
+    public void sendWeekly(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountry> country, List<NoOfPacksPendingDTO> pending, List<LoyalClients> clients) {
+
+        Locale locale = Locale.forLanguageTag("en");
+
+        StringContext context = new StringContext(weeklyReport, locale);
+        context.setVariable(DElIVERED, delivered);
+        context.setVariable(COUNTRY, country);
+        context.setVariable(PENDING, pending);
+        context.setVariable(CLIENTS, clients);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        String content = templateEngine.process(weeklyReport, context);
+
+        System.out.print(content);
+
+    }
+
+    public byte[] sendWeeklyPDF(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountry> country, List<NoOfPacksPendingDTO> pending, List<LoyalClients> clients) throws IOException, DocumentException {
+        Locale locale = Locale.forLanguageTag("en");
+
+        StringContext context = new StringContext(weeklyReport, locale);
+
+        context.setVariable(DElIVERED, delivered);
+        context.setVariable(COUNTRY, country);
+        context.setVariable(PENDING, pending);
+        context.setVariable(CLIENTS, clients);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        String content = templateEngine.process(weeklyReport, context);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ITextRenderer renderer = new ITextRenderer();

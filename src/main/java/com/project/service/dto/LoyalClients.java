@@ -49,4 +49,14 @@ public class LoyalClients {
     public void setNumberOfPacksSended(Long numberOfPacksSended) {
         this.numberOfPacksSended = numberOfPacksSended;
     }
+
+    @Override
+    public String toString() {
+        return "Client:"+
+            "name='" + name + '\'' +
+            ", tel='" + tel + '\'' +
+            ", address='" + address + '\'' +
+            ", numberOfPacksSended=" + numberOfPacksSended
+            ;
+    }
 }
