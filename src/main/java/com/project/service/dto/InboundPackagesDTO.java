@@ -4,10 +4,6 @@ import java.math.BigDecimal;
 
 public class InboundPackagesDTO {
 
-
-
-
-
     private String senderName;
     private String senderEmail;
 

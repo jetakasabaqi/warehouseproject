@@ -2,6 +2,7 @@ package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.lowagie.text.DocumentException;
+import com.project.Job.SampleJob;
 import com.project.domain.Shipment;
 import com.project.domain.Status;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -64,6 +66,7 @@ public class ShipmentResource {
 
     @Autowired
     private  MailService mailService;
+
 
 
     public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, EntityManager entityManager, ProductService productService, WarehouseLocationService warehouseLocationService) {
@@ -301,6 +304,7 @@ public class ShipmentResource {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
 
+        //logic to be implemented in the service
         if (status.getId() == 3) {
             shipment.setStatus(status);
            updateShipment(shipment);
@@ -330,10 +334,10 @@ public class ShipmentResource {
 
     @GetMapping("/shipment/weekly")
     @Timed
+    @Scheduled(cron="\t\n" +
+        "0 40 15 ? * TUE")
     public ResponseEntity<Boolean> getWeekly() throws IOException, DocumentException {
         return new ResponseEntity<Boolean>(shipmentService.weeklyReport(),HttpStatus.OK);
-
-
 
 
     }

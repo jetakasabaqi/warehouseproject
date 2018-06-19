@@ -3,10 +3,10 @@ package com.project.service.dto;
 public class LoyalClients {
 
 
-     private String name;
+    private String name;
     private String tel;
-     private String address;
-   private Long numberOfPacksSended;
+    private String address;
+    private Long numberOfPacksSended;
 
     public LoyalClients() {
     }
@@ -52,7 +52,7 @@ public class LoyalClients {
 
     @Override
     public String toString() {
-        return "Client:"+
+        return "Client:" +
             "name='" + name + '\'' +
             ", tel='" + tel + '\'' +
             ", address='" + address + '\'' +
