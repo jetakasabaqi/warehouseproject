@@ -10,7 +10,7 @@
            Hello
         </p>
         <p>
-           This is the your weekly report
+           This is the your weekly report<br> <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}">...</span>
         </p>
         <p>
            At a glance :

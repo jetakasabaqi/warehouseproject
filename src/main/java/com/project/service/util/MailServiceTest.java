@@ -148,7 +148,7 @@ public class MailServiceTest {
         "           Hello\n" +
         "        </p>\n" +
         "        <p>\n" +
-        "           This is the your weekly report\n" +
+        "           This is the your weekly report, <span th:text=\"${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}\">...</span>\n" +
         "        </p>\n" +
         "        <p>\n" +
         "           At a glance :\n" +
