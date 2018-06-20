@@ -1,11 +1,9 @@
 package com.project.domain;
 
-import org.checkerframework.checker.units.qual.C;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -39,18 +37,18 @@ public class Person implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @Column(name="city")
+    @Column(name = "city")
     private String city;
 
-    @Column(name="country")
+    @Column(name = "country")
     private String country;
 
 
     @OneToOne
-    @JoinColumn(name="id",referencedColumnName = "userId")
+    @JoinColumn(name = "id", referencedColumnName = "userId")
     private User user;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -123,7 +121,7 @@ public class Person implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
     public User getUser() {
         return user;
@@ -149,26 +147,19 @@ public class Person implements Serializable {
         this.country = country;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Person person = (Person) o;
-        return Objects.equals(id, person.id) &&
-            Objects.equals(fullName, person.fullName) &&
-            Objects.equals(tel, person.tel) &&
-            Objects.equals(address, person.address) &&
-            Objects.equals(zipCode, person.zipCode) &&
-            Objects.equals(email, person.email) &&
-            Objects.equals(city, person.city) &&
-            Objects.equals(country, person.country) &&
-            Objects.equals(user, person.user);
+        return Objects.equals(id, person.id);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, fullName, tel, address, zipCode, email, city, country, user);
+        return Objects.hash(id);
     }
 
     @Override

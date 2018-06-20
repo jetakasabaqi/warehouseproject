@@ -18,34 +18,34 @@ public class ProductDetails implements Serializable {
     private Long id;
 
     @OneToOne
-    @JoinColumn (name="product_id",referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
 
-    @Column(name="width")
+    @Column(name = "width")
     private double width;
 
-    @Column(name="length")
+    @Column(name = "length")
     private double length;
 
-    @Column(name="height")
+    @Column(name = "height")
     private double height;
 
 
-    @Column(name="weight")
+    @Column(name = "weight")
     private double weight;
 
 
     @OneToOne
-    @JoinColumn (name="weight_unit",referencedColumnName = "id")
+    @JoinColumn(name = "weight_unit", referencedColumnName = "id")
     private WeightUnit weightUnit;
 
     @OneToOne
-    @JoinColumn (name="product_type",referencedColumnName = "id")
+    @JoinColumn(name = "product_type", referencedColumnName = "id")
     private ProductType type;
 
-    public ProductDetails()
-    {}
+    public ProductDetails() {
+    }
 
 
     public ProductDetails(Long id, Product product, double width, double length, double height, double weight, WeightUnit weightUnit, ProductType type) {
@@ -58,29 +58,27 @@ public class ProductDetails implements Serializable {
         this.weightUnit = weightUnit;
         this.type = type;
     }
-   public ProductDetails weight(double weight)
-    {
-        this.weight=weight;
+
+    public ProductDetails weight(double weight) {
+        this.weight = weight;
         return this;
     }
 
-    public ProductDetails height(double heigh)
-    {
-        this.height=heigh;
+    public ProductDetails height(double heigh) {
+        this.height = heigh;
         return this;
     }
 
-    public ProductDetails length(double length)
-    {
-        this.length=length;
+    public ProductDetails length(double length) {
+        this.length = length;
         return this;
     }
 
-    public ProductDetails width(double widht)
-    {
-        this.width=widht;
+    public ProductDetails width(double widht) {
+        this.width = widht;
         return this;
     }
+
     public Long getId() {
         return id;
     }
@@ -144,7 +142,6 @@ public class ProductDetails implements Serializable {
     public void setType(ProductType type) {
         this.type = type;
     }
-
 
 
     @Override

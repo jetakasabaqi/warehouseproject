@@ -1,17 +1,17 @@
 package com.project.service.dto;
 
-public class LoyalClients {
+public class LoyalClientsDTO {
 
 
-     private String name;
+    private String name;
     private String tel;
-     private String address;
-   private Long numberOfPacksSended;
+    private String address;
+    private Long numberOfPacksSended;
 
-    public LoyalClients() {
+    public LoyalClientsDTO() {
     }
 
-    public LoyalClients(String name, String tel, String address, Long numberOfPacksSended) {
+    public LoyalClientsDTO(String name, String tel, String address, Long numberOfPacksSended) {
         this.name = name;
         this.tel = tel;
         this.address = address;
@@ -52,7 +52,7 @@ public class LoyalClients {
 
     @Override
     public String toString() {
-        return "Client:"+
+        return "Client:" +
             "name='" + name + '\'' +
             ", tel='" + tel + '\'' +
             ", address='" + address + '\'' +

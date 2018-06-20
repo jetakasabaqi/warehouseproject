@@ -5,7 +5,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -42,15 +41,15 @@ public class Employee implements Serializable {
     private String age;
 
     @OneToOne
-    @JoinColumn (name="type",referencedColumnName = "id")
+    @JoinColumn(name = "type", referencedColumnName = "id")
     private EmployeeType type;
 
     @OneToOne
-    @JoinColumn(name="user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Employee()
-    {}
+    public Employee() {
+    }
 
     public Employee(String name, String lastName, String tel, String email, String age, EmployeeType type, User user) {
         this.name = name;
@@ -62,7 +61,7 @@ public class Employee implements Serializable {
         this.user = user;
     }
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -135,7 +134,7 @@ public class Employee implements Serializable {
     public void setAge(String age) {
         this.age = age;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
     public User getUser() {
         return user;

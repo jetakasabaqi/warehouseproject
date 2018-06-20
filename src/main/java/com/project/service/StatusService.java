@@ -43,5 +43,11 @@ public interface StatusService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the statuses by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<Status> findAll(CriteriaQuery<Status> query);
 }

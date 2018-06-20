@@ -1,11 +1,9 @@
 package com.project.service.impl;
 
 import com.lowagie.text.DocumentException;
-import com.project.service.MailService;
-import com.project.service.ShipmentService;
 import com.project.domain.Shipment;
-import com.project.domain.Vendor;
 import com.project.repository.ShipmentRepository;
+import com.project.service.MailService;
 import com.project.service.ShipmentService;
 import com.project.service.dto.*;
 import com.project.service.util.ParseRsql;
@@ -14,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,8 +91,15 @@ public class ShipmentServiceImpl implements ShipmentService {
         shipmentRepository.delete(id);
     }
 
+    /**
+     * Validate a shipment
+     *
+     * @param shipment the shipment to be validatet
+     * @return true if everything is ok,false if not
+     */
     @Override
     public boolean shipmentValidation(Shipment shipment) throws Exception {
+        log.debug("Request to validate Shipment : {}", shipment.getId());
         boolean ok = true;
         if (shipment.getSenderP().getId() == null && shipment.getSenderV().getId() == null) {
             ok = false;
@@ -121,80 +125,140 @@ public class ShipmentServiceImpl implements ShipmentService {
         return ok;
     }
 
-    @Override
-    public List<Shipment> findAll(Specification spec) {
-        log.debug(("Request to get all shipments by " + spec));
-        return shipmentRepository.findAll(spec);
-    }
 
-    @Override
-    public Vendor jeta(Long id) {
-        return shipmentRepository.jeta(id);
-    }
-
+    /**
+     * Get all the shipments by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Shipment> findAll(CriteriaQuery<Shipment> query) {
-        return ParseRsql.findAll(query,entityManager);
+        return ParseRsql.findAll(query, entityManager);
     }
 
-
+    /**
+     * Get all the shipments by client id
+     *
+     * @param person_id the filter, the clients id
+     * @return the list of entities
+     */
     @Override
     public List<PackageDTO> getAllShipmentsByClientId(Long person_id) {
         return shipmentRepository.getAllRecordsBySender(person_id);
     }
 
+    /**
+     * Get one shipments by a filter
+     *
+     * @param query the filter, the clients id
+     * @return the entity
+     */
     @Override
-    public PackageDTO findOnePackage( CriteriaQuery<PackageDTO> query) {
-        return (PackageDTO) ParseRsql.findAll(query,entityManager);
+    public PackageDTO findOnePackage(CriteriaQuery<PackageDTO> query) {
+        return (PackageDTO) ParseRsql.findAll(query, entityManager);
     }
 
+    /**
+     * Get one shipments by client id and product id
+     *
+     * @param productid,person_id
+     * @return the entity
+     */
     @Override
     public PackageDTO getShipmentsByClientIdAndProductID(Long productid, Long person_id) {
-        return shipmentRepository.getAllByPersonAndProduct(productid,person_id);
+        return shipmentRepository.getAllByPersonAndProduct(productid, person_id);
     }
 
-
-
+    /**
+     * Get one shipments status details
+     *
+     * @param packageId,person_id
+     * @return the entity
+     */
     @Override
     public PackageStatusDTO getPackageStatusDetails(Long person_id, Long packageId) {
-        return shipmentRepository.getPackageDetails(person_id,packageId);
+        return shipmentRepository.getPackageDetails(person_id, packageId);
     }
 
+    /**
+     * Get one shipments package info
+     *
+     * @param product_id,person_id
+     * @return the entity
+     */
     @Override
     public PackageInfoDTO getPackageInfo(Long person_id, Long product_id) {
-        return shipmentRepository.getPackageInfo(person_id,product_id);
+        return shipmentRepository.getPackageInfo(person_id, product_id);
     }
 
+    /**
+     * Get inbound packages
+     *
+     * @param pageable
+     * @return pages of the entities
+     */
     @Override
     public Page<InboundPackagesDTO> getInboundPackages(Pageable pageable) {
         return shipmentRepository.getInboundPackages(pageable);
     }
 
+    /**
+     * Get outbound packages
+     *
+     * @param pageable
+     * @return pages of the entities
+     */
     @Override
     public Page<OutboundPackageDTO> getOutboundPackages(Pageable pageable) {
         return shipmentRepository.getOutboundPackages(pageable);
     }
 
+    /**
+     * Get the number of packages delivered
+     *
+     * @return entity
+     */
     @Override
     public NoOfPacksDeliveredDTO getNoOfPacksDelivered() {
         return shipmentRepository.getNoOfPacksDelivered();
     }
 
+    /**
+     * Get all the packages delivered by any country
+     *
+     * @return list of the entities
+     */
     @Override
-    public List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry() {
+    public List<NoOfPackByAnyCountryDTO> getNoOfPacksByAnyCountry() {
         return shipmentRepository.getNoOfPacksByAnyCountry();
     }
 
+    /**
+     * Get number of pending packages
+     *
+     * @return list of the entities
+     */
     @Override
     public List<NoOfPacksPendingDTO> getNoOfPacksPending() {
         return shipmentRepository.getNoOfPacksPending();
     }
 
+    /**
+     * Get number clients with 4 or more packages
+     *
+     * @return list of the entities
+     */
     @Override
-    public List<LoyalClients> getLoyalClients() {
+    public List<LoyalClientsDTO> getLoyalClients() {
         return shipmentRepository.getLoyalClients();
     }
 
+    /**
+     * Get number of packages delivered by a country
+     *
+     * @return entity
+     */
     @Override
     public NoOfPacksDeliveredDTO getNoOfPacksDeliveredByCountry(String country) {
         return shipmentRepository.getNoOfPacksDeliveredByCountry(country);
@@ -206,23 +270,28 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public List<LoyalClients> getLoyalClients(Pageable pageable) {
+    public List<LoyalClientsDTO> getLoyalClients(Pageable pageable) {
         return shipmentRepository.getLoyalClients(pageable);
     }
 
     @Override
-    public List<NoOfPackByAnyCountry> getNoOfPacksByAnyCountry(Pageable pageable) {
+    public List<NoOfPackByAnyCountryDTO> getNoOfPacksByAnyCountry(Pageable pageable) {
         return shipmentRepository.getNoOfPacksByAnyCountry(pageable);
     }
 
+    /**
+     * send weekly report email
+     *
+     * @return true if email is sent, false if not
+     */
     @Override
     public Boolean weeklyReport() throws IOException, DocumentException {
-        NoOfPacksDeliveredDTO delivered= getNoOfPacksDelivered();
-        List<NoOfPackByAnyCountry> country=getNoOfPacksByAnyCountry();
-        List<NoOfPacksPendingDTO> pending=getNoOfPacksPending();
-        List<LoyalClients> clients=getLoyalClients();
+        NoOfPacksDeliveredDTO delivered = getNoOfPacksDelivered();
+        List<NoOfPackByAnyCountryDTO> country = getNoOfPacksByAnyCountry();
+        List<NoOfPacksPendingDTO> pending = getNoOfPacksPending();
+        List<LoyalClientsDTO> clients = getLoyalClients();
 
-        mailService.sendEmailWeekly(delivered,country,pending,clients);
+        mailService.sendEmailWeekly(delivered, country, pending, clients);
 
         return true;
     }

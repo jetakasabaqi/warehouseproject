@@ -1,15 +1,12 @@
 package com.project.service.dto;
 
-import com.project.domain.Shipment;
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class PackageDTO {
 
     private Long productId;
 
-    private  Long statusId;
+    private Long statusId;
 
     private Long receiverId;
 
@@ -59,17 +56,16 @@ public class PackageDTO {
         this.price = price;
     }
 
-    public  PackageDTO(Long productId, Long statusId, long receiverId, long priceId, String statusName, String receiverFullName, String receiverAddress, String receiverZipCode, BigDecimal price)
-    {
-        this.productId=productId;
-        this.statusId=statusId;
-        this.receiverId=receiverId;
-        this.priceId=priceId;
-        this.statusName=statusName;
-        this.receiverFullName=receiverFullName;
-        this.receiverAddress=receiverAddress;
-        this.receiverZipCode=receiverZipCode;
-        this.price=price;
+    public PackageDTO(Long productId, Long statusId, long receiverId, long priceId, String statusName, String receiverFullName, String receiverAddress, String receiverZipCode, BigDecimal price) {
+        this.productId = productId;
+        this.statusId = statusId;
+        this.receiverId = receiverId;
+        this.priceId = priceId;
+        this.statusName = statusName;
+        this.receiverFullName = receiverFullName;
+        this.receiverAddress = receiverAddress;
+        this.receiverZipCode = receiverZipCode;
+        this.price = price;
 
     }
 

@@ -139,7 +139,7 @@ public class PriceResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/prices")
     @ResponseBody
-    public ResponseEntity<List<Price>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Price>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

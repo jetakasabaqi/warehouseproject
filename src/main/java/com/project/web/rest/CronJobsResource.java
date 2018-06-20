@@ -2,10 +2,8 @@ package com.project.web.rest;
 
 
 import com.codahale.metrics.annotation.Timed;
-import com.project.domain.City;
 import com.project.domain.CronJobs;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
-import com.project.service.CityService;
 import com.project.service.CronJobsService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;

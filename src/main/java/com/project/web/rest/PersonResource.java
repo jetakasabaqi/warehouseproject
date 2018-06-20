@@ -13,7 +13,6 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -43,9 +42,9 @@ public class PersonResource {
 
     private final EntityManager entityManager;
 
-    public PersonResource(PersonService personService,EntityManager entityManager) {
+    public PersonResource(PersonService personService, EntityManager entityManager) {
         this.personService = personService;
-        this.entityManager=entityManager;
+        this.entityManager = entityManager;
     }
 
     /**
@@ -135,7 +134,7 @@ public class PersonResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/persons")
     @ResponseBody
-    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

@@ -1,7 +1,6 @@
 package com.project.service;
 
 import com.project.domain.CronJobs;
-import com.project.domain.Employee;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -42,5 +41,11 @@ public interface CronJobsService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the cronJobs by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<CronJobs> findAll(CriteriaQuery<CronJobs> query);
 }

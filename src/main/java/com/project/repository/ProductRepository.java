@@ -1,11 +1,9 @@
 package com.project.repository;
 
-import com.project.domain.Price;
 import com.project.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import org.springframework.data.jpa.repository.*;
-
 
 import java.util.List;
 
@@ -15,8 +13,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long>,JpaSpecificationExecutor {
-
+public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor {
 
 
     List<Product> findAllById(Long person_id);

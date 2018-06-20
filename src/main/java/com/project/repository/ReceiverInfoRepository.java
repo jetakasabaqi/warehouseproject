@@ -1,9 +1,9 @@
 package com.project.repository;
 
 import com.project.domain.ReceiverInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import org.springframework.data.jpa.repository.*;
 
 
 /**
@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.*;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ReceiverInfoRepository extends JpaRepository<ReceiverInfo, Long>,JpaSpecificationExecutor {
+public interface ReceiverInfoRepository extends JpaRepository<ReceiverInfo, Long>, JpaSpecificationExecutor {
 
 }

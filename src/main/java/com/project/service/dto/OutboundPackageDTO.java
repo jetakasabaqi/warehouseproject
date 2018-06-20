@@ -5,9 +5,6 @@ import java.math.BigDecimal;
 public class OutboundPackageDTO {
 
 
-
-
-
     private String senderName;
     private String senderEmail;
 
@@ -32,7 +29,6 @@ public class OutboundPackageDTO {
     private String productType;
 
 
-
     public OutboundPackageDTO(String senderName, String senderEmail, String receiverName, String receiverAddress, String deliverEmployeeName, String deliverEmployeeTel, String contactEmployeeName, String contactEmployeeTel, Long statusId, String statusName, Long productId, BigDecimal price, Long locationId, String type) {
         this.senderName = senderName;
         this.senderEmail = senderEmail;
@@ -47,10 +43,8 @@ public class OutboundPackageDTO {
         this.productId = productId;
         this.price = price;
         this.locationId = locationId;
-        this.productType=type;
+        this.productType = type;
     }
-
-
 
 
     public String getSenderName() {

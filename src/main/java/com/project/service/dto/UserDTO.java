@@ -1,14 +1,13 @@
 package com.project.service.dto;
 
 import com.project.config.Constants;
-
 import com.project.domain.Authority;
 import com.project.domain.User;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -1,10 +1,6 @@
 package com.project.domain;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,7 +9,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "vendor")
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+
 public class Vendor implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,12 +40,11 @@ public class Vendor implements Serializable {
     @Column(name = "zip_code")
     private String zipCode;
 
-   @OneToOne()
-   @JoinColumn(name="id",referencedColumnName = "userId")
-   private User user;
+    @OneToOne()
+    @JoinColumn(name = "id", referencedColumnName = "userId")
+    private User user;
 
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -66,7 +61,7 @@ public class Vendor implements Serializable {
         this.firstName = firstName;
     }
 
-    public Vendor firstName(String firstName){
+    public Vendor firstName(String firstName) {
         this.firstName = firstName;
         return this;
     }
@@ -78,10 +73,12 @@ public class Vendor implements Serializable {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public Vendor lastName(String lastName){
+
+    public Vendor lastName(String lastName) {
         this.lastName = lastName;
         return this;
     }
+
     public String getAddress() {
         return address;
     }
@@ -146,7 +143,7 @@ public class Vendor implements Serializable {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
     public User getUser() {
         return user;
@@ -156,10 +153,11 @@ public class Vendor implements Serializable {
         this.user = user;
     }
 
-    public Vendor user(User user){
+    public Vendor user(User user) {
         this.user = user;
         return this;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

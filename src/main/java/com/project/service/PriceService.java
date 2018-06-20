@@ -43,6 +43,11 @@ public interface PriceService {
      */
     void delete(Long id);
 
-
+    /**
+     * Get all the prices by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<Price> findAll(CriteriaQuery<Price> query);
 }

@@ -43,5 +43,11 @@ public interface VendorService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the vendor by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<Vendor> findAll(CriteriaQuery<Vendor> query);
 }

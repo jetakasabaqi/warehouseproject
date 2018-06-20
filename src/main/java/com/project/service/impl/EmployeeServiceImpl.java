@@ -84,7 +84,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.delete(id);
     }
 
-
+    /**
+     * Get all the employees by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Employee> findAll(CriteriaQuery<Employee> query) {
         return ParseRsql.findAll(query, entityManager);

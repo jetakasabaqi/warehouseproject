@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -33,7 +32,7 @@ public class WarehouseLocation implements Serializable {
     @JoinColumn(unique = true)
     private City city;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -80,7 +79,7 @@ public class WarehouseLocation implements Serializable {
     public void setCity(City city) {
         this.city = city;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
     @Override
     public boolean equals(Object o) {

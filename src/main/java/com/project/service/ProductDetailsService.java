@@ -1,6 +1,5 @@
 package com.project.service;
 
-import com.project.domain.Product;
 import com.project.domain.ProductDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,5 +39,11 @@ public interface ProductDetailsService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the productDetails by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<ProductDetails> findAll(CriteriaQuery<ProductDetails> query);
 }

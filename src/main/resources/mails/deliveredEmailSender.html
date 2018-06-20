@@ -1,32 +1,31 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Delivered details</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
-</head>
-<body>
+    <head>
+       <title>Delivered details</title>
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+       <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
 
-<h1>Delivery details for shipment : </h1>
-<p th:text="${shipment.id}">The id of the shipment</p>
-<p th:text="${shipment.senderP.fullName}">>Dear </p>
-    <p>this email is sended to you to confirm that the shipment you made using our service has been delivered to</p>
-<p th:text="${shipment.receiver.fullName}"></p>
+        <h1>Delivery details for shipment : </h1>
+        <p th:text="${shipment.id}">The id of the shipment</p>
+        <p th:text="${shipment.senderP.fullName}">>Dear </p>
+        <p>this email is sended to you to confirm that the shipment you made using our service has been delivered to</p>
+        <p th:text="${shipment.receiver.fullName}"></p>
+        <p>Thank your for using our service.
+           If you have any questions, please contact the employee who is resposible for this shipment:</p>
 
-<p>Thank your for using our service.
-    If you have any questions, please contact the employee who is resposible for this shipment:</p>
+        <ul>
+            <li th:text="${shipment.contactEmployee.name}">>Name</li>
+            <li  th:text="${shipment.contactEmployee.lastName}">Surname</li>
+            <li  th:text="${shipment.contactEmployee.tel}">Number</li>
+            <li  th:text="${shipment.contactEmployee.email}">email</li>
 
-<ul>
-    <li th:text="${shipment.contactEmployee.name}">>Name</li>
-    <li  th:text="${shipment.contactEmployee.lastName}">Surname</li>
-    <li  th:text="${shipment.contactEmployee.tel}">Number</li>
-    <li  th:text="${shipment.contactEmployee.email}">email</li>
-
-</ul>
-Best regards,
-The Warehouse Team.
+         </ul>
+        Best regards,
+        The Warehouse Team.
 
 
-</body>
+     </body>
 </html>

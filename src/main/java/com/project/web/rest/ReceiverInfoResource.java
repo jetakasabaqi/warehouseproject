@@ -40,7 +40,7 @@ public class ReceiverInfoResource {
 
     private final ReceiverInfoService receiverInfoService;
 
-    private final  EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public ReceiverInfoResource(ReceiverInfoService receiverInfoService, EntityManager entityManager) {
         this.receiverInfoService = receiverInfoService;
@@ -134,7 +134,7 @@ public class ReceiverInfoResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/receivers")
     @ResponseBody
-    public ResponseEntity<List<ReceiverInfo>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<ReceiverInfo>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

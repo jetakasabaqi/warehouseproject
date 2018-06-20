@@ -43,6 +43,11 @@ public interface CityService {
      */
     void delete(Long id);
 
-
+    /**
+     * Get all the cities by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<City> findAll(CriteriaQuery<com.project.domain.City> query);
 }

@@ -15,6 +15,5 @@
                                  referencedTableName="jhi_user"/>
 
 
-
     </changeSet>
 </databaseChangeLog>

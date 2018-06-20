@@ -84,6 +84,12 @@ public class VendorServiceImpl implements VendorService {
         vendorRepository.delete(id);
     }
 
+    /**
+     * Get all the vendors by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Vendor> findAll(CriteriaQuery<Vendor> query) {
         return ParseRsql.findAll(query, entityManager);

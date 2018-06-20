@@ -1,15 +1,14 @@
 package com.project.service.impl;
 
-import com.project.service.CityService;
 import com.project.domain.City;
 import com.project.repository.CityRepository;
+import com.project.service.CityService;
 import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,6 +84,12 @@ public class CityServiceImpl implements CityService {
         cityRepository.delete(id);
     }
 
+    /**
+     * Get all the cities by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<City> findAll(CriteriaQuery<City> query) {
         return ParseRsql.findAll(query, entityManager);

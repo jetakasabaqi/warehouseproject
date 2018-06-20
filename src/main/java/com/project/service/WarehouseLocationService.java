@@ -43,5 +43,11 @@ public interface WarehouseLocationService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the warehouse locations by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<WarehouseLocation> findAll(CriteriaQuery<WarehouseLocation> query);
 }

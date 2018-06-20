@@ -139,7 +139,7 @@ public class WarehouseLocationResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/warehouses")
     @ResponseBody
-    public ResponseEntity<List<WarehouseLocation>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<WarehouseLocation>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

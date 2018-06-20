@@ -1,7 +1,6 @@
 package com.project.service.impl;
 
 import com.project.domain.Complaints;
-import com.project.repository.CityRepository;
 import com.project.repository.ComplaintsRepository;
 import com.project.service.ComplaintsService;
 import org.slf4j.Logger;
@@ -16,6 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
+/**
+ * Service Implementation for managing Complaints.
+ */
 @Service
 @Transactional
 public class ComplaintsServiceImpl implements ComplaintsService {
@@ -31,28 +33,60 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     public ComplaintsServiceImpl(ComplaintsRepository complaintsRepository) {
         this.complaintsRepository = complaintsRepository;
     }
+
+    /**
+     * Save a complain.
+     *
+     * @param complaints the entity to save
+     * @return the persisted entity
+     */
     @Override
     public Complaints save(Complaints complaints) {
+        log.debug("Request to save Complain : {}", complaints);
         return complaintsRepository.save(complaints);
     }
 
+    /**
+     * Get all the complaints.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
     @Override
     public Page<Complaints> findAll(Pageable pageable) {
+        log.debug("Request to get all Complaints");
         return complaintsRepository.findAll(pageable);
     }
 
+    /**
+     * Get one complain by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
     @Override
     public Complaints findOne(Long id) {
-
+        log.debug("Request to get Complain : {}", id);
         return complaintsRepository.findOne(id);
     }
 
+    /**
+     * Delete the complain by id.
+     *
+     * @param id the id of the entity
+     */
     @Override
     public void delete(Long id) {
-
-   complaintsRepository.delete(id);
+        log.debug("Request to delete Complain : {}", id);
+        complaintsRepository.delete(id);
     }
 
+    /**
+     * Get all the complains by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Complaints> findAll(CriteriaQuery<Complaints> query) {
         return complaintsRepository.findAll();

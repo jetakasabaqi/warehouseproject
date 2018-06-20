@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @SuppressWarnings("unused")
 @Repository
-public interface WeightUnitRepository extends JpaRepository<WeightUnit,Long>,JpaSpecificationExecutor {
+public interface WeightUnitRepository extends JpaRepository<WeightUnit, Long>, JpaSpecificationExecutor {
 }

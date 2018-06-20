@@ -1,13 +1,9 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.project.domain.ProductDetails;
 import com.project.domain.ProductType;
-import com.project.domain.Status;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
-import com.project.service.ProductDetailsService;
 import com.project.service.ProductTypeService;
-import com.project.service.StatusService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
 import com.project.web.rest.util.PaginationUtil;
@@ -22,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;

@@ -7,12 +7,12 @@ public class NoOfPacksPendingDTO {
     private String countryDestination;
 
 
-    public NoOfPacksPendingDTO()
-    {}
+    public NoOfPacksPendingDTO() {
+    }
 
-    public NoOfPacksPendingDTO(long numberOfPacksPending,String countryDestination) {
-      this.numberOfPacksPending = numberOfPacksPending;
-       this.countryDestination=countryDestination;
+    public NoOfPacksPendingDTO(long numberOfPacksPending, String countryDestination) {
+        this.numberOfPacksPending = numberOfPacksPending;
+        this.countryDestination = countryDestination;
     }
 
     public long getNumberOfPacksPending() {
@@ -35,7 +35,7 @@ public class NoOfPacksPendingDTO {
     public String toString() {
         return
             "numberOfPacksPending=" + numberOfPacksPending +
-            ", countryDestination='" + countryDestination + '\''
+                ", countryDestination='" + countryDestination + '\''
             ;
     }
 }

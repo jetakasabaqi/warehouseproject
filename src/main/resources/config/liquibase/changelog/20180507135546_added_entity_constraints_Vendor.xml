@@ -6,15 +6,7 @@
     <!--
         Added the constraints for entity Person.
     -->
-    <!--<changeSet id="20180507135542-2" author="jhipster">-->
 
-        <!--<addForeignKeyConstraint baseColumnNames="user_id"-->
-                                 <!--baseTableName="vendor"-->
-                                 <!--constraintName="fk_vendor_user_id"-->
-                                 <!--referencedColumnNames="id"-->
-                                 <!--referencedTableName="jhi_user"/>-->
-
-    <!--</changeSet>-->
 
     <changeSet author="jhipster" id="20180507135542">
         <addForeignKeyConstraint baseColumnNames="user_id"

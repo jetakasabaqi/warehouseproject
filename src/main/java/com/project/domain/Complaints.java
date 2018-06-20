@@ -5,12 +5,14 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 @ApiModel(description = "not an ignored comment")
 @Entity
 @Table(name = "complaints")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Complaints {
+public class Complaints implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
@@ -21,7 +23,7 @@ public class Complaints {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name="user_id",referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "user_name")
@@ -31,14 +33,13 @@ public class Complaints {
     private String details;
 
 
-    public Complaints()
-    {}
+    public Complaints() {
+    }
 
-    public Complaints(User user,String details)
-    {
-        this.user=user;
-        this.userName=user.getFirstName();
-        this.details=details;
+    public Complaints(User user, String details) {
+        this.user = user;
+        this.userName = user.getFirstName();
+        this.details = details;
     }
 
     public Long getId() {
@@ -60,12 +61,11 @@ public class Complaints {
     public String getUserName() {
         return userName;
     }
-    public void setUserName(String userName){
-        this.userName=userName;
+
+    public void setUserName(String userName) {
+        this.userName = userName;
 
     }
-
-
 
     public String getDetails() {
         return details;
@@ -75,6 +75,19 @@ public class Complaints {
         this.details = details;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Complaints that = (Complaints) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
+    }
 
     @Override
     public String toString() {

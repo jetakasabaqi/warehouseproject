@@ -43,6 +43,12 @@ public interface PersonService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the persons by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<Person> findAll(CriteriaQuery<Person> query);
 
 

@@ -3,8 +3,6 @@ package com.project.service.dto;
 import com.project.config.Constants;
 import com.project.domain.Authority;
 import com.project.domain.Employee;
-
-
 import com.project.domain.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -32,7 +30,7 @@ public class EmployeeDTO {
     @Size(max = 50)
     private String lastName;
 
-    @Size(max=50)
+    @Size(max = 50)
     private String tel;
 
     @Email
@@ -71,14 +69,14 @@ public class EmployeeDTO {
         this.login = employee.getUser().getLogin();
         this.name = employee.getName();
         this.lastName = employee.getLastName();
-        this.age=employee.getAge();
-        this.tel=employee.getTel();
-        this.userId=employee.getUser();
+        this.age = employee.getAge();
+        this.tel = employee.getTel();
+        this.userId = employee.getUser();
         this.email = employee.getEmail();
         this.activated = employee.getUser().getActivated();
         this.imageUrl = employee.getUser().getImageUrl();
         this.langKey = employee.getUser().getLangKey();
-        this.created_date=created_date;
+        this.created_date = created_date;
 
         this.authorities = employee.getUser().getAuthorities().stream()
             .map(Authority::getName)

@@ -2,7 +2,6 @@ package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.ProductDetails;
-import com.project.repository.PriceRepository;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
 import com.project.service.*;
 import com.project.web.rest.errors.BadRequestAlertException;
@@ -14,7 +13,6 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;

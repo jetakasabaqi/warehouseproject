@@ -3,10 +3,6 @@ package com.project.service.impl;
 import com.project.domain.ProductDetails;
 import com.project.repository.ProductDetailsRepository;
 import com.project.service.ProductDetailsService;
-import com.project.service.ProductService;
-import com.project.domain.Product;
-import com.project.repository.ProductRepository;
-import com.project.service.ProductService;
 import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -93,12 +86,16 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
         productDetailsRepository.delete(id);
     }
 
+    /**
+     * Get all the productDetails by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<ProductDetails> findAll(CriteriaQuery<ProductDetails> query) {
         return ParseRsql.findAll(query, entityManager);
     }
-
-
 
 
 }

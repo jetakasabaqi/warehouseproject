@@ -2,10 +2,8 @@ package com.project.web.rest;
 
 
 import com.codahale.metrics.annotation.Timed;
-import com.project.domain.Vendor;
 import com.project.domain.WeightUnit;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
-import com.project.service.VendorService;
 import com.project.service.WeightUnitService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;

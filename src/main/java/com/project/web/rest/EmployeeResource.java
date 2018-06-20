@@ -13,7 +13,6 @@ import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +42,7 @@ public class EmployeeResource {
 
     private final EntityManager entityManager;
 
-    public EmployeeResource(EmployeeService employeeService,EntityManager entityManager) {
+    public EmployeeResource(EmployeeService employeeService, EntityManager entityManager) {
         this.employeeService = employeeService;
         this.entityManager = entityManager;
     }
@@ -132,6 +131,7 @@ public class EmployeeResource {
         employeeService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "/employees")
     @ResponseBody
     public ResponseEntity<List<Employee>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {

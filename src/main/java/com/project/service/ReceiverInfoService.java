@@ -43,5 +43,11 @@ public interface ReceiverInfoService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the receiverInfo by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<ReceiverInfo> findAll(CriteriaQuery<ReceiverInfo> query);
 }

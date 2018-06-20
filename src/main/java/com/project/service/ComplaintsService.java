@@ -27,7 +27,7 @@ public interface ComplaintsService {
     Page<Complaints> findAll(Pageable pageable);
 
     /**
-     * Get the "id" city.
+     * Get the "id" complain.
      *
      * @param id the id of the entity
      * @return the entity
@@ -35,12 +35,17 @@ public interface ComplaintsService {
     Complaints findOne(Long id);
 
     /**
-     * Delete the "id" city.
+     * Delete the "id" complain.
      *
      * @param id the id of the entity
      */
     void delete(Long id);
 
-
+    /**
+     * Get all the complaints by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<Complaints> findAll(CriteriaQuery<Complaints> query);
 }

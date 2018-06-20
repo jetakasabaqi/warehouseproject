@@ -63,7 +63,7 @@ public class ShipmentResource {
     private final WarehouseLocationService warehouseLocationService;
 
     @Autowired
-    private  MailService mailService;
+    private MailService mailService;
 
 
     public ShipmentResource(ShipmentService shipmentService, PersonService personService, ReceiverInfoService receiverInfo, VendorService vendorService, EmployeeService employeeService, StatusService statusService, EntityManager entityManager, ProductService productService, WarehouseLocationService warehouseLocationService) {
@@ -132,14 +132,7 @@ public class ShipmentResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of shipments in body
      */
-//    @GetMapping("/shipments")
-//    @Timed
-//    public ResponseEntity<List<Shipment>> getAllShipments(Pageable pageable) {
-//        log.debug("REST request to get a page of Shipments");
-//        Page<Shipment> page = shipmentService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/shipments");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
+
 
     /**
      * GET  /shipments/:id : get the "id" shipment.
@@ -250,7 +243,7 @@ public class ShipmentResource {
     }
 
 
-    @GetMapping("/shipment/packs_delivered")
+    @GetMapping("/shipment/packs-delivered")
     @Timed
     public ResponseEntity<NoOfPacksDeliveredDTO> getNoOFPacksDelivered() {
         NoOfPacksDeliveredDTO result = shipmentService.getNoOfPacksDelivered();
@@ -258,7 +251,7 @@ public class ShipmentResource {
 
     }
 
-    @GetMapping("/shipment/packs_by_country")
+    @GetMapping("/shipment/packs-by-country")
     public ResponseEntity<NoOfPacksDeliveredDTO> getNoOfPacksByCountry(@RequestParam(value = "country") String country) {
         NoOfPacksDeliveredDTO res = shipmentService.getNoOfPacksDeliveredByCountry(country);
 
@@ -266,14 +259,15 @@ public class ShipmentResource {
 
 
     }
-    @GetMapping("/shipment/getPacksByAnyCountry")
-    public ResponseEntity<List<NoOfPackByAnyCountry>> getNoOfPackByAnyCountry(Pageable pageable)
-    {
 
-        List<NoOfPackByAnyCountry> res=shipmentService.getNoOfPacksByAnyCountry(pageable);
-        return new ResponseEntity<>(res,HttpStatus.OK);
+    @GetMapping("/shipment/get-packs-by-any-country")
+    public ResponseEntity<List<NoOfPackByAnyCountryDTO>> getNoOfPackByAnyCountry(Pageable pageable) {
+
+        List<NoOfPackByAnyCountryDTO> res = shipmentService.getNoOfPacksByAnyCountry(pageable);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
-    @GetMapping("/shipment/packs_pending")
+
+    @GetMapping("/shipment/packs-pending")
     @Timed
     public ResponseEntity<List<NoOfPacksPendingDTO>> getNoOfPacksPending(Pageable pageable) {
         List<NoOfPacksPendingDTO> result = shipmentService.getNoOfPacksPending(pageable);
@@ -281,17 +275,17 @@ public class ShipmentResource {
 
     }
 
-    @GetMapping("/shipment/loyalClients")
+    @GetMapping("/shipment/loyal-clients")
     @Timed
-    public ResponseEntity<List<LoyalClients>> getLoyalClients(Pageable pageable) {
-        List<LoyalClients> result = shipmentService.getLoyalClients(pageable);
+    public ResponseEntity<List<LoyalClientsDTO>> getLoyalClients(Pageable pageable) {
+        List<LoyalClientsDTO> result = shipmentService.getLoyalClients(pageable);
         return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
-    @PutMapping("/shipment/{id}/changeStatus")
+    @PutMapping("/shipment/{id}/change-status")
     @Timed
-    public ResponseEntity<Boolean> changeStatus(@PathVariable("id")Long id ,@RequestBody Status status ) throws Exception {
+    public ResponseEntity<Boolean> changeStatus(@PathVariable("id") Long id, @RequestBody Status status) throws Exception {
 
         Shipment shipment = shipmentService.findOne(id);
 
@@ -303,22 +297,21 @@ public class ShipmentResource {
 
         if (status.getId() == 3) {
             shipment.setStatus(status);
-           updateShipment(shipment);
-           if(shipment.getId() ==null){
+            updateShipment(shipment);
+            if (shipment.getId() == null) {
 
-           }
-           else
-           {
-           mailService.sendShippedStatusEmail(shipment);}
+            } else {
+                mailService.sendShippedStatusEmail(shipment);
+            }
         } else if (status.getId() == 4) {
             shipment.setStatus(status);
             updateShipment(shipment);
-            if(shipment.getId() ==null){
+            if (shipment.getId() == null) {
 
+            } else {
+                mailService.sendDeliveredREmail(shipment);
+                mailService.sendDeliveredSEmail(shipment);
             }
-            else {
-            mailService.sendDeliveredREmail(shipment);
-            mailService.sendDeliveredSEmail(shipment);}
         }
         return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
 
@@ -326,18 +319,13 @@ public class ShipmentResource {
     }
 
 
-
-
     @GetMapping("/shipment/weekly")
     @Timed
     public ResponseEntity<Boolean> getWeekly() throws IOException, DocumentException {
-        return new ResponseEntity<Boolean>(shipmentService.weeklyReport(),HttpStatus.OK);
-
-
+        return new ResponseEntity<Boolean>(shipmentService.weeklyReport(), HttpStatus.OK);
 
 
     }
-
 
 
 }

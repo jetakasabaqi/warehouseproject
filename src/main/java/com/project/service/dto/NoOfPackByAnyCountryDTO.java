@@ -1,26 +1,25 @@
 package com.project.service.dto;
 
 
+public class NoOfPackByAnyCountryDTO {
 
-public class NoOfPackByAnyCountry {
-
-    private long noOfPacksDelivered ;
+    private long noOfPacksDelivered;
 
     private String country;
 
-    public NoOfPackByAnyCountry()
-    {}
-
-    public NoOfPackByAnyCountry(long noOfPacksDelivered, String country) {
-        this.noOfPacksDelivered = noOfPacksDelivered;
-        this.country=country;
+    public NoOfPackByAnyCountryDTO() {
     }
 
-    public long getNumber_of_Packs_delivered() {
+    public NoOfPackByAnyCountryDTO(long noOfPacksDelivered, String country) {
+        this.noOfPacksDelivered = noOfPacksDelivered;
+        this.country = country;
+    }
+
+    public long getNoOfPacksDelivered() {
         return noOfPacksDelivered;
     }
 
-    public void setNumber_of_Packs_delivered(int noOfPacksDelivered) {
+    public void setNoOfPacksDelivered(long noOfPacksDelivered) {
         this.noOfPacksDelivered = noOfPacksDelivered;
     }
 
@@ -36,7 +35,7 @@ public class NoOfPackByAnyCountry {
     public String toString() {
         return
             "noOfPacksDelivered=" + noOfPacksDelivered +
-            ", country='" + country + '\''
+                ", country='" + country + '\''
             ;
     }
 }

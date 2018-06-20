@@ -1,8 +1,7 @@
 package com.project.domain;
 
-import com.project.config.Constants;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.config.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
@@ -14,18 +13,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
-import java.time.Instant;
 
 /**
  * A user.
  */
 @Entity
 @Table(name = "jhi_user")
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -96,14 +95,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private Set<Authority> authorities = new HashSet<>();
 
 
-    public User()
-    {}
+    public User() {
+    }
 
-    public User( String login, String lastName, String email, String name) {
-    this.login=login;
-    this.lastName=lastName;
-    this.email=email;
-    this.firstName=name;
+    public User(String login, String lastName, String email, String name) {
+        this.login = login;
+        this.lastName = lastName;
+        this.email = email;
+        this.firstName = name;
 
     }
 
@@ -119,7 +118,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return login;
     }
 
-    // Lowercase the login before saving it in database
+
     public void setLogin(String login) {
         this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
     }

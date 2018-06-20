@@ -1,8 +1,6 @@
 package com.project.service.impl;
 
-import com.project.domain.Product;
 import com.project.domain.ProductType;
-import com.project.repository.ProductRepository;
 import com.project.repository.ProductTypeRepository;
 import com.project.service.ProductTypeService;
 import com.project.service.util.ParseRsql;
@@ -17,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+
 @Service
 @Transactional
 public class ProductTypeServiceImpl implements ProductTypeService {
@@ -29,7 +28,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
 
 
     public ProductTypeServiceImpl(ProductTypeRepository productTypeRepository) {
-        this.productTypeRepository= productTypeRepository;
+        this.productTypeRepository = productTypeRepository;
     }
 
 
@@ -82,7 +81,12 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         log.debug("Request to delete Product Type : {}", id);
         productTypeRepository.delete(id);
     }
-
+    /**
+     * Get all the productTypes by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<ProductType> findAll(CriteriaQuery<ProductType> query) {
         return ParseRsql.findAll(query, entityManager);

@@ -34,11 +34,11 @@ package com.project.rsql1.misc;
 public class ArgumentFormatException extends RuntimeException {
 
     /**
-	 * SERIAL UID
-	 */
-	private static final long serialVersionUID = 521849874508654920L;
+     * SERIAL UID
+     */
+    private static final long serialVersionUID = 521849874508654920L;
 
-	private final String argument;
+    private final String argument;
     private final Class<?> propertyType;
 
 

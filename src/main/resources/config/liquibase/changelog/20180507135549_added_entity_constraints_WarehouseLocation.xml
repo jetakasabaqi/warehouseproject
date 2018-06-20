@@ -7,7 +7,7 @@
         Added the constraints for entity WarehouseLocation.
     -->
     <changeSet id="20180507135549-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="city_id"
                                  baseTableName="warehouse_location"
                                  constraintName="fk_warehouse_location_city_id"

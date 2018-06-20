@@ -1,13 +1,9 @@
 package com.project.repository;
 
 import com.project.domain.Price;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import org.springframework.data.jpa.repository.*;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 
 /**

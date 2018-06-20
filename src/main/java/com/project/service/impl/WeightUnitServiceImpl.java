@@ -1,8 +1,6 @@
 package com.project.service.impl;
 
-import com.project.domain.Vendor;
 import com.project.domain.WeightUnit;
-import com.project.repository.VendorRepository;
 import com.project.repository.WeightUnitRepository;
 import com.project.service.WeightUnitService;
 import com.project.service.util.ParseRsql;
@@ -17,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+
 @Service
 @Transactional
 public class WeightUnitServiceImpl implements WeightUnitService {
@@ -81,6 +80,12 @@ public class WeightUnitServiceImpl implements WeightUnitService {
         weightUnitRepository.delete(id);
     }
 
+    /**
+     * Get all the weightUnits by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<WeightUnit> findAll(CriteriaQuery<WeightUnit> query) {
         return ParseRsql.findAll(query, entityManager);

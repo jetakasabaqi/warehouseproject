@@ -1,6 +1,5 @@
 package com.project.service.impl;
 
-import com.project.service.ProductService;
 import com.project.domain.Product;
 import com.project.repository.ProductRepository;
 import com.project.service.ProductService;
@@ -15,9 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.List;
-
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -90,15 +86,16 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(id);
     }
 
+    /**
+     * Get all the products by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Product> findAll(CriteriaQuery<Product> query) {
         return ParseRsql.findAll(query, entityManager);
     }
 
 
-
-    @Override
-    public List<BigDecimal> getAllShipmentsByClientId(Long person_id) {
-        return null;
-    }
 }

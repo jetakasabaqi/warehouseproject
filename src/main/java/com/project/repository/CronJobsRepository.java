@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CronJobsRepository extends JpaRepository<CronJobs, Long> ,JpaSpecificationExecutor {
-
+public interface CronJobsRepository extends JpaRepository<CronJobs, Long>, JpaSpecificationExecutor {
 
 
 }

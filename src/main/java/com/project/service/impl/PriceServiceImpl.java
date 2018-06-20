@@ -84,6 +84,12 @@ public class PriceServiceImpl implements PriceService {
         priceRepository.delete(id);
     }
 
+    /**
+     * Get all the prices by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Price> findAll(CriteriaQuery<Price> query) {
         return ParseRsql.findAll(query, entityManager);

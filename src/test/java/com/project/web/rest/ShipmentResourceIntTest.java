@@ -596,10 +596,10 @@ public class ShipmentResourceIntTest {
         shipment.getStatus().setId(4l);
         shipmentRepository.saveAndFlush(shipment);
 
-        restShipmentMockMvc.perform(get("/api/shipment/packs_delivered"))
+        restShipmentMockMvc.perform(get("/api/shipment/packs-delivered"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.number_of_Packs_delivered").value(1));
+            .andExpect(jsonPath("$.noOfPacksDelivered").value(1));
     }
 
     @Test
@@ -609,10 +609,10 @@ public class ShipmentResourceIntTest {
         shipment.getStatus().setId(4l);
         shipmentRepository.saveAndFlush(shipment);
 
-        restShipmentMockMvc.perform(get("/api/shipment/packs_by_country?country="+ shipment.getSenderP().getCountry()))
+        restShipmentMockMvc.perform(get("/api/shipment/packs-by-country?country="+ shipment.getSenderP().getCountry()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.number_of_Packs_delivered").value(1));
+            .andExpect(jsonPath("$.noOfPacksDelivered").value(1));
     }
 
     @Test
@@ -622,7 +622,7 @@ public class ShipmentResourceIntTest {
         shipment.getStatus().setId(2l);
         shipmentRepository.saveAndFlush(shipment);
 
-        restShipmentMockMvc.perform(get("/api/shipment/packs_pending"))
+        restShipmentMockMvc.perform(get("/api/shipment/packs-pending"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
            .andExpect(jsonPath("$.[*].numberOfPacksPending").value(hasItem(1)))
@@ -649,7 +649,7 @@ public class ShipmentResourceIntTest {
 
         updateShipment();
 
-        restShipmentMockMvc.perform(put("/api/shipment/{id}/changeStatus",shipment.getId().intValue())
+        restShipmentMockMvc.perform(put("/api/shipment/{id}/change-status",shipment.getId().intValue())
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(status)))
             .andExpect(status().isAccepted());

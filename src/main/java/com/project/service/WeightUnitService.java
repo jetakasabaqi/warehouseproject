@@ -41,5 +41,11 @@ public interface WeightUnitService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the weight units by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<WeightUnit> findAll(CriteriaQuery<WeightUnit> query);
 }

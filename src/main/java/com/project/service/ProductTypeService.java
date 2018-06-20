@@ -1,6 +1,5 @@
 package com.project.service;
 
-import com.project.domain.Product;
 import com.project.domain.ProductType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +40,11 @@ public interface ProductTypeService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the productTypes by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<ProductType> findAll(CriteriaQuery<ProductType> query);
 }

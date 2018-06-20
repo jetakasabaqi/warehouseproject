@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class SimpleMapper implements Mapper {
 
-	private static final Logger LOG = Logger.getLogger(SimpleMapper.class.getName());
+    private static final Logger LOG = Logger.getLogger(SimpleMapper.class.getName());
 
     private Map<Class<?>, Map<String, String>> mapping;
 
@@ -45,8 +45,9 @@ public class SimpleMapper implements Mapper {
      * entities map.
      */
     public SimpleMapper() {
-    	this(0);
+        this(0);
     }
+
     /**
      * Construct new <tt>SimpleMapper</tt> with the specified initial capacity
      * of the entities map.
@@ -64,7 +65,7 @@ public class SimpleMapper implements Mapper {
         String property = (map != null) ? map.get(selector) : null;
 
         if (property != null) {
-        	LOG.log(Level.INFO, "Found mapping {0} -> {1}" , new Object[] {selector, property});
+            LOG.log(Level.INFO, "Found mapping {0} -> {1}", new Object[]{selector, property});
             return property;
         }
 
@@ -76,7 +77,7 @@ public class SimpleMapper implements Mapper {
      * Add selectors -> property names mapping for given entity class.
      *
      * @param entityClass entity class
-     * @param mapping mapping of selectors to property names
+     * @param mapping     mapping of selectors to property names
      */
     public void addMapping(Class<?> entityClass, Map<String, String> mapping) {
         this.mapping.put(entityClass, mapping);
@@ -86,16 +87,16 @@ public class SimpleMapper implements Mapper {
      * Add one selector -> property name mapping for given entity class.
      *
      * @param entityClass entity class
-     * @param selector Selector that identifies some element of an entry's content.
-     * @param property Name of corresponding entity's property.
+     * @param selector    Selector that identifies some element of an entry's content.
+     * @param property    Name of corresponding entity's property.
      */
     public void addMapping(Class<?> entityClass, String selector, String property) {
         mapping.get(entityClass).put(selector, property);
     }
 
     /**
-     * @see SimpleMapper#setMapping(Map)
      * @return The current mapping of all entities.
+     * @see SimpleMapper#setMapping(Map)
      */
     public Map<Class<?>, Map<String, String>> getMapping() {
         return mapping;

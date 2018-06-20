@@ -1,6 +1,5 @@
 package com.project.service.util;
 
-import com.project.domain.Shipment;
 import com.project.service.dto.PackageDTO;
 
 import javax.persistence.EntityManager;

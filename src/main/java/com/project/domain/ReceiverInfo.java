@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -32,16 +31,16 @@ public class ReceiverInfo implements Serializable {
     @Column(name = "zip_code")
     private String zipCode;
 
-    @Column(name="city")
+    @Column(name = "city")
     private String city;
 
-    @Column(name="country")
+    @Column(name = "country")
     private String country;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -88,7 +87,7 @@ public class ReceiverInfo implements Serializable {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
 
     public String getCity() {

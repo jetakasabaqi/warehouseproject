@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 public class PackageStatusDTO {
 
 
-
     private Long productId;
 
     private Long priceId;
@@ -21,14 +20,12 @@ public class PackageStatusDTO {
     private BigDecimal price;
 
 
-
-
-    public PackageStatusDTO(Long productId, Long priceId, Long statusId,Long employeeId,String employeeName, String statusName, BigDecimal price) {
+    public PackageStatusDTO(Long productId, Long priceId, Long statusId, Long employeeId, String employeeName, String statusName, BigDecimal price) {
         this.productId = productId;
         this.priceId = priceId;
         this.statusId = statusId;
-        this.employeeId=employeeId;
-        this.employeeName=employeeName;
+        this.employeeId = employeeId;
+        this.employeeName = employeeName;
         this.statusName = statusName;
         this.price = price;
     }

@@ -16,11 +16,11 @@ public class WeightUnit implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name="unit")
+    @Column(name = "unit")
     private String unit;
 
-    public WeightUnit()
-    {}
+    public WeightUnit() {
+    }
 
     public WeightUnit(Long id, String unit) {
         this.id = id;
@@ -67,7 +67,7 @@ public class WeightUnit implements Serializable {
     }
 
     public WeightUnit unit(String kg) {
-        this.unit=unit;
+        this.unit = unit;
         return this;
     }
 }

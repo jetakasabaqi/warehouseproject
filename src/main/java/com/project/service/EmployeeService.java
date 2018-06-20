@@ -43,5 +43,11 @@ public interface EmployeeService {
      */
     void delete(Long id);
 
+    /**
+     * Get all the employees by a filter
+     *
+     * @param query
+     * @return the list of entities
+     */
     List<Employee> findAll(CriteriaQuery<Employee> query);
 }

@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "employeeType")
@@ -20,8 +21,8 @@ public class EmployeeType {
     private String type;
 
 
-    public EmployeeType()
-    {}
+    public EmployeeType() {
+    }
 
     public EmployeeType(String type) {
         this.type = type;
@@ -41,6 +42,21 @@ public class EmployeeType {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmployeeType that = (EmployeeType) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 
     @Override

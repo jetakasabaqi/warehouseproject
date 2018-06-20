@@ -41,7 +41,7 @@ public class ProductResource {
 
     private final ProductService productService;
     private final PriceService priceService;
-    private  final EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public ProductResource(ProductService productService, PriceService priceService, EntityManager entityManager) {
         this.productService = productService;
@@ -139,7 +139,7 @@ public class ProductResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/products")
     @ResponseBody
-    public ResponseEntity<List<Product>> findAllByRsql(@RequestParam(value = "search",required = false) String search,Pageable pageable) {
+    public ResponseEntity<List<Product>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

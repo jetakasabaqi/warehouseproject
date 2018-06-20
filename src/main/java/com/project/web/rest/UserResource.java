@@ -1,9 +1,11 @@
 package com.project.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.lowagie.text.DocumentException;
 import com.project.config.Constants;
-import com.project.domain.*;
+import com.project.domain.Employee;
+import com.project.domain.Person;
+import com.project.domain.User;
+import com.project.domain.Vendor;
 import com.project.repository.EmployeeRepository;
 import com.project.repository.UserRepository;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
@@ -30,14 +32,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -337,25 +337,26 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.ok().headers(HeaderUtil.createAlert("A user is deleted with identifier " + login, login)).build();
     }
+
     @RequestMapping(method = RequestMethod.GET, value = "/users")
     @ResponseBody
-    public ResponseEntity<List<User>> findAllByRsql(@RequestParam(value = "search",required = false) String search,Pageable pageable) {
+    public ResponseEntity<List<User>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
-         if (search == null) {
+        if (search == null) {
             Page<User> page = userService.findAll(pageable);
             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         } else {
-        RSQLVisitor<CriteriaQuery<User>, EntityManager> visitor = new JpaCriteriaQueryVisitor<User>();
-        final Node rootNode = new RSQLParser().parse(search);
-        CriteriaQuery<User> query = rootNode.accept(visitor, entityManager);
-        List<User> users = userService.findAll(query);
+            RSQLVisitor<CriteriaQuery<User>, EntityManager> visitor = new JpaCriteriaQueryVisitor<User>();
+            final Node rootNode = new RSQLParser().parse(search);
+            CriteriaQuery<User> query = rootNode.accept(visitor, entityManager);
+            List<User> users = userService.findAll(query);
 
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        }
     }
-}
 
 //
 //    @GetMapping("/user/email")
@@ -369,7 +370,6 @@ public class UserResource {
 //        mailService.sendEmailFromTemplateAttachment(user);
 //        return true;
 //    }
-
 
 
 }

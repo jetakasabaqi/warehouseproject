@@ -30,7 +30,7 @@ import com.project.rsql1.misc.Mapper;
 
 /**
  * Facade Interface for miscelaneous utilities for operation definition.
- *
+ * <p>
  * PropertyMapper for translation of properties aliases.
  * ArgumentParser for casting specific types.
  * PredicateBuilder for RSQL AST new nodes.
@@ -40,45 +40,45 @@ import com.project.rsql1.misc.Mapper;
  */
 public interface BuilderTools {
 
-	/**
-	 * Get a mapper for the properties.
-	 *
-	 * @return Mapper
-	 */
-	public Mapper getPropertiesMapper();
+    /**
+     * Get a mapper for the properties.
+     *
+     * @return Mapper
+     */
+    public Mapper getPropertiesMapper();
 
-	/**
-	 * Set a specific Mapper.
-	 *
-	 * @param mapper Mapper
-	 */
-	public void setPropertiesMapper(Mapper mapper);
+    /**
+     * Set a specific Mapper.
+     *
+     * @param mapper Mapper
+     */
+    public void setPropertiesMapper(Mapper mapper);
 
-	/**
-	 * Get a argument parser for casting types.
-	 *
-	 * @return ArgumentParser
-	 */
-	public ArgumentParser getArgumentParser();
+    /**
+     * Get a argument parser for casting types.
+     *
+     * @return ArgumentParser
+     */
+    public ArgumentParser getArgumentParser();
 
-	/**
-	 * Set a specific ArgumentParser.
-	 *
-	 * @param argumentParser ArgumentParser
-	 */
-	public void setArgumentParser(ArgumentParser argumentParser);
+    /**
+     * Set a specific ArgumentParser.
+     *
+     * @param argumentParser ArgumentParser
+     */
+    public void setArgumentParser(ArgumentParser argumentParser);
 
-	/**
-	 * Get a predicate strategy for parsing Node into Predicate.
-	 *
-	 * @return PredicateBuilderStrategy
-	 */
-	public PredicateBuilderStrategy getPredicateBuilder();
+    /**
+     * Get a predicate strategy for parsing Node into Predicate.
+     *
+     * @return PredicateBuilderStrategy
+     */
+    public PredicateBuilderStrategy getPredicateBuilder();
 
-	/**
-	 * Set a specific predicate strategy.
-	 *
-	 * @param predicateStrategy PredicateBuilderStrategy
-	 */
-	public void setPredicateBuilder(PredicateBuilderStrategy predicateStrategy);
+    /**
+     * Set a specific predicate strategy.
+     *
+     * @param predicateStrategy PredicateBuilderStrategy
+     */
+    public void setPredicateBuilder(PredicateBuilderStrategy predicateStrategy);
 }

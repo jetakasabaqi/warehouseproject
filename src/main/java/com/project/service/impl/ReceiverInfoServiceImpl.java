@@ -83,6 +83,12 @@ public class ReceiverInfoServiceImpl implements ReceiverInfoService {
         receiverInfoRepository.delete(id);
     }
 
+    /**
+     * Get all the receivers by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<ReceiverInfo> findAll(CriteriaQuery<ReceiverInfo> query) {
         return ParseRsql.findAll(query, entityManager);

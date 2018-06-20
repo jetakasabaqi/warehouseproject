@@ -84,6 +84,12 @@ public class PersonServiceImpl implements PersonService {
         personRepository.delete(id);
     }
 
+    /**
+     * Get all the persons by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<Person> findAll(CriteriaQuery<Person> query) {
         return ParseRsql.findAll(query, entityManager);

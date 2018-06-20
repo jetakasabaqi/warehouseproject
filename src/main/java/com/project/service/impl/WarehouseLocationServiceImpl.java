@@ -84,6 +84,12 @@ public class WarehouseLocationServiceImpl implements WarehouseLocationService {
         warehouseLocationRepository.delete(id);
     }
 
+    /**
+     * Get all the warehouse locations by a filter
+     *
+     * @param query the filter
+     * @return the list of entities
+     */
     @Override
     public List<WarehouseLocation> findAll(CriteriaQuery<WarehouseLocation> query) {
         return ParseRsql.findAll(query, entityManger);

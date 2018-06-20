@@ -23,29 +23,27 @@
  */
 package com.project.rsql1.jpa;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import cz.jirutka.rsql.parser.ast.AndNode;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import cz.jirutka.rsql.parser.ast.OrNode;
 import cz.jirutka.rsql.parser.ast.RSQLVisitor;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * JpaCriteriaQueryVisitor
- *
+ * <p>
  * Visitor class for Criteria Query count creation from RSQL AST Nodes.
  *
- * @author sza
- *
  * @param <T> Entity type
+ * @author sza
  */
-public class JpaCriteriaCountQueryVisitor<T> extends AbstractJpaVisitor<CriteriaQuery<Long>, T>  implements RSQLVisitor<CriteriaQuery<Long>, EntityManager> {
+public class JpaCriteriaCountQueryVisitor<T> extends AbstractJpaVisitor<CriteriaQuery<Long>, T> implements RSQLVisitor<CriteriaQuery<Long>, EntityManager> {
 
     private static final Logger LOG = Logger.getLogger(JpaCriteriaCountQueryVisitor.class.getName());
 

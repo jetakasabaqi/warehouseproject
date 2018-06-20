@@ -4,7 +4,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -26,14 +25,13 @@ public class Status implements Serializable {
     @Column(name = "status_name")
     private String statusName;
 
-    public Status()
-    {}
-
-    public Status(String status) {
-        this.statusName=status;
+    public Status() {
     }
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public Status(String status) {
+        this.statusName = status;
+    }
+
     public Long getId() {
         return id;
     }
@@ -54,7 +52,7 @@ public class Status implements Serializable {
     public void setStatusName(String statusName) {
         this.statusName = statusName;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
     @Override
     public boolean equals(Object o) {

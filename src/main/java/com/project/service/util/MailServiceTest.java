@@ -3,8 +3,8 @@ package com.project.service.util;
 import com.lowagie.text.DocumentException;
 import com.project.config.thymeleaf.StringContext;
 import com.project.domain.Shipment;
-import com.project.service.dto.LoyalClients;
-import com.project.service.dto.NoOfPackByAnyCountry;
+import com.project.service.dto.LoyalClientsDTO;
+import com.project.service.dto.NoOfPackByAnyCountryDTO;
 import com.project.service.dto.NoOfPacksDeliveredDTO;
 import com.project.service.dto.NoOfPacksPendingDTO;
 import io.github.jhipster.config.JHipsterProperties;
@@ -28,20 +28,20 @@ public class MailServiceTest {
 
     private static final String BASE_URL = "baseUrl";
 
-    private static final String STATUS="status";
-    private static final String SENDER="sender";
+    private static final String STATUS = "status";
+    private static final String SENDER = "sender";
 
-    private static final String SHIPMENT="shipment";
+    private static final String SHIPMENT = "shipment";
 
-    private static final String DElIVERED="delivered";
+    private static final String DElIVERED = "delivered";
 
-    private static final String COUNTRY="country";
+    private static final String COUNTRY = "country";
 
-    private static final  String PENDING="pending";
+    private static final String PENDING = "pending";
 
-    private static final String CLIENTS="clients";
+    private static final String CLIENTS = "clients";
 
-    private String shippedTemplate="\n" +
+    private String shippedTemplate = "\n" +
         "<!DOCTYPE html>\n" +
         "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
         "<head>\n" +
@@ -71,7 +71,7 @@ public class MailServiceTest {
         "\n" +
         "</body>\n" +
         "</html>\n";
-    private String deliveredTemplateSender="\n" +
+    private String deliveredTemplateSender = "\n" +
         "<!DOCTYPE html>\n" +
         "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
         "<head>\n" +
@@ -103,7 +103,7 @@ public class MailServiceTest {
         "\n" +
         "</body>\n" +
         "</html>\n";
-    private String deliveredTemplateReceiver="\n" +
+    private String deliveredTemplateReceiver = "\n" +
         "<!DOCTYPE html>\n" +
         "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
         "<head>\n" +
@@ -136,7 +136,7 @@ public class MailServiceTest {
         "</body>\n" +
         "</html>\n";
 
-    private String weeklyReport="<!DOCTYPE html>\n" +
+    private String weeklyReport = "<!DOCTYPE html>\n" +
         "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
         "    <head>\n" +
         "        <title>WEEKLY REPORT</title>\n" +
@@ -213,6 +213,7 @@ public class MailServiceTest {
         "        </p>\n" +
         "    </body>\n" +
         "</html>\n";
+
     public MailServiceTest(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {
         this.templateEngine = templateEngine;
         this.jHipsterProperties = jHipsterProperties;
@@ -255,7 +256,6 @@ public class MailServiceTest {
     }
 
 
-
     public byte[] sendShippedPdf(Shipment shipment) throws IOException, DocumentException {
         Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
 
@@ -288,9 +288,6 @@ public class MailServiceTest {
 
         System.out.print(content);
     }
-
-
-
 
 
     public byte[] sendDeliveredSPDFTemplate(Shipment shipment) throws IOException, DocumentException {
@@ -326,9 +323,6 @@ public class MailServiceTest {
     }
 
 
-
-
-
     public byte[] sendDeliveredRPDFTemplate(Shipment shipment) throws IOException, DocumentException {
         Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
 
@@ -349,7 +343,7 @@ public class MailServiceTest {
         return pdfbytes;
     }
 
-    public void sendWeekly(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountry> country, List<NoOfPacksPendingDTO> pending, List<LoyalClients> clients) {
+    public void sendWeekly(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients) {
 
         Locale locale = Locale.forLanguageTag("en");
 
@@ -366,7 +360,7 @@ public class MailServiceTest {
 
     }
 
-    public byte[] sendWeeklyPDF(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountry> country, List<NoOfPacksPendingDTO> pending, List<LoyalClients> clients) throws IOException, DocumentException {
+    public byte[] sendWeeklyPDF(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients) throws IOException, DocumentException {
         Locale locale = Locale.forLanguageTag("en");
 
         StringContext context = new StringContext(weeklyReport, locale);
@@ -429,7 +423,6 @@ public class MailServiceTest {
 //          outputStream.close();
 //       //return pdfbytes;
 //    }
-
 
 
 }

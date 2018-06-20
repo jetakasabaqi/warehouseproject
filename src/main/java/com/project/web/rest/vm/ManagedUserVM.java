@@ -1,6 +1,7 @@
 package com.project.web.rest.vm;
 
 import com.project.service.dto.UserDTO;
+
 import javax.validation.constraints.Size;
 
 /**

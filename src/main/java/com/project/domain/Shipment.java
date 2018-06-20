@@ -1,11 +1,9 @@
 package com.project.domain;
 
-import org.checkerframework.common.reflection.qual.ClassBound;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -37,11 +35,11 @@ public class Shipment implements Serializable {
     private ReceiverInfo receiver;
 
     @OneToOne
-    @JoinColumn(name="employee_id",referencedColumnName = "id")
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee deliverEmployee;
 
     @OneToOne
-    @JoinColumn(name="contact_id",referencedColumnName = "id")
+    @JoinColumn(name = "contact_id", referencedColumnName = "id")
     private Employee contactEmployee;
 
     @OneToOne
@@ -57,12 +55,13 @@ public class Shipment implements Serializable {
     private WarehouseLocation location;
 
     @OneToOne
-    @JoinColumn (name="product_details",referencedColumnName = "id")
+    @JoinColumn(name = "product_details", referencedColumnName = "id")
     private ProductDetails details;
 
-   public Shipment()
-   {}
-    public Shipment(Person senderP, Vendor senderV, ReceiverInfo receiver, Employee deliverEmployee, Employee contactEmployee, Status status, Product product, WarehouseLocation location,ProductDetails details) {
+    public Shipment() {
+    }
+
+    public Shipment(Person senderP, Vendor senderV, ReceiverInfo receiver, Employee deliverEmployee, Employee contactEmployee, Status status, Product product, WarehouseLocation location, ProductDetails details) {
         this.senderP = senderP;
         this.senderV = senderV;
         this.receiver = receiver;
@@ -71,10 +70,10 @@ public class Shipment implements Serializable {
         this.status = status;
         this.product = product;
         this.location = location;
-        this.details=details;
+        this.details = details;
     }
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
@@ -156,7 +155,6 @@ public class Shipment implements Serializable {
     }
 
 
-
     public Shipment product(Product product) {
         this.product = product;
         return this;
@@ -178,7 +176,7 @@ public class Shipment implements Serializable {
     public void setLocation(WarehouseLocation warehouseLocation) {
         this.location = warehouseLocation;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
 
 
     public ProductDetails getDetails() {

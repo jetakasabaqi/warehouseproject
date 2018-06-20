@@ -1,6 +1,5 @@
 package com.project.domain;
 
-import org.checkerframework.checker.units.qual.C;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -16,14 +15,14 @@ public class ProductType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-    private  Long id;
+    private Long id;
 
 
-    @Column(name="type")
+    @Column(name = "type")
     private String type;
 
-    public ProductType()
-    {}
+    public ProductType() {
+    }
 
     public ProductType(Long id, String type) {
         this.id = id;
@@ -70,7 +69,7 @@ public class ProductType implements Serializable {
     }
 
     public ProductType type(String envelope) {
-        this.type=type;
+        this.type = type;
         return this;
     }
 }

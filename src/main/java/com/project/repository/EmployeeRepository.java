@@ -1,11 +1,9 @@
 package com.project.repository;
 
 import com.project.domain.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-
-import org.springframework.data.jpa.repository.*;
-
-import java.util.Optional;
 
 
 /**
@@ -13,7 +11,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long>,JpaSpecificationExecutor {
+public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor {
 
 //    Optional<Object> findOneByLogin(String s);
 //

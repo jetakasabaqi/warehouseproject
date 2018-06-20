@@ -3,13 +3,10 @@ package com.project.service.dto;
 
 import com.project.config.Constants;
 import com.project.domain.Authority;
-
 import com.project.domain.User;
 import com.project.domain.Vendor;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -28,7 +25,7 @@ public class VendorDTO {
     @Size(max = 50)
     private String firstName;
 
-    @Size(max=50)
+    @Size(max = 50)
     private String lastName;
 
     @Size(max = 50)
@@ -70,10 +67,6 @@ public class VendorDTO {
     private Set<String> authorities;
 
 
-
-
-
-
     public VendorDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -81,14 +74,14 @@ public class VendorDTO {
 
     public VendorDTO(Vendor vendor) {
         this.userId = vendor.getUser();
-        this.vendorId=vendor.getId();
-        this.address=vendor.getAddress();
-        this.contactPerson=vendor.getContactPerson();
-        this.website=vendor.getWebsite();
-        this.zipCode=vendor.getZipCode();
+        this.vendorId = vendor.getId();
+        this.address = vendor.getAddress();
+        this.contactPerson = vendor.getContactPerson();
+        this.website = vendor.getWebsite();
+        this.zipCode = vendor.getZipCode();
         this.login = vendor.getUser().getLogin();
         this.firstName = vendor.getFirstName();
-        this.lastName=vendor.getLastName();
+        this.lastName = vendor.getLastName();
         this.email = vendor.getEmail();
         this.activated = vendor.getUser().getActivated();
         this.imageUrl = vendor.getUser().getImageUrl();
