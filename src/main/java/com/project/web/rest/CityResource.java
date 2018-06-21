@@ -95,14 +95,7 @@ public class CityResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of cities in body
      */
-//    @GetMapping("/cities")
-//    @Timed
-//    public ResponseEntity<List<City>> getAllCities(Pageable pageable) {
-//        log.debug("REST request to get a page of Cities");
-//        Page<City> page = cityService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
+
 
     /**
      * GET  /cities/:id : get the "id" city.
@@ -114,7 +107,12 @@ public class CityResource {
     @Timed
     public ResponseEntity<City> getCity(@PathVariable Long id) {
         log.debug("REST request to get City : {}", id);
-        City city = cityService.findOne(id);
+        City city = null;
+        try {
+            city = cityService.findOne(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(city));
     }
 
@@ -128,8 +126,14 @@ public class CityResource {
     @Timed
     public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
         log.debug("REST request to delete City : {}", id);
-        cityService.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        try {
+            cityService.delete(id);
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return (ResponseEntity<Void>) ResponseEntity.notFound().header(String.valueOf(HeaderUtil.createAlert("not found",""+id)));
+        }
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/cities")
@@ -137,14 +141,27 @@ public class CityResource {
     public ResponseEntity<List<City>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
         if (search == null) {
-            Page<City> page = cityService.findAll(pageable);
-            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
-            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+            Page<City> page = null;
+            HttpHeaders headers =null;
+            try {
+                page = cityService.findAll(pageable);
+                 PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
+                return new ResponseEntity<>(page.getContent(), headers, HttpStatus.BAD_REQUEST);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
+            }
+
+
         } else {
             RSQLVisitor<CriteriaQuery<City>, EntityManager> visitor = new JpaCriteriaQueryVisitor<City>();
             final Node rootNode = new RSQLParser().parse(search);
             CriteriaQuery<City> query = rootNode.accept(visitor, entityManager);
-            List<City> cities = cityService.findAll(query);
+            List<City> cities = null;
+            try {
+                cities = cityService.findAll(query);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
             return new ResponseEntity<>(cities, HttpStatus.OK);

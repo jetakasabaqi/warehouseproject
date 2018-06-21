@@ -89,20 +89,6 @@ public class PersonResource {
             .body(result);
     }
 
-    /**
-     * GET  /people : get all the people.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of people in body
-     */
-//    @GetMapping("/people")
-//    @Timed
-//    public ResponseEntity<List<Person>> getAllPeople(Pageable pageable) {
-//        log.debug("REST request to get a page of People");
-//        Page<Person> page = personService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/people");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /people/:id : get the "id" person.
@@ -112,9 +98,10 @@ public class PersonResource {
      */
     @GetMapping("/people/{id}")
     @Timed
-    public ResponseEntity<Person> getPerson(@PathVariable Long id) {
+    public ResponseEntity<Person> getPerson(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Person : {}", id);
         Person person = personService.findOne(id);
+
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(person));
     }
 
@@ -134,7 +121,7 @@ public class PersonResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/persons")
     @ResponseBody
-    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Person>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) throws Exception {
 
 
         if (search == null) {

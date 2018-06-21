@@ -26,7 +26,7 @@ public interface CityService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<City> findAll(Pageable pageable);
+    Page<City> findAll(Pageable pageable) throws Exception;
 
     /**
      * Get the "id" city.
@@ -34,14 +34,14 @@ public interface CityService {
      * @param id the id of the entity
      * @return the entity
      */
-    City findOne(Long id);
+    City findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" city.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the cities by a filter
@@ -49,5 +49,5 @@ public interface CityService {
      * @param query
      * @return the list of entities
      */
-    List<City> findAll(CriteriaQuery<com.project.domain.City> query);
+    List<City> findAll(CriteriaQuery<com.project.domain.City> query) throws Exception;
 }

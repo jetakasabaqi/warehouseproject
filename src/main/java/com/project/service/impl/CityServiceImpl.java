@@ -55,9 +55,15 @@ public class CityServiceImpl implements CityService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<City> findAll(Pageable pageable) {
+    public Page<City> findAll(Pageable pageable) throws Exception {
         log.debug("Request to get all Cities");
-        return cityRepository.findAll(pageable);
+        Page<City> cities=cityRepository.findAll(pageable);
+        if(cities.getTotalPages()==0)
+        {
+            throw new Exception("Cities not found");
+        }
+        else{
+        return cities;}
     }
 
     /**
@@ -68,10 +74,17 @@ public class CityServiceImpl implements CityService {
      */
     @Override
     @Transactional(readOnly = true)
-    public City findOne(Long id) {
+    public City findOne(Long id) throws Exception {
         log.debug("Request to get City : {}", id);
-        return cityRepository.findOne(id);
-    }
+        City city=cityRepository.findOne(id);
+        if(city==null)
+        {
+            throw new Exception();
+        }
+        else
+        {
+        return city;
+    }}
 
     /**
      * Delete the city by id.
@@ -79,10 +92,14 @@ public class CityServiceImpl implements CityService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete City : {}", id);
+        City city=findOne(id);
+        if(city==null)
+        {throw new Exception();}
+        else{
         cityRepository.delete(id);
-    }
+    }}
 
     /**
      * Get all the cities by a filter
@@ -91,8 +108,13 @@ public class CityServiceImpl implements CityService {
      * @return the list of entities
      */
     @Override
-    public List<City> findAll(CriteriaQuery<City> query) {
-        return ParseRsql.findAll(query, entityManager);
+    public List<City> findAll(CriteriaQuery<City> query) throws Exception {
+        List a=ParseRsql.findAll(query, entityManager);
+        if(a.size()==0)
+        {
+            throw new Exception();
+        }
+        return a;
     }
 
 
