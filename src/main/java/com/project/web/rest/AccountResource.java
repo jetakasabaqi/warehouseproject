@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.project.domain.User;
 import com.project.repository.UserRepository;
 import com.project.security.SecurityUtils;
-import com.project.service.MailService;
+import com.project.service.util.Mail.MailService;
 import com.project.service.UserService;
 import com.project.service.dto.UserDTO;
 import com.project.web.rest.errors.*;

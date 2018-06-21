@@ -13,6 +13,7 @@ import com.project.service.dto.PersonDTO;
 import com.project.service.dto.UserDTO;
 import com.project.service.dto.VendorDTO;
 import com.project.service.mapper.UserMapper;
+import com.project.service.util.Mail.MailService;
 import com.project.web.rest.errors.ExceptionTranslator;
 import com.project.web.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;

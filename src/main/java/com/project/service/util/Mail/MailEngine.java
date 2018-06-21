@@ -1,4 +1,4 @@
-package com.project.service.util;
+package com.project.service.util.Mail;
 
 import com.lowagie.text.DocumentException;
 import com.project.config.thymeleaf.StringContext;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Component
-public class MailServiceTest {
+public class MailEngine {
 
     private final SpringTemplateEngine templateEngine;
 
@@ -214,7 +214,7 @@ public class MailServiceTest {
         "    </body>\n" +
         "</html>\n";
 
-    public MailServiceTest(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {
+    public MailEngine(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {
         this.templateEngine = templateEngine;
         this.jHipsterProperties = jHipsterProperties;
     }
@@ -243,104 +243,67 @@ public class MailServiceTest {
         this.deliveredTemplateReceiver = deliveredTemplateReceiver;
     }
 
-    public void sendShippedTemplate(Shipment shipment) throws IOException {
+    public byte[] sendPDF(Shipment shipment, String template) throws DocumentException, IOException
+
+    {
         Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
 
-        StringContext context = new StringContext(shippedTemplate, locale);
-        context.setVariable(SHIPMENT, shipment);
+        StringContext context =new StringContext(template,locale);
+        context.setVariable(SHIPMENT,shipment);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
         String content = templateEngine.process(shippedTemplate, context);
 
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ITextRenderer renderer = new ITextRenderer();
+        renderer.setDocumentFromString(content);
+        renderer.layout();
+        renderer.createPDF(outputStream);
+
+        byte[] pdfbytes = outputStream.toByteArray();
+        outputStream.close();
+        return pdfbytes;
+    }
+    public void sendTemplate(Shipment shipment,String template) throws IOException {
+        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
+
+        StringContext context = new StringContext(template, locale);
+        context.setVariable(SHIPMENT, shipment);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        String content = templateEngine.process(template, context);
+
         System.out.print(content);
+    }
+    public void sendShippedTemplate(Shipment shipment) throws IOException {
+        sendTemplate(shipment,shippedTemplate);
     }
 
 
     public byte[] sendShippedPdf(Shipment shipment) throws IOException, DocumentException {
-        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
 
-        StringContext context = new StringContext(shippedTemplate, locale);
-        context.setVariable(SHIPMENT, shipment);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-
-        String content = templateEngine.process(shippedTemplate, context);
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocumentFromString(content);
-        renderer.layout();
-        renderer.createPDF(outputStream);
-
-        byte[] pdfbytes = outputStream.toByteArray();
-        outputStream.close();
-        return pdfbytes;
+       return sendPDF(shipment,shippedTemplate);
     }
 
 
+
     public void sendDeliveredSTemplate(Shipment shipment) throws IOException {
-        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
-
-        StringContext context = new StringContext(deliveredTemplateSender, locale);
-        context.setVariable(SHIPMENT, shipment);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-
-        String content = templateEngine.process(deliveredTemplateSender, context);
-
-        System.out.print(content);
+     sendTemplate(shipment,deliveredTemplateSender);
     }
 
 
     public byte[] sendDeliveredSPDFTemplate(Shipment shipment) throws IOException, DocumentException {
-        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
-
-        StringContext context = new StringContext(deliveredTemplateSender, locale);
-        context.setVariable(SHIPMENT, shipment);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-
-        String content = templateEngine.process(deliveredTemplateSender, context);
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocumentFromString(content);
-        renderer.layout();
-        renderer.createPDF(outputStream);
-
-        byte[] pdfbytes = outputStream.toByteArray();
-        outputStream.close();
-        return pdfbytes;
+   return sendPDF(shipment,deliveredTemplateSender);
     }
 
     public void sendDeliveredRTemplate(Shipment shipment) throws IOException {
-        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
-
-        StringContext context = new StringContext(deliveredTemplateReceiver, locale);
-        context.setVariable(SHIPMENT, shipment);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-
-        String content = templateEngine.process(deliveredTemplateReceiver, context);
-
-        System.out.print(content);
+        sendTemplate(shipment,deliveredTemplateReceiver);
     }
 
 
     public byte[] sendDeliveredRPDFTemplate(Shipment shipment) throws IOException, DocumentException {
-        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
-
-        StringContext context = new StringContext(deliveredTemplateReceiver, locale);
-        context.setVariable(SHIPMENT, shipment);
-        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-
-        String content = templateEngine.process(deliveredTemplateReceiver, context);
-
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocumentFromString(content);
-        renderer.layout();
-        renderer.createPDF(outputStream);
-
-        byte[] pdfbytes = outputStream.toByteArray();
-        outputStream.close();
-        return pdfbytes;
+        return sendPDF(shipment,deliveredTemplateReceiver);
     }
 
     public void sendWeekly(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients) {
@@ -384,45 +347,6 @@ public class MailServiceTest {
         return pdfbytes;
     }
 
-//    public byte[] sendPdfTemplets(Shipment shipment) throws IOException, DocumentException {
-//        Locale locale = Locale.forLanguageTag(shipment.getSenderP().getUser().getLangKey());
-//        Person sender=shipment.getSenderP();
-//        StringContext context = new StringContext(template, locale);
-//        context.setVariable(SHIPMENT,shipment );
-//        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-//
-//        String content = templateEngine.process(template, context);
-//
-//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//        ITextRenderer renderer = new ITextRenderer();
-//        renderer.setDocumentFromString(content);
-//        renderer.layout();
-//        renderer.createPDF(outputStream);
-//
-//        byte[] pdfbytes = outputStream.toByteArray();
-//        outputStream.close();
-//        return pdfbytes;
-//    }
-//    public void sendPdfTempletsLisy(User user,List<Status> status) throws IOException, DocumentException {
-//        Locale locale = Locale.forLanguageTag(user.getLangKey());
-//
-//        StringContext context = new StringContext(templateList, locale);
-//        context.setVariable(USER, user);
-//        context.setVariable(STATUS,status);
-//        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
-//
-//        String content = templateEngine.process(templateList, context);
-//
-//        OutputStream outputStream=new FileOutputStream("messagelist.pdf");
-//        ITextRenderer renderer = new ITextRenderer();
-//        renderer.setDocumentFromString(content);
-//        renderer.layout();
-//        renderer.createPDF(outputStream);
-//
-//      // byte[] pdfbytes = outputStream.toByteArray();
-//          outputStream.close();
-//       //return pdfbytes;
-//    }
 
 
 }

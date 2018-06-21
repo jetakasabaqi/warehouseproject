@@ -3,14 +3,13 @@ package com.project.web.rest;
 import com.project.config.Constants;
 import com.project.Jeta123App;
 import com.project.domain.Authority;
-import com.project.domain.Status;
 import com.project.domain.User;
 import com.project.repository.AuthorityRepository;
 import com.project.repository.UserRepository;
 import com.project.security.AuthoritiesConstants;
-import com.project.service.MailService;
+import com.project.service.util.Mail.MailService;
 import com.project.service.dto.UserDTO;
-import com.project.service.util.MailServiceTest;
+import com.project.service.util.Mail.MailEngine;
 import com.project.web.rest.errors.ExceptionTranslator;
 import com.project.web.rest.vm.KeyAndPasswordVM;
 import com.project.web.rest.vm.ManagedUserVM;
@@ -33,7 +32,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
-import java.time.LocalDate;
 
 import java.util.*;
 
@@ -55,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AccountResourceIntTest {
 
     @Autowired
-    private MailServiceTest mailServiceTest;
+    private MailEngine mailEngine;
 
     @Autowired
     private UserRepository userRepository;

@@ -3,7 +3,7 @@ package com.project.service.impl;
 import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
 import com.project.repository.ShipmentRepository;
-import com.project.service.MailService;
+import com.project.service.util.Mail.MailService;
 import com.project.service.ShipmentService;
 import com.project.service.dto.*;
 import com.project.service.util.ParseRsql;

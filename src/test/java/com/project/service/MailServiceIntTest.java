@@ -3,6 +3,7 @@ import com.project.config.Constants;
 
 import com.project.Jeta123App;
 import com.project.domain.User;
+import com.project.service.util.Mail.MailService;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Before;
 import org.junit.Test;

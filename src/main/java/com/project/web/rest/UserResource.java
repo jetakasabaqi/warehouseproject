@@ -15,6 +15,7 @@ import com.project.service.dto.EmployeeDTO;
 import com.project.service.dto.PersonDTO;
 import com.project.service.dto.UserDTO;
 import com.project.service.dto.VendorDTO;
+import com.project.service.util.Mail.MailService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.errors.EmailAlreadyUsedException;
 import com.project.web.rest.errors.LoginAlreadyUsedException;

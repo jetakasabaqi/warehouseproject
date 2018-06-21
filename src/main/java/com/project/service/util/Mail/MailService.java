@@ -1,4 +1,4 @@
-package com.project.service;
+package com.project.service.util.Mail;
 
 import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
@@ -7,7 +7,6 @@ import com.project.service.dto.LoyalClientsDTO;
 import com.project.service.dto.NoOfPackByAnyCountryDTO;
 import com.project.service.dto.NoOfPacksDeliveredDTO;
 import com.project.service.dto.NoOfPacksPendingDTO;
-import com.project.service.util.MailServiceTest;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
@@ -119,59 +118,43 @@ public class MailService {
 
     }
 
-//    @Async
-//    public void sendEmailFromTemplateAttachment(User user) throws IOException, DocumentException {
-//
-//        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
-//
-//        byte[] array=  mailServiceTest.se(user);
-//        sendMailWithAttachments(user.getEmail(),true,false,array);
-//    }
 
     @Async
     public void sendEmailShipped(Shipment shipment) throws IOException, DocumentException {
 
-        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine, jHipsterProperties);
+        MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailServiceTest.sendShippedPdf(shipment);
+        byte[] array = mailEngine.sendShippedPdf(shipment);
         sendMailWithAttachments(shipment.getSenderP().getEmail(), true, false, array);
     }
 
     @Async
     public void sendEmailDeliveredS(Shipment shipment) throws IOException, DocumentException {
 
-        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine, jHipsterProperties);
+        MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailServiceTest.sendDeliveredSPDFTemplate(shipment);
+        byte[] array = mailEngine.sendDeliveredSPDFTemplate(shipment);
         sendMailWithAttachments(shipment.getSenderP().getEmail(), true, false, array);
     }
 
     @Async
     public void sendEmailDeliveredR(Shipment shipment) throws IOException, DocumentException {
 
-        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine, jHipsterProperties);
+        MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailServiceTest.sendDeliveredRPDFTemplate(shipment);
+        byte[] array = mailEngine.sendDeliveredRPDFTemplate(shipment);
         sendMailWithAttachments(shipment.getReceiver().getEmail(), true, false, array);
     }
 
     @Async
     public void sendEmailWeekly(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClientsDTO> clients) throws IOException, DocumentException {
-        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine, jHipsterProperties);
+        MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailServiceTest.sendWeeklyPDF(deliveredDTO, country, pendingDTO, clients);
+        byte[] array = mailEngine.sendWeeklyPDF(deliveredDTO, country, pendingDTO, clients);
         sendMailWithAttachments("jetakasabaqi@gmail.com", true, false, array);
 
 
     }
-//    @Async
-//    public void sendEmailFromAttachment(Shipment shipment) throws IOException, DocumentException {
-//
-//        MailServiceTest mailServiceTest = new MailServiceTest(templateEngine,jHipsterProperties);
-//
-//        byte[] array=  mailServiceTest.sendPdfTemplets(shipment);
-//        sendMailWithAttachments(shipment.getSenderP().getEmail(),true,false,array);
-//    }
 
 
     @Async

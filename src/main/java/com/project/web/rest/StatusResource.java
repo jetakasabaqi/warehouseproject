@@ -3,7 +3,7 @@ package com.project.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.project.domain.Status;
 import com.project.rsql1.jpa.JpaCriteriaQueryVisitor;
-import com.project.service.MailService;
+import com.project.service.util.Mail.MailService;
 import com.project.service.StatusService;
 import com.project.web.rest.errors.BadRequestAlertException;
 import com.project.web.rest.util.HeaderUtil;
