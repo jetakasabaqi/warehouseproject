@@ -2,6 +2,7 @@ package com.project.service.impl;
 
 import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
+import com.project.domain.Status;
 import com.project.repository.ShipmentRepository;
 import com.project.service.util.Mail.MailService;
 import com.project.service.ShipmentService;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -295,4 +298,37 @@ public class ShipmentServiceImpl implements ShipmentService {
 
         return true;
     }
+
+    @Override
+    public Boolean changeStatus(Long id, Status status) throws IOException, DocumentException {
+        Shipment shipment = findOne(id);
+        boolean ok = true;
+        if (ok) {
+            if (status.getId() == null) {
+                log.debug("Status should have an id");
+                ok = false;
+            }
+
+            if (status.getId() == 3) {
+                shipment.setStatus(status);
+                save(shipment);
+                if (shipment.getId() == null) {
+
+                } else {
+                    mailService.sendShippedStatusEmail(shipment);
+                }
+            } else if (status.getId() == 4) {
+                shipment.setStatus(status);
+                save(shipment);
+                if (shipment.getId() == null) {
+
+                } else {
+                    mailService.sendDeliveredREmail(shipment);
+                    mailService.sendDeliveredSEmail(shipment);
+                }
+            }
+        }
+        return ok;
+    }
+
 }

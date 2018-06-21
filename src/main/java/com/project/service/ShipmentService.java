@@ -2,6 +2,7 @@ package com.project.service;
 
 import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
+import com.project.domain.Status;
 import com.project.service.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -162,4 +163,6 @@ public interface ShipmentService {
      * @return true if email is sent, false if not
      */
     Boolean weeklyReport() throws IOException, DocumentException;
+
+    Boolean changeStatus(Long id,Status status) throws IOException, DocumentException;
 }

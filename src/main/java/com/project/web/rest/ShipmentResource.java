@@ -287,34 +287,9 @@ public class ShipmentResource {
     @PutMapping("/shipment/{id}/change-status")
     @Timed
     public ResponseEntity<Boolean> changeStatus(@PathVariable("id") Long id, @RequestBody Status status) throws Exception {
+         boolean ok= shipmentService.changeStatus(id,status);
 
-        Shipment shipment = shipmentService.findOne(id);
-
-        if (status.getId() == null) {
-            log.debug("Status should have an id");
-
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-        }
-
-        if (status.getId() == 3) {
-            shipment.setStatus(status);
-            updateShipment(shipment);
-            if (shipment.getId() == null) {
-
-            } else {
-                mailService.sendShippedStatusEmail(shipment);
-            }
-        } else if (status.getId() == 4) {
-            shipment.setStatus(status);
-            updateShipment(shipment);
-            if (shipment.getId() == null) {
-
-            } else {
-                mailService.sendDeliveredREmail(shipment);
-                mailService.sendDeliveredSEmail(shipment);
-            }
-        }
-        return new ResponseEntity<>(true, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(ok, HttpStatus.ACCEPTED);
 
 
     }
