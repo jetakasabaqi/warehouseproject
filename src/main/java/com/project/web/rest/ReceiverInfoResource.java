@@ -112,7 +112,7 @@ public class ReceiverInfoResource {
      */
     @GetMapping("/receiver-infos/{id}")
     @Timed
-    public ResponseEntity<ReceiverInfo> getReceiverInfo(@PathVariable Long id) {
+    public ResponseEntity<ReceiverInfo> getReceiverInfo(@PathVariable Long id) throws Exception {
         log.debug("REST request to get ReceiverInfo : {}", id);
         ReceiverInfo receiverInfo = receiverInfoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(receiverInfo));
@@ -126,7 +126,7 @@ public class ReceiverInfoResource {
      */
     @DeleteMapping("/receiver-infos/{id}")
     @Timed
-    public ResponseEntity<Void> deleteReceiverInfo(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteReceiverInfo(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete ReceiverInfo : {}", id);
         receiverInfoService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

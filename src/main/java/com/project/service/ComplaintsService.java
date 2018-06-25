@@ -24,7 +24,7 @@ public interface ComplaintsService {
      * @param pageable the pagination information
      * @return the list of entities
      */
-    Page<Complaints> findAll(Pageable pageable);
+    Page<Complaints> findAll(Pageable pageable) throws Exception;
 
     /**
      * Get the "id" complain.
@@ -32,14 +32,14 @@ public interface ComplaintsService {
      * @param id the id of the entity
      * @return the entity
      */
-    Complaints findOne(Long id);
+    Complaints findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" complain.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the complaints by a filter
@@ -47,5 +47,5 @@ public interface ComplaintsService {
      * @param query
      * @return the list of entities
      */
-    List<Complaints> findAll(CriteriaQuery<Complaints> query);
+    List<Complaints> findAll(CriteriaQuery<Complaints> query) throws Exception;
 }

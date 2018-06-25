@@ -66,9 +66,14 @@ public class ProductTypeServiceImpl implements ProductTypeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ProductType findOne(Long id) {
+    public ProductType findOne(Long id) throws Exception {
         log.debug("Request to get Product type : {}", id);
-        return productTypeRepository.findOne(id);
+        ProductType productType = productTypeRepository.findOne(id);
+        if (productType == null) {
+            throw new Exception("ProductTypeID not found");
+        } else {
+            return productTypeRepository.findOne(id);
+        }
     }
 
     /**
@@ -81,6 +86,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         log.debug("Request to delete Product Type : {}", id);
         productTypeRepository.delete(id);
     }
+
     /**
      * Get all the productTypes by a filter
      *

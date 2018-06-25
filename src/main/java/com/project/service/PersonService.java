@@ -34,14 +34,14 @@ public interface PersonService {
      * @param id the id of the entity
      * @return the entity
      */
-    Person findOne(Long id);
+    Person findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" person.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the persons by a filter

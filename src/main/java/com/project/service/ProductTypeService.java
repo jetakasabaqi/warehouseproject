@@ -31,7 +31,7 @@ public interface ProductTypeService {
      * @param id the id of the entity
      * @return the entity
      */
-    ProductType findOne(Long id);
+    ProductType findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" product type.

@@ -112,7 +112,7 @@ public class VendorResource {
      */
     @GetMapping("/vendors/{id}")
     @Timed
-    public ResponseEntity<Vendor> getVendor(@PathVariable Long id) {
+    public ResponseEntity<Vendor> getVendor(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Vendor : {}", id);
         Vendor vendor = vendorService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(vendor));
@@ -126,7 +126,7 @@ public class VendorResource {
      */
     @DeleteMapping("/vendors/{id}")
     @Timed
-    public ResponseEntity<Void> deleteVendor(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteVendor(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Vendor : {}", id);
         vendorService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

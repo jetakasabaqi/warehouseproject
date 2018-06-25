@@ -34,14 +34,14 @@ public interface VendorService {
      * @param id the id of the entity
      * @return the entity
      */
-    Vendor findOne(Long id);
+    Vendor findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" vendor.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the vendor by a filter

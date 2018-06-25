@@ -68,9 +68,14 @@ public class VendorServiceImpl implements VendorService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Vendor findOne(Long id) {
+    public Vendor findOne(Long id) throws Exception {
         log.debug("Request to get Vendor : {}", id);
-        return vendorRepository.findOne(id);
+        Vendor vendor = vendorRepository.findOne(id);
+        if (vendor == null) {
+            throw new Exception("VendorID not found");
+        } else {
+            return vendorRepository.findOne(id);
+        }
     }
 
     /**
@@ -79,9 +84,14 @@ public class VendorServiceImpl implements VendorService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Vendor : {}", id);
-        vendorRepository.delete(id);
+        Vendor vendor = vendorRepository.findOne(id);
+        if (vendor == null) {
+            throw new Exception("VendorID not found");
+        } else {
+            vendorRepository.delete(id);
+        }
     }
 
     /**

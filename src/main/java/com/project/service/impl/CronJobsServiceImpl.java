@@ -3,6 +3,7 @@ package com.project.service.impl;
 import com.project.domain.CronJobs;
 import com.project.repository.CronJobsRepository;
 import com.project.service.CronJobsService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +63,17 @@ public class CronJobsServiceImpl implements CronJobsService {
      * @return the entity
      */
     @Override
-    public CronJobs findOne(Long id) {
+    public CronJobs findOne(Long id) throws Exception {
 
         log.debug("Request to get CronJob : {}", id);
-
-
+        CronJobs cronJob=cronJobsRepository.findOne(id);
+        if(cronJob==null)
+        {
+            throw new Exception("CronJobsID not found");
+        }
+        else{
         return cronJobsRepository.findOne(id);
-    }
+    }}
 
     /**
      * Delete the cronJob by id.
@@ -76,10 +81,17 @@ public class CronJobsServiceImpl implements CronJobsService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
 
         log.debug("Request to delete CronJob : {}", id);
-        cronJobsRepository.delete(id);
+        CronJobs cronJob=cronJobsRepository.findOne(id);
+        if(cronJob==null)
+        {
+            throw new Exception("CronJobsID not found");
+        }
+        else{
+           cronJobsRepository.delete(id);
+        }
     }
 
     /**
@@ -90,6 +102,6 @@ public class CronJobsServiceImpl implements CronJobsService {
      */
     @Override
     public List<CronJobs> findAll(CriteriaQuery<CronJobs> query) {
-        return findAll(query);
+        return ParseRsql.findAll(query,entityManager);
     }
 }

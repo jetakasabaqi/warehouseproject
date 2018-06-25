@@ -143,7 +143,7 @@ public class ShipmentResource {
      */
     @GetMapping("/shipments/{id}")
     @Timed
-    public ResponseEntity<Shipment> getShipment(@PathVariable Long id) {
+    public ResponseEntity<Shipment> getShipment(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Shipment : {}", id);
         Shipment shipment = shipmentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(shipment));
@@ -157,7 +157,7 @@ public class ShipmentResource {
      */
     @DeleteMapping("/shipments/{id}")
     @Timed
-    public ResponseEntity<Void> deleteShipment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteShipment(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Shipment : {}", id);
         shipmentService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

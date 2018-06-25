@@ -64,9 +64,14 @@ public class WeightUnitServiceImpl implements WeightUnitService {
      */
     @Override
     @Transactional(readOnly = true)
-    public WeightUnit findOne(Long id) {
+    public WeightUnit findOne(Long id) throws Exception {
         log.debug("Request to get weight unit : {}", id);
-        return weightUnitRepository.findOne(id);
+        WeightUnit weightUnit = weightUnitRepository.findOne(id);
+        if (weightUnit == null) {
+            throw new Exception("WeightUnitID not found");
+        } else {
+            return weightUnitRepository.findOne(id);
+        }
     }
 
     /**

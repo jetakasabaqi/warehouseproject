@@ -68,9 +68,14 @@ public class PriceServiceImpl implements PriceService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Price findOne(Long id) {
+    public Price findOne(Long id) throws Exception {
         log.debug("Request to get Price : {}", id);
-        return priceRepository.findOne(id);
+        Price price = priceRepository.findOne(id);
+        if (price == null) {
+            throw new Exception("PriceID not found");
+        } else {
+            return priceRepository.findOne(id);
+        }
     }
 
     /**
@@ -79,9 +84,14 @@ public class PriceServiceImpl implements PriceService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Price : {}", id);
-        priceRepository.delete(id);
+        Price price = priceRepository.findOne(id);
+        if (price == null) {
+            throw new Exception("PriceID not found");
+        } else {
+            priceRepository.delete(id);
+        }
     }
 
     /**

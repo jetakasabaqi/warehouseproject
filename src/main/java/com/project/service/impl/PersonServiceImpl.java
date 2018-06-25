@@ -68,10 +68,16 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Person findOne(Long id) {
+    public Person findOne(Long id) throws Exception {
         log.debug("Request to get Person : {}", id);
-        return personRepository.findOne(id);
-    }
+        Person person=personRepository.findOne(id);
+        if(person==null)
+        {
+            throw  new Exception("PersonId not found");
+        }
+        else{
+        return person;
+    }}
 
     /**
      * Delete the person by id.
@@ -79,10 +85,16 @@ public class PersonServiceImpl implements PersonService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Person : {}", id);
+        Person person=personRepository.findOne(id);
+        if(person==null)
+        {
+            throw  new Exception("PersonID not found");
+        }
+        else{
         personRepository.delete(id);
-    }
+    }}
 
     /**
      * Get all the persons by a filter

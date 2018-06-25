@@ -68,9 +68,14 @@ public class WarehouseLocationServiceImpl implements WarehouseLocationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public WarehouseLocation findOne(Long id) {
+    public WarehouseLocation findOne(Long id) throws Exception {
         log.debug("Request to get WarehouseLocation : {}", id);
-        return warehouseLocationRepository.findOne(id);
+        WarehouseLocation warehouseLocation = warehouseLocationRepository.findOne(id);
+        if (warehouseLocation == null) {
+            throw new Exception("WarehouseLocationID not found");
+        } else {
+            return warehouseLocationRepository.findOne(id);
+        }
     }
 
     /**
@@ -79,9 +84,14 @@ public class WarehouseLocationServiceImpl implements WarehouseLocationService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete WarehouseLocation : {}", id);
-        warehouseLocationRepository.delete(id);
+        WarehouseLocation warehouseLocation = warehouseLocationRepository.findOne(id);
+        if (warehouseLocation == null) {
+            throw new Exception("WarehouseLocationID not found");
+        } else {
+            warehouseLocationRepository.delete(id);
+        }
     }
 
     /**

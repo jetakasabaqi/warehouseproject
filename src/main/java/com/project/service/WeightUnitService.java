@@ -32,7 +32,7 @@ public interface WeightUnitService {
      * @param id the id of the entity
      * @return the entity
      */
-    WeightUnit findOne(Long id);
+    WeightUnit findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" weight unit.

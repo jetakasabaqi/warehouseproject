@@ -67,9 +67,14 @@ public class ReceiverInfoServiceImpl implements ReceiverInfoService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ReceiverInfo findOne(Long id) {
+    public ReceiverInfo findOne(Long id) throws Exception {
         log.debug("Request to get ReceiverInfo : {}", id);
-        return receiverInfoRepository.findOne(id);
+        ReceiverInfo receiverInfo = receiverInfoRepository.findOne(id);
+        if (receiverInfo == null) {
+            throw new Exception("ReceiverID not found");
+        } else {
+            return receiverInfoRepository.findOne(id);
+        }
     }
 
     /**
@@ -78,10 +83,16 @@ public class ReceiverInfoServiceImpl implements ReceiverInfoService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete ReceiverInfo : {}", id);
+        ReceiverInfo receiverInfo=receiverInfoRepository.findOne(id);
+        if(receiverInfo==null)
+        {
+            throw new Exception("ReceiverID not found");
+        }
+        else{
         receiverInfoRepository.delete(id);
-    }
+    }}
 
     /**
      * Get all the receivers by a filter

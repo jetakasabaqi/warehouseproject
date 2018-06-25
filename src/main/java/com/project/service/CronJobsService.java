@@ -32,14 +32,14 @@ public interface CronJobsService {
      * @param id the id of the entity
      * @return the entity
      */
-    CronJobs findOne(Long id);
+    CronJobs findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" employee.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the cronJobs by a filter

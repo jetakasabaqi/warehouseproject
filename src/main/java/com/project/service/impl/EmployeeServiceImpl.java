@@ -68,10 +68,18 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Employee findOne(Long id) {
+    public Employee findOne(Long id) throws Exception {
         log.debug("Request to get Employee : {}", id);
-        return employeeRepository.findOne(id);
-    }
+        Employee employee=employeeRepository.findOne(id);
+        if(employee==null)
+
+        {
+            throw new Exception("EmployeeID not found.");
+        }
+        else
+        {
+        return employee;
+    }}
 
     /**
      * Delete the employee by id.
@@ -79,9 +87,19 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Employee : {}", id);
         employeeRepository.delete(id);
+        Employee employee=employeeRepository.findOne(id);
+        if(employee==null)
+
+        {
+            throw new Exception("EmployeeID not found.");
+        }
+        else
+        {
+            employeeRepository.delete(id);
+        }
     }
 
     /**

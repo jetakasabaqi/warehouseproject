@@ -86,20 +86,6 @@ public class WeightUnitResource {
             .body(result);
     }
 
-    /**
-     * GET  /weightUnit : get all the weightUnit.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of weightUnit in body
-     */
-//    @GetMapping("/vendors")
-//    @Timed
-//    public ResponseEntity<List<Vendor>> getAllVendors(Pageable pageable) {
-//        log.debug("REST request to get a page of Vendors");
-//        Page<Vendor> page = vendorService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/vendors");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /weightUnit/:id : get the "id" weightUnit.
@@ -109,7 +95,7 @@ public class WeightUnitResource {
      */
     @GetMapping("/weight_unit/{id}")
     @Timed
-    public ResponseEntity<WeightUnit> getWeightUnit(@PathVariable Long id) {
+    public ResponseEntity<WeightUnit> getWeightUnit(@PathVariable Long id) throws Exception {
         log.debug("REST request to get weightUnit : {}", id);
         WeightUnit weightUnit = weightUnitService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(weightUnit));

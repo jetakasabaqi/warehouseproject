@@ -117,7 +117,7 @@ public class StatusResource {
      */
     @GetMapping("/statuses/{id}")
     @Timed
-    public ResponseEntity<Status> getStatus(@PathVariable Long id) {
+    public ResponseEntity<Status> getStatus(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Status : {}", id);
         Status status = statusService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(status));
@@ -131,7 +131,7 @@ public class StatusResource {
      */
     @DeleteMapping("/statuses/{id}")
     @Timed
-    public ResponseEntity<Void> deleteStatus(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStatus(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Status : {}", id);
         statusService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

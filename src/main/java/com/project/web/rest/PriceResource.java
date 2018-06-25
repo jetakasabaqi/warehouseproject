@@ -66,6 +66,10 @@ public class PriceResource {
         if (price.getId() != null) {
             throw new BadRequestAlertException("A new price cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (price.getPrice()==null )
+        {
+            throw new BadRequestAlertException("Price cannot be null",ENTITY_NAME,"null");
+        }
         Price result = priceService.save(price);
         return ResponseEntity.created(new URI("/api/prices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -85,6 +89,11 @@ public class PriceResource {
     @Timed
     public ResponseEntity<Price> updatePrice(@RequestBody Price price) throws URISyntaxException {
         log.debug("REST request to update Price : {}", price);
+        if(price.getPrice()==null)
+        {
+            throw new BadRequestAlertException("Price cannot be null",ENTITY_NAME,"null");
+        }
+        else{
         if (price.getId() == null) {
             return createPrice(price);
         }
@@ -92,22 +101,9 @@ public class PriceResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, price.getId().toString()))
             .body(result);
-    }
+    }}
 
-    /**
-     * GET  /prices : get all the prices.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of prices in body
-     */
-//    @GetMapping("/prices")
-//    @Timed
-//    public ResponseEntity<List<Price>> getAllPrices(Pageable pageable) {
-//        log.debug("REST request to get a page of Prices");
-//        Page<Price> page = priceService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prices");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
+
 
     /**
      * GET  /prices/:id : get the "id" price.
@@ -117,7 +113,7 @@ public class PriceResource {
      */
     @GetMapping("/prices/{id}")
     @Timed
-    public ResponseEntity<Price> getPrice(@PathVariable Long id) {
+    public ResponseEntity<Price> getPrice(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Price : {}", id);
         Price price = priceService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(price));
@@ -131,7 +127,7 @@ public class PriceResource {
      */
     @DeleteMapping("/prices/{id}")
     @Timed
-    public ResponseEntity<Void> deletePrice(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePrice(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Price : {}", id);
         priceService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

@@ -34,14 +34,14 @@ public interface ReceiverInfoService {
      * @param id the id of the entity
      * @return the entity
      */
-    ReceiverInfo findOne(Long id);
+    ReceiverInfo findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" receiverInfo.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the receiverInfo by a filter

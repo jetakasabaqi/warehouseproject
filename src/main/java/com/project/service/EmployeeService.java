@@ -34,14 +34,14 @@ public interface EmployeeService {
      * @param id the id of the entity
      * @return the entity
      */
-    Employee findOne(Long id);
+    Employee findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" employee.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the employees by a filter

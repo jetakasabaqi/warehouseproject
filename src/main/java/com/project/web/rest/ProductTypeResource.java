@@ -90,20 +90,6 @@ public class ProductTypeResource {
             .body(result);
     }
 
-    /**
-     * GET  /productType : get all the productType.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of productType in body
-     */
-//    @GetMapping("/statuses")
-//    @Timed
-//    public ResponseEntity<List<Status>> getAllStatuses(Pageable pageable) {
-//        log.debug("REST request to get a page of Statuses");
-//        Page<Status> page = statusService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/statuses");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /productType/:id : get the "id" productType.
@@ -113,7 +99,7 @@ public class ProductTypeResource {
      */
     @GetMapping("/product-type/{id}")
     @Timed
-    public ResponseEntity<ProductType> getProductType(@PathVariable Long id) {
+    public ResponseEntity<ProductType> getProductType(@PathVariable Long id) throws Exception {
         log.debug("REST request to get productType : {}", id);
         ProductType productType = productTypeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(productType));

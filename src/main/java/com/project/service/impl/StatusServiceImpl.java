@@ -68,9 +68,14 @@ public class StatusServiceImpl implements StatusService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Status findOne(Long id) {
+    public Status findOne(Long id) throws Exception {
         log.debug("Request to get Status : {}", id);
-        return statusRepository.findOne(id);
+        Status status = statusRepository.findOne(id);
+        if (status == null) {
+            throw new Exception("StatusId not found");
+        } else {
+            return statusRepository.findOne(id);
+        }
     }
 
     /**
@@ -79,9 +84,14 @@ public class StatusServiceImpl implements StatusService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Status : {}", id);
-        statusRepository.delete(id);
+        Status status = statusRepository.findOne(id);
+        if (status == null) {
+            throw new Exception("StatusID not found");
+        } else {
+            statusRepository.delete(id);
+        }
     }
 
     /**

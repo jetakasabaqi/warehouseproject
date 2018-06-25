@@ -34,14 +34,14 @@ public interface WarehouseLocationService {
      * @param id the id of the entity
      * @return the entity
      */
-    WarehouseLocation findOne(Long id);
+    WarehouseLocation findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" warehouseLocation.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the warehouse locations by a filter

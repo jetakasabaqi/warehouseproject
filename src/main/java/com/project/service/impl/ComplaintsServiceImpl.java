@@ -3,6 +3,7 @@ package com.project.service.impl;
 import com.project.domain.Complaints;
 import com.project.repository.ComplaintsRepository;
 import com.project.service.ComplaintsService;
+import com.project.service.util.ParseRsql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +54,10 @@ public class ComplaintsServiceImpl implements ComplaintsService {
      * @return the list of entities
      */
     @Override
-    public Page<Complaints> findAll(Pageable pageable) {
+    public Page<Complaints> findAll(Pageable pageable) throws Exception {
         log.debug("Request to get all Complaints");
-        return complaintsRepository.findAll(pageable);
+        return  complaintsRepository.findAll(pageable);
+
     }
 
     /**
@@ -65,9 +67,18 @@ public class ComplaintsServiceImpl implements ComplaintsService {
      * @return the entity
      */
     @Override
-    public Complaints findOne(Long id) {
+    public Complaints findOne(Long id) throws Exception {
         log.debug("Request to get Complain : {}", id);
-        return complaintsRepository.findOne(id);
+        Complaints complaints=findOne(id);
+        if(complaints==null)
+        {
+            throw new Exception("ComplaintID not found");
+        }
+        else
+        {
+            return complaints;
+        }
+
     }
 
     /**
@@ -76,9 +87,18 @@ public class ComplaintsServiceImpl implements ComplaintsService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Complain : {}", id);
-        complaintsRepository.delete(id);
+        Complaints complaints=findOne(id);
+        if(complaints==null)
+        {
+            throw new Exception("ComplaintID not found");
+        }
+        else {
+            complaintsRepository.delete(id);
+        }
+
+
     }
 
     /**
@@ -88,7 +108,9 @@ public class ComplaintsServiceImpl implements ComplaintsService {
      * @return the list of entities
      */
     @Override
-    public List<Complaints> findAll(CriteriaQuery<Complaints> query) {
-        return complaintsRepository.findAll();
+    public List<Complaints> findAll(CriteriaQuery<Complaints> query) throws Exception {
+      return ParseRsql.findAll(query,entityManager);
+
+
     }
 }

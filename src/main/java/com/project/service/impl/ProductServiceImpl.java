@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,9 +71,14 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Product findOne(Long id) {
+    public Product findOne(Long id) throws Exception {
         log.debug("Request to get Product : {}", id);
-        return productRepository.findOne(id);
+        Product product = productRepository.findOne(id);
+        if (product == null) {
+            throw new Exception("ProductID not found");
+        } else {
+            return productRepository.findOne(id);
+        }
     }
 
     /**
@@ -81,9 +87,14 @@ public class ProductServiceImpl implements ProductService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Product : {}", id);
-        productRepository.delete(id);
+        Product product = productRepository.findOne(id);
+        if (product == null) {
+            throw new Exception("ProductID not found");
+        } else {
+            productRepository.delete(id);
+        }
     }
 
     /**

@@ -34,14 +34,14 @@ public interface PriceService {
      * @param id the id of the entity
      * @return the entity
      */
-    Price findOne(Long id);
+    Price findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" price.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the prices by a filter

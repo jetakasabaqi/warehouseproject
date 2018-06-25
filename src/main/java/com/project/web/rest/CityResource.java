@@ -61,6 +61,9 @@ public class CityResource {
         if (city.getId() != null) {
             throw new BadRequestAlertException("A new city cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (city.getCityName() == null || city.getCityName() == "") {
+            throw new BadRequestAlertException("cityName cannot be null", ENTITY_NAME, "null");
+        }
         City result = cityService.save(city);
         return ResponseEntity.created(new URI("/api/cities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -80,21 +83,21 @@ public class CityResource {
     @Timed
     public ResponseEntity<City> updateCity(@RequestBody City city) throws URISyntaxException {
         log.debug("REST request to update City : {}", city);
-        if (city.getId() == null) {
-            return createCity(city);
-        }
-        City result = cityService.save(city);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, city.getId().toString()))
-            .body(result);
-    }
+        if (city.getCityName() == null || city.getCityName() == "") {
+            throw new BadRequestAlertException("cityName cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (city.getId() == null) {
 
-    /**
-     * GET  /cities : get all the cities.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of cities in body
-     */
+                return createCity(city);
+
+
+            }
+            City result = cityService.save(city);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, city.getId().toString()))
+                .body(result);
+        }
+    }
 
 
     /**
@@ -105,16 +108,12 @@ public class CityResource {
      */
     @GetMapping("/cities/{id}")
     @Timed
-    public ResponseEntity<City> getCity(@PathVariable Long id) {
-        log.debug("REST request to get City : {}", id);
-        City city = null;
-        try {
-            city = cityService.findOne(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public ResponseEntity<City> getCity(@PathVariable Long id) throws Exception {
+
+        City city = cityService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(city));
     }
+
 
     /**
      * DELETE  /cities/:id : delete the "id" city.
@@ -124,15 +123,12 @@ public class CityResource {
      */
     @DeleteMapping("/cities/{id}")
     @Timed
-    public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCity(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete City : {}", id);
-        try {
-            cityService.delete(id);
-            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return (ResponseEntity<Void>) ResponseEntity.notFound().header(String.valueOf(HeaderUtil.createAlert("not found",""+id)));
-        }
+
+        cityService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+
 
     }
 
@@ -142,10 +138,10 @@ public class CityResource {
 
         if (search == null) {
             Page<City> page = null;
-            HttpHeaders headers =null;
+            HttpHeaders headers = null;
             try {
                 page = cityService.findAll(pageable);
-                 PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
+                PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
                 return new ResponseEntity<>(page.getContent(), headers, HttpStatus.BAD_REQUEST);
             } catch (Exception e) {
                 return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);

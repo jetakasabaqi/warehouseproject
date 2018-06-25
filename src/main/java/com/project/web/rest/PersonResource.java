@@ -61,6 +61,10 @@ public class PersonResource {
         if (person.getId() != null) {
             throw new BadRequestAlertException("A new person cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (person.getFullName() == null || person.getEmail() == null || person.getCountry() == null || person.getTel() == null) {
+            throw new BadRequestAlertException("Field cannot be null", ENTITY_NAME, "null");
+        }
+
         Person result = personService.save(person);
         return ResponseEntity.created(new URI("/api/people/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -80,13 +84,18 @@ public class PersonResource {
     @Timed
     public ResponseEntity<Person> updatePerson(@RequestBody Person person) throws URISyntaxException {
         log.debug("REST request to update Person : {}", person);
-        if (person.getId() == null) {
-            return createPerson(person);
+        if (person.getTel() == null || person.getCountry() == null || person.getEmail() == null || person.getFullName() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (person.getId() == null) {
+                return createPerson(person);
+            }
+
+            Person result = personService.save(person);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, person.getId().toString()))
+                .body(result);
         }
-        Person result = personService.save(person);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, person.getId().toString()))
-            .body(result);
     }
 
 
@@ -100,6 +109,7 @@ public class PersonResource {
     @Timed
     public ResponseEntity<Person> getPerson(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Person : {}", id);
+
         Person person = personService.findOne(id);
 
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(person));
@@ -113,7 +123,7 @@ public class PersonResource {
      */
     @DeleteMapping("/people/{id}")
     @Timed
-    public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePerson(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Person : {}", id);
         personService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

@@ -53,6 +53,9 @@ public class CronJobsResource {
         if (cronJobs.getId() != null) {
             throw new BadRequestAlertException("A new cron cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (cronJobs.getCron() == null) {
+            throw new BadRequestAlertException("Cron cannot be null.", ENTITY_NAME, "null");
+        }
         CronJobs result = cronJobsService.save(cronJobs);
         return ResponseEntity.created(new URI("/api/cronJobs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -63,18 +66,24 @@ public class CronJobsResource {
     @Timed
     public ResponseEntity<CronJobs> updateCronJobs(@RequestBody CronJobs cronJobs) throws URISyntaxException {
         log.debug("REST request to update Cron : {}", cronJobs);
-        if (cronJobs.getId() == null) {
-            return createCronJobs(cronJobs);
+        if (cronJobs.getCron() == null) {
+            throw new BadRequestAlertException("Cron cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (cronJobs.getId() == null) {
+
+
+                return createCronJobs(cronJobs);
+            }
+            CronJobs result = cronJobsService.save(cronJobs);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cronJobs.getId().toString()))
+                .body(result);
         }
-        CronJobs result = cronJobsService.save(cronJobs);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cronJobs.getId().toString()))
-            .body(result);
     }
 
     @GetMapping("/cronJobs/{id}")
     @Timed
-    public ResponseEntity<CronJobs> getCronJobs(@PathVariable Long id) {
+    public ResponseEntity<CronJobs> getCronJobs(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Cron : {}", id);
         CronJobs cronJobs = cronJobsService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(cronJobs));
@@ -82,7 +91,7 @@ public class CronJobsResource {
 
     @DeleteMapping("/cronJobs/{id}")
     @Timed
-    public ResponseEntity<Void> deleteCronJobs(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCronJobs(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete CronJobs : {}", id);
         cronJobsService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

@@ -57,8 +57,8 @@ public class ProductDetailsResource {
         this.entityManager = entityManager;
         this.productService = productService;
         this.weightUnitService = weightUnitService;
-        this.priceService=priceService;
-        this.productTypeService=productTypeService;
+        this.priceService = priceService;
+        this.productTypeService = productTypeService;
     }
 
     /**
@@ -74,6 +74,9 @@ public class ProductDetailsResource {
         log.debug("REST request to save productDetails : {}", productDetails);
         if (productDetails.getId() != null) {
             throw new BadRequestAlertException("A new productDetails cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (productDetails.getType() == null || productDetails.getProduct() == null || productDetails.getWeightUnit() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
         }
         ProductDetails result = productDetailsService.save(productDetails);
         return ResponseEntity.created(new URI("/api/product_details/" + result.getId()))
@@ -94,29 +97,19 @@ public class ProductDetailsResource {
     @Timed
     public ResponseEntity<ProductDetails> updateProductDetails(@RequestBody ProductDetails productDetails) throws URISyntaxException {
         log.debug("REST request to update productDetails : {}", productDetails);
-        if (productDetails.getId() == null) {
-            return createProductDetails(productDetails);
+        if (productDetails.getType() == null || productDetails.getProduct() == null || productDetails.getWeightUnit() == null) {
+            throw new BadRequestAlertException("Fields must not be null", ENTITY_NAME, "null");
+        } else {
+            if (productDetails.getId() == null) {
+                return createProductDetails(productDetails);
+            }
+            ProductDetails result = productDetailsService.save(productDetails);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, productDetails.getId().toString()))
+                .body(result);
         }
-        ProductDetails result = productDetailsService.save(productDetails);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, productDetails.getId().toString()))
-            .body(result);
     }
 
-    /**
-     * GET  /prices : get all the productDetails.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of productDetails in body
-     */
-//    @GetMapping("/prices")
-//    @Timed
-//    public ResponseEntity<List<Price>> getAllPrices(Pageable pageable) {
-//        log.debug("REST request to get a page of Prices");
-//        Page<Price> page = priceService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/prices");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /productDetails/:id : get the "id" productDetails.
@@ -126,7 +119,7 @@ public class ProductDetailsResource {
      */
     @GetMapping("/product_details/{id}")
     @Timed
-    public ResponseEntity<ProductDetails> getProductDetails(@PathVariable Long id) {
+    public ResponseEntity<ProductDetails> getProductDetails(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Product Details : {}", id);
         ProductDetails productDetails = productDetailsService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(productDetails));
@@ -140,7 +133,7 @@ public class ProductDetailsResource {
      */
     @DeleteMapping("/product_details/{id}")
     @Timed
-    public ResponseEntity<Void> deletePrice(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePrice(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Product Details : {}", id);
         productDetailsService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
@@ -148,7 +141,7 @@ public class ProductDetailsResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/product_details")
     @ResponseBody
-    public ResponseEntity<List<ProductDetails>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<ProductDetails>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

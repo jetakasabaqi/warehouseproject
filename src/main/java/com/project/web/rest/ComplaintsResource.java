@@ -59,7 +59,10 @@ public class ComplaintsResource {
     public ResponseEntity<Complaints> createComplain(@RequestBody Complaints complaints) throws URISyntaxException {
         log.debug("REST request to save complain : {}", complaints);
         if (complaints.getId() != null) {
-            throw new BadRequestAlertException("A new city cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("A new complain cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (complaints.getUserName() == null || complaints.getUser() == null || complaints.getDetails() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
         }
         Complaints result = complaintsService.save(complaints);
         return ResponseEntity.created(new URI("/api/complaints/" + result.getId()))
@@ -79,30 +82,23 @@ public class ComplaintsResource {
     @PutMapping("/complaints")
     @Timed
     public ResponseEntity<Complaints> updateComplaints(@RequestBody Complaints complaints) throws URISyntaxException {
-        log.debug("REST request to update City : {}", complaints);
-        if (complaints.getId() == null) {
-            return createComplain(complaints);
+        log.debug("REST request to update Complain : {}", complaints);
+        if (complaints.getUser() == null || complaints.getUserName() == null || complaints.getDetails() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+
+        } else {
+            if (complaints.getId() == null) {
+
+                return createComplain(complaints);
+
+            }
+            Complaints result = complaintsService.save(complaints);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, complaints.getId().toString()))
+                .body(result);
         }
-        Complaints result = complaintsService.save(complaints);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, complaints.getId().toString()))
-            .body(result);
     }
 
-    /**
-     * GET  /cities : get all the cities.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of cities in body
-     */
-//    @GetMapping("/cities")
-//    @Timed
-//    public ResponseEntity<List<City>> getAllCities(Pageable pageable) {
-//        log.debug("REST request to get a page of Cities");
-//        Page<City> page = cityService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /cities/:id : get the "id" city.
@@ -112,8 +108,9 @@ public class ComplaintsResource {
      */
     @GetMapping("/complaints/{id}")
     @Timed
-    public ResponseEntity<Complaints> getComplaints(@PathVariable Long id) {
+    public ResponseEntity<Complaints> getComplaints(@PathVariable Long id) throws Exception {
         log.debug("REST request to get City : {}", id);
+
         Complaints complaints = complaintsService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(complaints));
     }
@@ -126,7 +123,7 @@ public class ComplaintsResource {
      */
     @DeleteMapping("/complaints/{id}")
     @Timed
-    public ResponseEntity<Void> deleteComplaints(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComplaints(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete complaints : {}", id);
         complaintsService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
@@ -134,7 +131,7 @@ public class ComplaintsResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/complaints")
     @ResponseBody
-    public ResponseEntity<List<Complaints>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Complaints>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) throws Exception {
 
         if (search == null) {
             Page<Complaints> page = complaintsService.findAll(pageable);

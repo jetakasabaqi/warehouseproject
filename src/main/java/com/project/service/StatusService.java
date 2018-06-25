@@ -34,14 +34,14 @@ public interface StatusService {
      * @param id the id of the entity
      * @return the entity
      */
-    Status findOne(Long id);
+    Status findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" status.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the statuses by a filter

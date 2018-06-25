@@ -94,20 +94,6 @@ public class ProductResource {
             .body(result);
     }
 
-    /**
-     * GET  /products : get all the products.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of products in body
-     */
-//    @GetMapping("/products")
-//    @Timed
-//    public ResponseEntity<List<Product>> getAllProducts(Pageable pageable) {
-//        log.debug("REST request to get a page of Products");
-//        Page<Product> page = productService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /products/:id : get the "id" product.
@@ -117,7 +103,7 @@ public class ProductResource {
      */
     @GetMapping("/products/{id}")
     @Timed
-    public ResponseEntity<Product> getProduct(@PathVariable Long id) {
+    public ResponseEntity<Product> getProduct(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Product : {}", id);
         Product product = productService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(product));
@@ -131,7 +117,7 @@ public class ProductResource {
      */
     @DeleteMapping("/products/{id}")
     @Timed
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Product : {}", id);
         productService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

@@ -61,6 +61,9 @@ public class EmployeeResource {
         if (employee.getId() != null) {
             throw new BadRequestAlertException("A new employee cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (employee.getName() == null || employee.getEmail() == null || employee.getTel() == null || employee.getTel() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        }
         Employee result = employeeService.save(employee);
         return ResponseEntity.created(new URI("/api/employees/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -80,29 +83,19 @@ public class EmployeeResource {
     @Timed
     public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) throws URISyntaxException {
         log.debug("REST request to update Employee : {}", employee);
-        if (employee.getId() == null) {
-            return createEmployee(employee);
+        if (employee.getName() == null || employee.getTel() == null || employee.getEmail() == null || employee.getLastName() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (employee.getId() == null) {
+                return createEmployee(employee);
+            }
+            Employee result = employeeService.save(employee);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, employee.getId().toString()))
+                .body(result);
         }
-        Employee result = employeeService.save(employee);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, employee.getId().toString()))
-            .body(result);
     }
 
-    /**
-     * GET  /employees : get all the employees.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of employees in body
-     */
-//    @GetMapping("/employees")
-//    @Timed
-//    public ResponseEntity<List<Employee>> getAllEmployees(Pageable pageable) {
-//        log.debug("REST request to get a page of Employees");
-//        Page<Employee> page = employeeService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/employees");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /employees/:id : get the "id" employee.
@@ -112,8 +105,9 @@ public class EmployeeResource {
      */
     @GetMapping("/employees/{id}")
     @Timed
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Employee : {}", id);
+
         Employee employee = employeeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(employee));
     }
@@ -126,7 +120,7 @@ public class EmployeeResource {
      */
     @DeleteMapping("/employees/{id}")
     @Timed
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Employee : {}", id);
         employeeService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

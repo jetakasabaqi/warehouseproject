@@ -57,13 +57,7 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     public Page<City> findAll(Pageable pageable) throws Exception {
         log.debug("Request to get all Cities");
-        Page<City> cities=cityRepository.findAll(pageable);
-        if(cities.getTotalPages()==0)
-        {
-            throw new Exception("Cities not found");
-        }
-        else{
-        return cities;}
+        return cityRepository.findAll(pageable);
     }
 
     /**
@@ -76,15 +70,13 @@ public class CityServiceImpl implements CityService {
     @Transactional(readOnly = true)
     public City findOne(Long id) throws Exception {
         log.debug("Request to get City : {}", id);
-        City city=cityRepository.findOne(id);
-        if(city==null)
-        {
-            throw new Exception();
+        City city = cityRepository.findOne(id);
+        if (city == null) {
+            throw new Exception("CityID not found");
+        } else {
+            return city;
         }
-        else
-        {
-        return city;
-    }}
+    }
 
     /**
      * Delete the city by id.
@@ -94,12 +86,13 @@ public class CityServiceImpl implements CityService {
     @Override
     public void delete(Long id) throws Exception {
         log.debug("Request to delete City : {}", id);
-        City city=findOne(id);
-        if(city==null)
-        {throw new Exception();}
-        else{
-        cityRepository.delete(id);
-    }}
+        City city = findOne(id);
+        if (city == null) {
+            throw new Exception("CityID not found");
+        } else {
+            cityRepository.delete(id);
+        }
+    }
 
     /**
      * Get all the cities by a filter
@@ -108,13 +101,9 @@ public class CityServiceImpl implements CityService {
      * @return the list of entities
      */
     @Override
-    public List<City> findAll(CriteriaQuery<City> query) throws Exception {
-        List a=ParseRsql.findAll(query, entityManager);
-        if(a.size()==0)
-        {
-            throw new Exception();
-        }
-        return a;
+    public List<City> findAll(CriteriaQuery<City> query) {
+        return ParseRsql.findAll(query, entityManager);
+
     }
 
 

@@ -1,5 +1,7 @@
 package com.project.service.impl;
 
+import com.project.domain.Price;
+import com.project.domain.Product;
 import com.project.domain.ProductDetails;
 import com.project.repository.ProductDetailsRepository;
 import com.project.service.ProductDetailsService;
@@ -70,9 +72,14 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ProductDetails findOne(Long id) {
+    public ProductDetails findOne(Long id) throws Exception {
         log.debug("Request to get Product Details : {}", id);
-        return productDetailsRepository.findOne(id);
+        ProductDetails productDetails = productDetailsRepository.findOne(id);
+        if (productDetails == null) {
+            throw new Exception("ProductDetailsID not found");
+        } else {
+            return productDetailsRepository.findOne(id);
+        }
     }
 
     /**
@@ -81,9 +88,14 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Product : {}", id);
-        productDetailsRepository.delete(id);
+        ProductDetails productDetails = productDetailsRepository.findOne(id);
+        if (productDetails == null) {
+            throw new Exception("ProductDetailsID not found");
+        } else {
+            productDetailsRepository.delete(id);
+        }
     }
 
     /**

@@ -38,14 +38,14 @@ public interface ShipmentService {
      * @param id the id of the entity
      * @return the entity
      */
-    Shipment findOne(Long id);
+    Shipment findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" shipment.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
 
     /**
@@ -164,5 +164,5 @@ public interface ShipmentService {
      */
     Boolean weeklyReport() throws IOException, DocumentException;
 
-    Boolean changeStatus(Long id,Status status) throws IOException, DocumentException;
+    Boolean changeStatus(Long id,Status status) throws Exception;
 }

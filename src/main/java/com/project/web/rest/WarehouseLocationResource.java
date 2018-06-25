@@ -94,20 +94,6 @@ public class WarehouseLocationResource {
             .body(result);
     }
 
-    /**
-     * GET  /warehouse-locations : get all the warehouseLocations.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of warehouseLocations in body
-     */
-//    @GetMapping("/warehouse-locations")
-//    @Timed
-//    public ResponseEntity<List<WarehouseLocation>> getAllWarehouseLocations(Pageable pageable) {
-//        log.debug("REST request to get a page of WarehouseLocations");
-//        Page<WarehouseLocation> page = warehouseLocationService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/warehouse-locations");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /warehouse-locations/:id : get the "id" warehouseLocation.
@@ -117,7 +103,7 @@ public class WarehouseLocationResource {
      */
     @GetMapping("/warehouse-locations/{id}")
     @Timed
-    public ResponseEntity<WarehouseLocation> getWarehouseLocation(@PathVariable Long id) {
+    public ResponseEntity<WarehouseLocation> getWarehouseLocation(@PathVariable Long id) throws Exception {
         log.debug("REST request to get WarehouseLocation : {}", id);
         WarehouseLocation warehouseLocation = warehouseLocationService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(warehouseLocation));
@@ -131,7 +117,7 @@ public class WarehouseLocationResource {
      */
     @DeleteMapping("/warehouse-locations/{id}")
     @Timed
-    public ResponseEntity<Void> deleteWarehouseLocation(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteWarehouseLocation(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete WarehouseLocation : {}", id);
         warehouseLocationService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();

@@ -34,14 +34,14 @@ public interface ProductService {
      * @param id the id of the entity
      * @return the entity
      */
-    Product findOne(Long id);
+    Product findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" product.
      *
      * @param id the id of the entity
      */
-    void delete(Long id);
+    void delete(Long id) throws Exception;
 
     /**
      * Get all the products by a filter

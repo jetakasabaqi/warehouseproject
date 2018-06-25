@@ -78,9 +78,14 @@ public class ShipmentServiceImpl implements ShipmentService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Shipment findOne(Long id) {
+    public Shipment findOne(Long id) throws Exception {
         log.debug("Request to get Shipment : {}", id);
-        return shipmentRepository.findOne(id);
+        Shipment shipment = shipmentRepository.findOne(id);
+        if (shipment == null) {
+            throw new Exception("ShipmentID not found");
+        } else {
+            return shipmentRepository.findOne(id);
+        }
     }
 
     /**
@@ -89,9 +94,14 @@ public class ShipmentServiceImpl implements ShipmentService {
      * @param id the id of the entity
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws Exception {
         log.debug("Request to delete Shipment : {}", id);
-        shipmentRepository.delete(id);
+        Shipment shipment = shipmentRepository.findOne(id);
+        if (shipment == null) {
+            throw new Exception("ShipmentID not found");
+        } else {
+            shipmentRepository.delete(id);
+        }
     }
 
     /**
@@ -300,7 +310,7 @@ public class ShipmentServiceImpl implements ShipmentService {
     }
 
     @Override
-    public Boolean changeStatus(Long id, Status status) throws IOException, DocumentException {
+    public Boolean changeStatus(Long id, Status status) throws Exception {
         Shipment shipment = findOne(id);
         boolean ok = true;
         if (ok) {
