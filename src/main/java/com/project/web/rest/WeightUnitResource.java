@@ -58,6 +58,9 @@ public class WeightUnitResource {
         if (weightUnit.getId() != null) {
             throw new BadRequestAlertException("A new weightUnit cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (weightUnit.getUnit() == null) {
+            throw new BadRequestAlertException("Unit cannot be null", ENTITY_NAME, "null");
+        }
         WeightUnit result = weightUnitService.save(weightUnit);
         return ResponseEntity.created(new URI("/api/weightUnit/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -77,13 +80,17 @@ public class WeightUnitResource {
     @Timed
     public ResponseEntity<WeightUnit> updateWeightUnit(@RequestBody WeightUnit weightUnit) throws URISyntaxException {
         log.debug("REST request to update weightUnit : {}", weightUnit);
-        if (weightUnit.getId() == null) {
-            return createWeightUnit(weightUnit);
+        if (weightUnit.getUnit() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (weightUnit.getId() == null) {
+                return createWeightUnit(weightUnit);
+            }
+            WeightUnit result = weightUnitService.save(weightUnit);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, weightUnit.getId().toString()))
+                .body(result);
         }
-        WeightUnit result = weightUnitService.save(weightUnit);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, weightUnit.getId().toString()))
-            .body(result);
     }
 
 
@@ -117,7 +124,7 @@ public class WeightUnitResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/weight_unit")
     @ResponseBody
-    public ResponseEntity<List<WeightUnit>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<WeightUnit>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {

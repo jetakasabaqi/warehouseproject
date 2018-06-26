@@ -61,6 +61,9 @@ public class ReceiverInfoResource {
         if (receiverInfo.getId() != null) {
             throw new BadRequestAlertException("A new receiverInfo cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (receiverInfo.getAddress() == null || receiverInfo.getCity() == null || receiverInfo.getEmail() == null || receiverInfo.getCountry() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        }
         ReceiverInfo result = receiverInfoService.save(receiverInfo);
         return ResponseEntity.created(new URI("/api/receiver-infos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -80,29 +83,19 @@ public class ReceiverInfoResource {
     @Timed
     public ResponseEntity<ReceiverInfo> updateReceiverInfo(@RequestBody ReceiverInfo receiverInfo) throws URISyntaxException {
         log.debug("REST request to update ReceiverInfo : {}", receiverInfo);
-        if (receiverInfo.getId() == null) {
-            return createReceiverInfo(receiverInfo);
+        if (receiverInfo.getAddress() == null || receiverInfo.getCity() == null || receiverInfo.getEmail() == null || receiverInfo.getCountry() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (receiverInfo.getId() == null) {
+                return createReceiverInfo(receiverInfo);
+            }
+            ReceiverInfo result = receiverInfoService.save(receiverInfo);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, receiverInfo.getId().toString()))
+                .body(result);
         }
-        ReceiverInfo result = receiverInfoService.save(receiverInfo);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, receiverInfo.getId().toString()))
-            .body(result);
     }
 
-    /**
-     * GET  /receiver-infos : get all the receiverInfos.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of receiverInfos in body
-     */
-//    @GetMapping("/receiver-infos")
-//    @Timed
-//    public ResponseEntity<List<ReceiverInfo>> getAllReceiverInfos(Pageable pageable) {
-//        log.debug("REST request to get a page of ReceiverInfos");
-//        Page<ReceiverInfo> page = receiverInfoService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/receiver-infos");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /receiver-infos/:id : get the "id" receiverInfo.

@@ -64,6 +64,9 @@ public class WarehouseLocationResource {
         if (warehouseLocation.getId() != null) {
             throw new BadRequestAlertException("A new warehouseLocation cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (warehouseLocation.getCity() == null || warehouseLocation.getAddress() == null || warehouseLocation.getCountry() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        }
         cityService.save(warehouseLocation.getCity());
         WarehouseLocation result = warehouseLocationService.save(warehouseLocation);
         return ResponseEntity.created(new URI("/api/warehouse-locations/" + result.getId()))
@@ -84,14 +87,18 @@ public class WarehouseLocationResource {
     @Timed
     public ResponseEntity<WarehouseLocation> updateWarehouseLocation(@RequestBody WarehouseLocation warehouseLocation) throws URISyntaxException {
         log.debug("REST request to update WarehouseLocation : {}", warehouseLocation);
-        if (warehouseLocation.getId() == null) {
+        if (warehouseLocation.getCity() == null || warehouseLocation.getAddress() == null || warehouseLocation.getCountry() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (warehouseLocation.getId() == null) {
 
-            return createWarehouseLocation(warehouseLocation);
+                return createWarehouseLocation(warehouseLocation);
+            }
+            WarehouseLocation result = warehouseLocationService.save(warehouseLocation);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, warehouseLocation.getId().toString()))
+                .body(result);
         }
-        WarehouseLocation result = warehouseLocationService.save(warehouseLocation);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, warehouseLocation.getId().toString()))
-            .body(result);
     }
 
 

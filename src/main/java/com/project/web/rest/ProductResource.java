@@ -65,7 +65,9 @@ public class ProductResource {
         }
         if (product.getPrice().getId() == null)
             priceService.save(product.getPrice());
-
+        if (product.getPrice().getPrice() == null) {
+            throw new BadRequestAlertException("Price cannot be null", ENTITY_NAME, "null");
+        }
         Product result = productService.save(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -85,13 +87,17 @@ public class ProductResource {
     @Timed
     public ResponseEntity<Product> updateProduct(@RequestBody Product product) throws URISyntaxException {
         log.debug("REST request to update Product : {}", product);
-        if (product.getId() == null) {
-            return createProduct(product);
+        if (product.getPrice().getPrice() == null) {
+            throw new BadRequestAlertException("Price cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (product.getId() == null) {
+                return createProduct(product);
+            }
+            Product result = productService.save(product);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, product.getId().toString()))
+                .body(result);
         }
-        Product result = productService.save(product);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, product.getId().toString()))
-            .body(result);
     }
 
 

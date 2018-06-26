@@ -61,6 +61,9 @@ public class VendorResource {
         if (vendor.getId() != null) {
             throw new BadRequestAlertException("A new vendor cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (vendor.getFirstName() == null || vendor.getLastName() == null || vendor.getContactPerson() == null || vendor.getAddress() == null) {
+            throw new BadRequestAlertException("Fields cannot be nul", ENTITY_NAME, "null");
+        }
         Vendor result = vendorService.save(vendor);
         return ResponseEntity.created(new URI("/api/vendors/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -80,29 +83,19 @@ public class VendorResource {
     @Timed
     public ResponseEntity<Vendor> updateVendor(@RequestBody Vendor vendor) throws URISyntaxException {
         log.debug("REST request to update Vendor : {}", vendor);
-        if (vendor.getId() == null) {
-            return createVendor(vendor);
+        if (vendor.getFirstName() == null || vendor.getLastName() == null || vendor.getContactPerson() == null || vendor.getAddress() == null) {
+            throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (vendor.getId() == null) {
+                return createVendor(vendor);
+            }
+            Vendor result = vendorService.save(vendor);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, vendor.getId().toString()))
+                .body(result);
         }
-        Vendor result = vendorService.save(vendor);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, vendor.getId().toString()))
-            .body(result);
     }
 
-    /**
-     * GET  /vendors : get all the vendors.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of vendors in body
-     */
-//    @GetMapping("/vendors")
-//    @Timed
-//    public ResponseEntity<List<Vendor>> getAllVendors(Pageable pageable) {
-//        log.debug("REST request to get a page of Vendors");
-//        Page<Vendor> page = vendorService.findAll(pageable);
-//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/vendors");
-//        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-//    }
 
     /**
      * GET  /vendors/:id : get the "id" vendor.
@@ -134,14 +127,14 @@ public class VendorResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/vendors")
     @ResponseBody
-    public ResponseEntity<List<Vendor>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<Vendor>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {
             Page<Vendor> page = vendorService.findAll(pageable);
             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/vendors");
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-            } else {
+        } else {
             RSQLVisitor<CriteriaQuery<Vendor>, EntityManager> visitor = new JpaCriteriaQueryVisitor<Vendor>();
             final Node rootNode = new RSQLParser().parse(search);
             CriteriaQuery<Vendor> query = rootNode.accept(visitor, entityManager);

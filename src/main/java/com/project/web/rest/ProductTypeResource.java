@@ -62,6 +62,9 @@ public class ProductTypeResource {
         if (productType.getId() != null) {
             throw new BadRequestAlertException("A new productType cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (productType.getType() == null) {
+            throw new BadRequestAlertException("ProductType cannot be null", ENTITY_NAME, "null");
+        }
         ProductType result = productTypeService.save(productType);
         return ResponseEntity.created(new URI("/api/product_type/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -81,15 +84,18 @@ public class ProductTypeResource {
     @Timed
     public ResponseEntity<ProductType> updateProductType(@RequestBody ProductType productType) throws URISyntaxException {
         log.debug("REST request to update productType : {}", productType);
-        if (productType.getId() == null) {
-            return createProductType(productType);
+        if (productType.getType() == null) {
+            throw new BadRequestAlertException("ProductType cannot be null", ENTITY_NAME, "null");
+        } else {
+            if (productType.getId() == null) {
+                return createProductType(productType);
+            }
+            ProductType result = productTypeService.save(productType);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, productType.getId().toString()))
+                .body(result);
         }
-        ProductType result = productTypeService.save(productType);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, productType.getId().toString()))
-            .body(result);
     }
-
 
     /**
      * GET  /productType/:id : get the "id" productType.
@@ -121,7 +127,7 @@ public class ProductTypeResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "/product_type")
     @ResponseBody
-    public ResponseEntity<List<ProductType>> findAllByRsql(@RequestParam(value = "search",required = false) String search, Pageable pageable) {
+    public ResponseEntity<List<ProductType>> findAllByRsql(@RequestParam(value = "search", required = false) String search, Pageable pageable) {
 
 
         if (search == null) {
