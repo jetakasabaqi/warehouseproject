@@ -25,7 +25,7 @@
 
 
         </createTable>
-
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/city.csv" separator=";" identityInsertEnabled="true" tableName="city">-->
     </changeSet>
 
 </databaseChangeLog>

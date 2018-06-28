@@ -46,6 +46,7 @@
             </column>
 
         </createTable>
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/employee.csv" separator=";" identityInsertEnabled="true" tableName="employee">-->
 
     </changeSet>
 

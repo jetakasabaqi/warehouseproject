@@ -26,7 +26,7 @@
 
         </createTable>
 
-        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/price.csv" separator=";" identityInsertEnabled="true" tableName="price">-->
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/employee_type.csv" separator=";" identityInsertEnabled="true" tableName="employee_type">-->
 
         <!--</ext:loadData>-->
     </changeSet>
