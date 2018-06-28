@@ -2,12 +2,15 @@ package com.project.service.util.Mail;
 
 import com.lowagie.text.DocumentException;
 import com.project.config.thymeleaf.StringContext;
+import com.project.domain.EmailTemplates;
 import com.project.domain.Shipment;
+import com.project.service.EmailTemplatesService;
 import com.project.service.dto.LoyalClientsDTO;
 import com.project.service.dto.NoOfPackByAnyCountryDTO;
 import com.project.service.dto.NoOfPacksDeliveredDTO;
 import com.project.service.dto.NoOfPacksPendingDTO;
 import io.github.jhipster.config.JHipsterProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -17,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-@Component
+
 public class MailEngine {
 
     private final SpringTemplateEngine templateEngine;
@@ -41,207 +44,13 @@ public class MailEngine {
 
     private static final String CLIENTS = "clients";
 
-    private String shippedTemplate = "\n" +
-        "<!DOCTYPE html>\n" +
-        "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
-        "<head>\n" +
-        "    <title>Shipping details</title>\n" +
-        "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" +
-        "</head>\n" +
-        "<body>\n" +
-        "\n" +
-        "<h1>Shipping details for shipment : </h1>\n" +
-        "<p th:text=\"${shipment.id}\">The id of the shipment</p>\n" +
-        "<p th:text=\"${shipment.senderP.fullName}\">>Dear </p>\n" +
-        "    <p>this email is sent to you to confirm that the shipment you made using our service has been shipped, and it's on its way to the destination.</p>\n" +
-        "\n" +
-        "<p>Thank your for using our service.\n" +
-        "    If you have any questions, please contact the employee who is resposible for this shipment:</p>\n" +
-        "\n" +
-        "<ul>\n" +
-        "    <li th:text=\"${shipment.contactEmployee.name}\">>Name</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.lastName}\">Surname</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.tel}\">Number</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.email}\">email</li>\n" +
-        "\n" +
-        "</ul>\n" +
-        "Best regards,\n" +
-        "The Warehouse Team.\n" +
-        "\n" +
-        "\n" +
-        "</body>\n" +
-        "</html>\n";
-    private String deliveredTemplateSender = "\n" +
-        "<!DOCTYPE html>\n" +
-        "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
-        "<head>\n" +
-        "    <title>Delivered details</title>\n" +
-        "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" +
-        "    <link rel=\"shortcut icon\" th:href=\"@{|${baseUrl}/favicon.ico|}\" />\n" +
-        "</head>\n" +
-        "<body>\n" +
-        "\n" +
-        "<h1>Delivery details for shipment : </h1>\n" +
-        "<p th:text=\"${shipment.id}\">The id of the shipment</p>\n" +
-        "<p th:text=\"${shipment.senderP.fullName}\">>Dear </p>\n" +
-        "    <p>this email is sended to you to confirm that the shipment you made using our service has been delivered to</p>\n" +
-        "<p th:text=\"${shipment.receiver.fullName}\"></p>\n" +
-        "\n" +
-        "<p>Thank your for using our service.\n" +
-        "    If you have any questions, please contact the employee who is resposible for this shipment:</p>\n" +
-        "\n" +
-        "<ul>\n" +
-        "    <li th:text=\"${shipment.contactEmployee.name}\">>Name</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.lastName}\">Surname</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.tel}\">Number</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.email}\">email</li>\n" +
-        "\n" +
-        "</ul>\n" +
-        "Best regards,\n" +
-        "The Warehouse Team.\n" +
-        "\n" +
-        "\n" +
-        "</body>\n" +
-        "</html>\n";
-    private String deliveredTemplateReceiver = "\n" +
-        "<!DOCTYPE html>\n" +
-        "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
-        "<head>\n" +
-        "    <title>Delivered details</title>\n" +
-        "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" +
-        "</head>\n" +
-        "<body>\n" +
-        "\n" +
-        "<h1>Delivery details for shipment : </h1>\n" +
-        "<p th:text=\"${shipment.id}\">The id of the shipment</p>\n" +
-        "<p th:text=\"${shipment.receiver.fullname}\">Dear </p>\n" +
-        "    <p>this email is sended to you to confirm that the shipment made by</p>\n" +
-        "<p th:text=\"${shipment.senderP.fullname}\"></p>\n" +
-        "<p>was delivered to you.</p>\n" +
-        "\n" +
-        "<p>Thank your for using our service.\n" +
-        "    If you have any questions, please contact the employee who is resposible for this shipment:</p>\n" +
-        "\n" +
-        "<ul>\n" +
-        "    <li th:text=\"${shipment.contactEmployee.name}\">>Name</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.lastName}\">Surname</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.tel}\">Number</li>\n" +
-        "    <li  th:text=\"${shipment.contactEmployee.email}\">email</li>\n" +
-        "\n" +
-        "</ul>\n" +
-        "Best regards,\n" +
-        "The Warehouse Team.\n" +
-        "\n" +
-        "\n" +
-        "</body>\n" +
-        "</html>\n";
 
-    private String weeklyReport = "<!DOCTYPE html>\n" +
-        "<html xmlns:th=\"http://www.thymeleaf.org\">\n" +
-        "    <head>\n" +
-        "        <title>WEEKLY REPORT</title>\n" +
-        "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" +
-        "        <link rel=\"shortcut icon\" th:href=\"@{|${baseUrl}/favicon.ico|}\" />\n" +
-        "    </head>\n" +
-        "    <body>\n" +
-        "        <p>\n" +
-        "           Hello\n" +
-        "        </p>\n" +
-        "        <p>\n" +
-        "           This is the your weekly report, <span th:text=\"${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}\">...</span>\n" +
-        "        </p>\n" +
-        "        <p>\n" +
-        "           At a glance :\n" +
-        "        </p>\n" +
-        "        <p>Number of packets delivered :</p>\n" +
-        "        <p th:text=\"${delivered.number_of_Packs_delivered}\"></p>\n" +
-        "        <p>Number of packets delivered by country</p>\n" +
-        "        <table border=\"5\" >\n" +
-        "            <tr>\n" +
-        "                <td>Country</td>\n" +
-        "                <td>Number of packets delivered</td>\n" +
-        "            </tr>\n" +
-        "            <th:block th:each=\"country : ${country}\">\n" +
-        "\n" +
-        "                <tr>\n" +
-        "                    <td th:text=\"${country.getCountry()}\">...</td>\n" +
-        "                    <td th:text=\"${country.getNumber_of_Packs_delivered()}\">...</td>\n" +
-        "\n" +
-        "                </tr>\n" +
-        "            </th:block>\n" +
-        "        </table>\n" +
-        "        <p>Number of packets pending and country destination</p>\n" +
-        "        <table border=\"5\" >\n" +
-        "            <tr>\n" +
-        "                <td>Country</td>\n" +
-        "                <td>Number of packets pending</td>\n" +
-        "            </tr>\n" +
-        "            <th:block th:each=\"pending : ${pending}\">\n" +
-        "\n" +
-        "                <tr>\n" +
-        "                    <td th:text=\"${pending.getCountryDestination()}\">...</td>\n" +
-        "                    <td th:text=\"${pending.getNumberOfPacksPending()}\">...</td>\n" +
-        "\n" +
-        "                </tr>\n" +
-        "            </th:block>\n" +
-        "        </table>\n" +
-        "\n" +
-        "        <p>List of clients with 4 or more packets and number of packets</p>\n" +
-        "        <table border=\"5\" >\n" +
-        "            <tr>\n" +
-        "                <td>Name</td>\n" +
-        "                <td>Tel</td>\n" +
-        "                <td>Address</td>\n" +
-        "                <td>Number of packets sent</td>\n" +
-        "            </tr>\n" +
-        "            <th:block th:each=\"clients : ${clients}\">\n" +
-        "\n" +
-        "                <tr>\n" +
-        "                    <td th:text=\"${clients.getName()}\">...</td>\n" +
-        "                    <td th:text=\"${clients.getTel()}\">...</td>\n" +
-        "                    <td th:text=\"${clients.getAddress()}\">...</td>\n" +
-        "                    <td th:text=\"${clients.getNumberOfPacksSended()}\">...</td>\n" +
-        "\n" +
-        "                </tr>\n" +
-        "            </th:block>\n" +
-        "        </table>\n" +
-        "\n" +
-        "        <p>\n" +
-        "            <span th:text=\"#{email.activation.text2}\">Regards, </span>\n" +
-        "            <br/>\n" +
-        "            <em th:text=\"#{email.signature}\">JHipster.</em>\n" +
-        "        </p>\n" +
-        "    </body>\n" +
-        "</html>\n";
 
     public MailEngine(SpringTemplateEngine templateEngine, JHipsterProperties jHipsterProperties) {
         this.templateEngine = templateEngine;
         this.jHipsterProperties = jHipsterProperties;
     }
 
-    public String getShippedTemplate() {
-        return shippedTemplate;
-    }
-
-    public void setShippedTemplate(String shippedTemplate) {
-        this.shippedTemplate = shippedTemplate;
-    }
-
-    public String getDeliveredTemplateSender() {
-        return deliveredTemplateSender;
-    }
-
-    public void setDeliveredTemplateSender(String deliveredTemplateSender) {
-        this.deliveredTemplateSender = deliveredTemplateSender;
-    }
-
-    public String getDeliveredTemplateReceiver() {
-        return deliveredTemplateReceiver;
-    }
-
-    public void setDeliveredTemplateReceiver(String deliveredTemplateReceiver) {
-        this.deliveredTemplateReceiver = deliveredTemplateReceiver;
-    }
 
     public byte[] sendPDF(Shipment shipment, String template) throws DocumentException, IOException
 
@@ -252,7 +61,7 @@ public class MailEngine {
         context.setVariable(SHIPMENT,shipment);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
-        String content = templateEngine.process(shippedTemplate, context);
+        String content = templateEngine.process(template, context);
 
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -276,57 +85,57 @@ public class MailEngine {
 
         System.out.print(content);
     }
-    public void sendShippedTemplate(Shipment shipment) throws IOException {
-        sendTemplate(shipment,shippedTemplate);
+    public void sendShippedTemplate(Shipment shipment,String template) throws IOException {
+        sendTemplate(shipment,template);
     }
 
 
-    public byte[] sendShippedPdf(Shipment shipment) throws IOException, DocumentException {
+    public byte[] sendShippedPdf(Shipment shipment,String template) throws IOException, DocumentException {
 
-       return sendPDF(shipment,shippedTemplate);
+       return sendPDF(shipment,template);
     }
 
 
 
-    public void sendDeliveredSTemplate(Shipment shipment) throws IOException {
-     sendTemplate(shipment,deliveredTemplateSender);
+    public void sendDeliveredSTemplate(Shipment shipment,String template) throws IOException {
+     sendTemplate(shipment,template);
     }
 
 
-    public byte[] sendDeliveredSPDFTemplate(Shipment shipment) throws IOException, DocumentException {
-   return sendPDF(shipment,deliveredTemplateSender);
+    public byte[] sendDeliveredSPDFTemplate(Shipment shipment,String template) throws IOException, DocumentException {
+   return sendPDF(shipment,template);
     }
 
-    public void sendDeliveredRTemplate(Shipment shipment) throws IOException {
-        sendTemplate(shipment,deliveredTemplateReceiver);
+    public void sendDeliveredRTemplate(Shipment shipment,String template) throws IOException {
+        sendTemplate(shipment,template);
     }
 
 
-    public byte[] sendDeliveredRPDFTemplate(Shipment shipment) throws IOException, DocumentException {
-        return sendPDF(shipment,deliveredTemplateReceiver);
+    public byte[] sendDeliveredRPDFTemplate(Shipment shipment,String template) throws IOException, DocumentException {
+        return sendPDF(shipment,template);
     }
 
-    public void sendWeekly(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients) {
+    public void sendWeekly(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients,String template) {
 
         Locale locale = Locale.forLanguageTag("en");
 
-        StringContext context = new StringContext(weeklyReport, locale);
+        StringContext context = new StringContext(template, locale);
         context.setVariable(DElIVERED, delivered);
         context.setVariable(COUNTRY, country);
         context.setVariable(PENDING, pending);
         context.setVariable(CLIENTS, clients);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
-        String content = templateEngine.process(weeklyReport, context);
+        String content = templateEngine.process(template, context);
 
         System.out.print(content);
 
     }
 
-    public byte[] sendWeeklyPDF(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients) throws IOException, DocumentException {
+    public byte[] sendWeeklyPDF(NoOfPacksDeliveredDTO delivered, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pending, List<LoyalClientsDTO> clients,String template) throws IOException, DocumentException {
         Locale locale = Locale.forLanguageTag("en");
 
-        StringContext context = new StringContext(weeklyReport, locale);
+        StringContext context = new StringContext(template, locale);
 
         context.setVariable(DElIVERED, delivered);
         context.setVariable(COUNTRY, country);
@@ -334,7 +143,7 @@ public class MailEngine {
         context.setVariable(CLIENTS, clients);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
 
-        String content = templateEngine.process(weeklyReport, context);
+        String content = templateEngine.process(template, context);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ITextRenderer renderer = new ITextRenderer();

@@ -1,8 +1,10 @@
 package com.project.service.util.Mail;
 
+import afu.org.checkerframework.checker.units.qual.A;
 import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
 import com.project.domain.User;
+import com.project.service.EmailTemplatesService;
 import com.project.service.dto.LoyalClientsDTO;
 import com.project.service.dto.NoOfPackByAnyCountryDTO;
 import com.project.service.dto.NoOfPacksDeliveredDTO;
@@ -11,6 +13,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -48,13 +51,15 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
+
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
-                       MessageSource messageSource, SpringTemplateEngine templateEngine) {
+                       MessageSource messageSource, SpringTemplateEngine templateEngine ) {
 
         this.jHipsterProperties = jHipsterProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
+
     }
 
     @Async
@@ -120,37 +125,37 @@ public class MailService {
 
 
     @Async
-    public void sendEmailShipped(Shipment shipment) throws IOException, DocumentException {
+    public void sendEmailShipped(Shipment shipment,String template) throws IOException, DocumentException {
 
         MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailEngine.sendShippedPdf(shipment);
+        byte[] array = mailEngine.sendShippedPdf(shipment,template);
         sendMailWithAttachments(shipment.getSenderP().getEmail(), true, false, array);
     }
 
     @Async
-    public void sendEmailDeliveredS(Shipment shipment) throws IOException, DocumentException {
+    public void sendEmailDeliveredS(Shipment shipment,String template) throws IOException, DocumentException {
 
         MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailEngine.sendDeliveredSPDFTemplate(shipment);
+        byte[] array = mailEngine.sendDeliveredSPDFTemplate(shipment,template);
         sendMailWithAttachments(shipment.getSenderP().getEmail(), true, false, array);
     }
 
     @Async
-    public void sendEmailDeliveredR(Shipment shipment) throws IOException, DocumentException {
+    public void sendEmailDeliveredR(Shipment shipment,String template) throws IOException, DocumentException {
 
         MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailEngine.sendDeliveredRPDFTemplate(shipment);
+        byte[] array = mailEngine.sendDeliveredRPDFTemplate(shipment,template);
         sendMailWithAttachments(shipment.getReceiver().getEmail(), true, false, array);
     }
 
     @Async
-    public void sendEmailWeekly(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClientsDTO> clients) throws IOException, DocumentException {
+    public void sendEmailWeekly(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClientsDTO> clients,String template) throws IOException, DocumentException {
         MailEngine mailEngine = new MailEngine(templateEngine, jHipsterProperties);
 
-        byte[] array = mailEngine.sendWeeklyPDF(deliveredDTO, country, pendingDTO, clients);
+        byte[] array = mailEngine.sendWeeklyPDF(deliveredDTO, country, pendingDTO, clients,template);
         sendMailWithAttachments("jetakasabaqi@gmail.com", true, false, array);
 
 
@@ -176,27 +181,27 @@ public class MailService {
     }
 
     @Async
-    public void sendShippedStatusEmail(Shipment shipment) throws IOException, DocumentException {
+    public void sendShippedStatusEmail(Shipment shipment,String template) throws IOException, DocumentException {
         log.debug("Sending status changed email to '{} '", shipment.getSenderP().getEmail());
-        sendEmailShipped(shipment);
+        sendEmailShipped(shipment,template);
     }
 
     @Async
-    public void sendDeliveredSEmail(Shipment shipment) throws IOException, DocumentException {
+    public void sendDeliveredSEmail(Shipment shipment,String template) throws IOException, DocumentException {
         log.debug("Sending status changed email to '{} '", shipment.getSenderP().getEmail());
-        sendEmailDeliveredS(shipment);
+        sendEmailDeliveredS(shipment,template);
     }
 
     @Async
-    public void sendDeliveredREmail(Shipment shipment) throws IOException, DocumentException {
+    public void sendDeliveredREmail(Shipment shipment,String template) throws IOException, DocumentException {
         log.debug("Sending status changed email to '{} '", shipment.getReceiver().getEmail());
-        sendEmailDeliveredR(shipment);
+        sendEmailDeliveredR(shipment,template);
     }
 
     @Async
-    public void sendWeeklyReport(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClientsDTO> clients) throws IOException, DocumentException {
+    public void sendWeeklyReport(NoOfPacksDeliveredDTO deliveredDTO, List<NoOfPackByAnyCountryDTO> country, List<NoOfPacksPendingDTO> pendingDTO, List<LoyalClientsDTO> clients,String template) throws IOException, DocumentException {
 
-        sendEmailWeekly(deliveredDTO, country, pendingDTO, clients);
+        sendEmailWeekly(deliveredDTO, country, pendingDTO, clients,template);
     }
 
 

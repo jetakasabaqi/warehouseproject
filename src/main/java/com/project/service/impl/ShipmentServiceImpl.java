@@ -4,6 +4,7 @@ import com.lowagie.text.DocumentException;
 import com.project.domain.Shipment;
 import com.project.domain.Status;
 import com.project.repository.ShipmentRepository;
+import com.project.service.EmailTemplatesService;
 import com.project.service.util.Mail.MailService;
 import com.project.service.ShipmentService;
 import com.project.service.dto.*;
@@ -40,6 +41,9 @@ public class ShipmentServiceImpl implements ShipmentService {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private EmailTemplatesService emailTemplatesService;
 
     public ShipmentServiceImpl(ShipmentRepository shipmentRepository) {
         this.shipmentRepository = shipmentRepository;
@@ -303,8 +307,8 @@ public class ShipmentServiceImpl implements ShipmentService {
         List<NoOfPackByAnyCountryDTO> country = getNoOfPacksByAnyCountry();
         List<NoOfPacksPendingDTO> pending = getNoOfPacksPending();
         List<LoyalClientsDTO> clients = getLoyalClients();
-
-        mailService.sendEmailWeekly(delivered, country, pending, clients);
+        String template=emailTemplatesService.getTemplateByID(4L);
+        mailService.sendWeeklyReport(delivered, country, pending, clients,template);
 
         return true;
     }
@@ -325,7 +329,8 @@ public class ShipmentServiceImpl implements ShipmentService {
                 if (shipment.getId() == null) {
 
                 } else {
-                    mailService.sendShippedStatusEmail(shipment);
+                    String template=emailTemplatesService.getTemplateByID(1L);
+                    mailService.sendShippedStatusEmail(shipment,template);
                 }
             } else if (status.getId() == 4) {
                 shipment.setStatus(status);
@@ -333,8 +338,10 @@ public class ShipmentServiceImpl implements ShipmentService {
                 if (shipment.getId() == null) {
 
                 } else {
-                    mailService.sendDeliveredREmail(shipment);
-                    mailService.sendDeliveredSEmail(shipment);
+                    String template1=emailTemplatesService.getTemplateByID(2L);
+                    String template2=emailTemplatesService.getTemplateByID(3L);
+                    mailService.sendDeliveredREmail(shipment,template1);
+                    mailService.sendDeliveredSEmail(shipment,template2);
                 }
             }
         }

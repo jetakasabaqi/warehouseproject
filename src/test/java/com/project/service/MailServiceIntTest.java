@@ -51,6 +51,7 @@ public class MailServiceIntTest {
 
     private MailService mailService;
 
+    private EmailTemplatesService emailTemplatesService;
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
