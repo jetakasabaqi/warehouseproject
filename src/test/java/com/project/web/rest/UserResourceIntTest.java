@@ -189,8 +189,7 @@ public class UserResourceIntTest {
         user.setLangKey(DEFAULT_LANGKEY);
         user.setImageUrl(DEFAULT_IMAGEURL);
 
-        //   employee.setUser(user);
-        // person.setUser(user);
+
     }
 
     @Test
@@ -268,9 +267,7 @@ public class UserResourceIntTest {
         assertThat(vendors).hasSize(databaseSizeBeforeCreate + 1);
         Vendor testVendor = vendors.get(vendors.size() - 1);
         assertThat(testVendor.getUser().getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testVendor.getName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(testVendor.getEmail()).isEqualTo(default_Email);
-        //     assertThat(testVendor.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(testVendor.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 

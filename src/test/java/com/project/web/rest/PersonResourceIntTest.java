@@ -54,6 +54,12 @@ public class PersonResourceIntTest {
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
+    private static final String DEFAULT_COUNTRY = "BBBBBBBBBB";
+    private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CITY = "BBBBBBBBBB";
+    private static final String UPDATED_CITY = "BBBBBBBBBB";
+
     @Autowired
     private PersonRepository personRepository;
 
@@ -99,7 +105,9 @@ public class PersonResourceIntTest {
             .tel(DEFAULT_TEL)
             .address(DEFAULT_ADDRESS)
             .zipCode(DEFAULT_ZIP_CODE)
-            .email(DEFAULT_EMAIL);
+            .email(DEFAULT_EMAIL)
+            .city(DEFAULT_CITY)
+            .country(DEFAULT_COUNTRY);
         return person;
     }
 
@@ -114,7 +122,7 @@ public class PersonResourceIntTest {
         int databaseSizeBeforeCreate = personRepository.findAll().size();
 
         // Create the Person
-        restPersonMockMvc.perform(post("/api/people")
+        restPersonMockMvc.perform(post("/api/person")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isCreated());
@@ -139,7 +147,7 @@ public class PersonResourceIntTest {
         person.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restPersonMockMvc.perform(post("/api/people")
+        restPersonMockMvc.perform(post("/api/person")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isBadRequest());
@@ -151,7 +159,7 @@ public class PersonResourceIntTest {
 
     @Test
     @Transactional
-    public void getAllPeople() throws Exception {
+    public void getAllperson() throws Exception {
         // Initialize the database
         personRepository.saveAndFlush(person);
 
@@ -194,7 +202,7 @@ public class PersonResourceIntTest {
         personRepository.saveAndFlush(person);
 
         // Get the person
-        restPersonMockMvc.perform(get("/api/people/{id}", person.getId()))
+        restPersonMockMvc.perform(get("/api/person/{id}", person.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(person.getId().intValue()))
@@ -209,7 +217,7 @@ public class PersonResourceIntTest {
     @Transactional
     public void getNonExistingPerson() throws Exception {
         // Get the person
-        restPersonMockMvc.perform(get("/api/people/{id}", Long.MAX_VALUE))
+        restPersonMockMvc.perform(get("/api/person/{id}", Long.MAX_VALUE))
             .andExpect(status().isInternalServerError());
     }
 
@@ -230,9 +238,11 @@ public class PersonResourceIntTest {
             .tel(UPDATED_TEL)
             .address(UPDATED_ADDRESS)
             .zipCode(UPDATED_ZIP_CODE)
-            .email(UPDATED_EMAIL);
+            .email(UPDATED_EMAIL)
+            .country(UPDATED_COUNTRY)
+        .city(UPDATED_CITY);
 
-        restPersonMockMvc.perform(put("/api/people")
+        restPersonMockMvc.perform(put("/api/person")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(updatedPerson)))
             .andExpect(status().isOk());
@@ -256,7 +266,7 @@ public class PersonResourceIntTest {
         // Create the Person
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
-        restPersonMockMvc.perform(put("/api/people")
+        restPersonMockMvc.perform(put("/api/person")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(person)))
             .andExpect(status().isCreated());
@@ -275,7 +285,7 @@ public class PersonResourceIntTest {
         int databaseSizeBeforeDelete = personRepository.findAll().size();
 
         // Get the person
-        restPersonMockMvc.perform(delete("/api/people/{id}", person.getId())
+        restPersonMockMvc.perform(delete("/api/person/{id}", person.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isOk());
 
@@ -287,7 +297,7 @@ public class PersonResourceIntTest {
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(Person.class);
+
         Person person1 = new Person();
         person1.setId(1L);
         Person person2 = new Person();

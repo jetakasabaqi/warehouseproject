@@ -168,7 +168,7 @@ public class ProductDetailsResourceIntTest {
     @Test
     @Transactional
     public void createProductDetails() throws Exception {
-        int databaseSizeBeforeCreate = productTypeRepository.findAll().size();
+        int databaseSizeBeforeCreate = productDetailsRepository.findAll().size();
 
         // Create the ProductType
         restProductDetailsMockMvc.perform(post("/api/product_details")
@@ -178,8 +178,12 @@ public class ProductDetailsResourceIntTest {
 
         // Validate the Product in the database
         List<ProductDetails> productDetails = productDetailsRepository.findAll();
-        assertThat(productDetails).hasSize(databaseSizeBeforeCreate );
+        assertThat(productDetails).hasSize(databaseSizeBeforeCreate + 1);
         ProductDetails testProduct = productDetails.get(productDetails.size() - 1);
+        assertThat(testProduct.getHeight()).isEqualTo(0.0);
+        assertThat(testProduct.getLength()).isEqualTo(0.0);
+        assertThat(testProduct.getWeight()).isEqualTo(0.0);
+
     }
 
     @Test

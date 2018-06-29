@@ -176,4 +176,13 @@ public class Person implements Serializable {
             ", user=" + user +
             '}';
     }
+
+    public Person country(String country) {
+        this.country=country;
+        return this;
+    }
+    public Person city(String city) {
+        this.city=city;
+        return this;
+    }
 }

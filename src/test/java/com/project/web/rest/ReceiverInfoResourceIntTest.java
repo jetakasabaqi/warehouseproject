@@ -48,6 +48,14 @@ public class ReceiverInfoResourceIntTest {
     private static final String DEFAULT_ZIP_CODE = "AAAAAAAAAA";
     private static final String UPDATED_ZIP_CODE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
+    private static final String UPDATED_EMAIL = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CITY = "AAAAAAAAAA";
+    private static final String UPDATED_CITY = "BBBBBBBBBB";
+
+    private static final String DEAFAULT_COUNTRY = "AAAAAAAAAA";
+    private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
     @Autowired
     private ReceiverInfoRepository receiverInfoRepository;
 
@@ -92,6 +100,9 @@ public class ReceiverInfoResourceIntTest {
             .fullName(DEFAULT_FULL_NAME)
             .address(DEFAULT_ADDRESS)
             .zipCode(DEFAULT_ZIP_CODE);
+        receiverInfo.setEmail(DEFAULT_EMAIL);
+        receiverInfo.setCountry(DEAFAULT_COUNTRY);
+        receiverInfo.setCity(DEFAULT_CITY);
         return receiverInfo;
     }
 
@@ -211,6 +222,9 @@ public class ReceiverInfoResourceIntTest {
             .fullName(UPDATED_FULL_NAME)
             .address(UPDATED_ADDRESS)
             .zipCode(UPDATED_ZIP_CODE);
+        updatedReceiverInfo.setCity(UPDATED_CITY);
+        updatedReceiverInfo.setCountry(UPDATED_COUNTRY);
+        updatedReceiverInfo.setEmail(UPDATED_EMAIL);
 
         restReceiverInfoMockMvc.perform(put("/api/receiver-infos")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -242,6 +256,13 @@ public class ReceiverInfoResourceIntTest {
         // Validate the ReceiverInfo in the database
         List<ReceiverInfo> receiverInfoList = receiverInfoRepository.findAll();
         assertThat(receiverInfoList).hasSize(databaseSizeBeforeUpdate + 1);
+        ReceiverInfo testReceiver = receiverInfoList.get(receiverInfoList.size() - 1);
+        assertThat(testReceiver.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+        assertThat(testReceiver.getFullName()).isEqualTo(DEFAULT_FULL_NAME);
+        assertThat(testReceiver.getZipCode()).isEqualTo(DEFAULT_ZIP_CODE);
+        assertThat(testReceiver.getCountry()).isEqualTo(DEAFAULT_COUNTRY);
+        assertThat(testReceiver.getZipCode()).isEqualTo(DEFAULT_ZIP_CODE);
+
     }
 
     @Test
@@ -265,7 +286,6 @@ public class ReceiverInfoResourceIntTest {
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(ReceiverInfo.class);
         ReceiverInfo receiverInfo1 = new ReceiverInfo();
         receiverInfo1.setId(1L);
         ReceiverInfo receiverInfo2 = new ReceiverInfo();

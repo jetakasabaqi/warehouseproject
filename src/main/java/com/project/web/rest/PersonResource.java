@@ -54,7 +54,7 @@ public class PersonResource {
      * @return the ResponseEntity with status 201 (Created) and with body the new person, or with status 400 (Bad Request) if the person has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping("/people")
+    @PostMapping("/person")
     @Timed
     public ResponseEntity<Person> createPerson(@RequestBody Person person) throws URISyntaxException {
         log.debug("REST request to save Person : {}", person);
@@ -80,7 +80,7 @@ public class PersonResource {
      * or with status 500 (Internal Server Error) if the person couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PutMapping("/people")
+    @PutMapping("/person")
     @Timed
     public ResponseEntity<Person> updatePerson(@RequestBody Person person) throws URISyntaxException {
         log.debug("REST request to update Person : {}", person);
@@ -105,7 +105,7 @@ public class PersonResource {
      * @param id the id of the person to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the person, or with status 404 (Not Found)
      */
-    @GetMapping("/people/{id}")
+    @GetMapping("/person/{id}")
     @Timed
     public ResponseEntity<Person> getPerson(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Person : {}", id);
@@ -121,7 +121,7 @@ public class PersonResource {
      * @param id the id of the person to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/people/{id}")
+    @DeleteMapping("/person/{id}")
     @Timed
     public ResponseEntity<Void> deletePerson(@PathVariable Long id) throws Exception {
         log.debug("REST request to delete Person : {}", id);
