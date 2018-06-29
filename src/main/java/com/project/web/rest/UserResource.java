@@ -156,7 +156,7 @@ public class UserResource {
 //        } else if (employeeRepository.findOneByEmailIgnoreCase(employeeDTO.getEmail()).isPresent()) {
 //            throw new EmailAlreadyUsedException();
         } else {
-            User user = new User(employeeDTO.getLogin(), employeeDTO.getLastName(), employeeDTO.getEmail(), employeeDTO.getName());
+            User user = new User(employeeDTO.getLogin(),  employeeDTO.getEmail(), employeeDTO.getName());
             User registerUser = userService.registerUser(new UserDTO(user), "user");
             //User newUser= userService.createUser(new UserDTO(user));
 
@@ -195,7 +195,7 @@ public class UserResource {
 //        } else if (employeeRepository.findOneByEmailIgnoreCase(employeeDTO.getEmail()).isPresent()) {
 //            throw new EmailAlreadyUsedException();
         } else {
-            User user = new User(personDTO.getLogin(), personDTO.getLastName(), personDTO.getEmail(), personDTO.getFirstName());
+            User user = new User(personDTO.getLogin(), personDTO.getEmail(), personDTO.getFirstName());
             user.setLangKey("en");
             User registerUser = userService.registerUser(new UserDTO(user), "user");
             //User newUser= userService.createUser(new UserDTO(user));
@@ -233,20 +233,20 @@ public class UserResource {
 //        } else if (employeeRepository.findOneByEmailIgnoreCase(employeeDTO.getEmail()).isPresent()) {
 //            throw new EmailAlreadyUsedException();
         } else {
-            User user = new User(vendorDTO.getLogin(), vendorDTO.getLastName(), vendorDTO.getEmail(), vendorDTO.getFirstName());
+            User user = new User(vendorDTO.getLogin(), vendorDTO.getEmail(), vendorDTO.getName());
             user.setLangKey("en");
             User registerUser = userService.registerUser(new UserDTO(user), "user");
             //User newUser= userService.createUser(new UserDTO(user));
 
             Vendor vendor = new Vendor();
-            vendor.setFirstName(vendorDTO.getFirstName());
+
             vendor.zipCode(vendorDTO.getZipCode());
             vendor.contactPerson(vendorDTO.getContactPerson());
             vendor.email(vendorDTO.getEmail());
             vendor.address(vendorDTO.getAddress());
             vendor.website(vendorDTO.getWebsite());
             vendor.setUser(registerUser);
-            vendor.setLastName(vendorDTO.getLastName());
+
 
             vendorService.save(vendor);
 

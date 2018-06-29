@@ -61,7 +61,7 @@ public class VendorResource {
         if (vendor.getId() != null) {
             throw new BadRequestAlertException("A new vendor cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (vendor.getFirstName() == null || vendor.getLastName() == null || vendor.getContactPerson() == null || vendor.getAddress() == null) {
+        if (vendor.getName() == null || vendor.getContactPerson() == null || vendor.getAddress() == null) {
             throw new BadRequestAlertException("Fields cannot be nul", ENTITY_NAME, "null");
         }
         Vendor result = vendorService.save(vendor);
@@ -83,7 +83,7 @@ public class VendorResource {
     @Timed
     public ResponseEntity<Vendor> updateVendor(@RequestBody Vendor vendor) throws URISyntaxException {
         log.debug("REST request to update Vendor : {}", vendor);
-        if (vendor.getFirstName() == null || vendor.getLastName() == null || vendor.getContactPerson() == null || vendor.getAddress() == null) {
+        if (vendor.getName() == null || vendor.getContactPerson() == null || vendor.getAddress() == null) {
             throw new BadRequestAlertException("Fields cannot be null", ENTITY_NAME, "null");
         } else {
             if (vendor.getId() == null) {

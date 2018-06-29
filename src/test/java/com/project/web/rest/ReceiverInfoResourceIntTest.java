@@ -192,7 +192,7 @@ public class ReceiverInfoResourceIntTest {
     public void getNonExistingReceiverInfo() throws Exception {
         // Get the receiverInfo
         restReceiverInfoMockMvc.perform(get("/api/receiver-infos/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

@@ -45,7 +45,7 @@ public class Person implements Serializable {
 
 
     @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "userId")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
 

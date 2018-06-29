@@ -69,15 +69,10 @@ public class ComplaintsServiceImpl implements ComplaintsService {
     @Override
     public Complaints findOne(Long id) throws Exception {
         log.debug("Request to get Complain : {}", id);
-        Complaints complaints=findOne(id);
-        if(complaints==null)
-        {
-            throw new Exception("ComplaintID not found");
-        }
-        else
-        {
+        Complaints complaints=complaintsRepository.findOne(id);
+
             return complaints;
-        }
+
 
     }
 

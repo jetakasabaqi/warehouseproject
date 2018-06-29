@@ -177,7 +177,7 @@ public class StatusResourceIntTest {
     public void getNonExistingStatus() throws Exception {
         // Get the status
         restStatusMockMvc.perform(get("/api/statuses/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

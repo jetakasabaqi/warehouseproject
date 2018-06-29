@@ -23,10 +23,8 @@ public class VendorDTO {
 
 
     @Size(max = 50)
-    private String firstName;
+    private String name;
 
-    @Size(max = 50)
-    private String lastName;
 
     @Size(max = 50)
     private String address;
@@ -80,8 +78,7 @@ public class VendorDTO {
         this.website = vendor.getWebsite();
         this.zipCode = vendor.getZipCode();
         this.login = vendor.getUser().getLogin();
-        this.firstName = vendor.getFirstName();
-        this.lastName = vendor.getLastName();
+        this.name=vendor.getName();
         this.email = vendor.getEmail();
         this.activated = vendor.getUser().getActivated();
         this.imageUrl = vendor.getUser().getImageUrl();
@@ -104,20 +101,13 @@ public class VendorDTO {
         this.userId = userId;
     }
 
-    public String getLastName() {
-        return lastName;
+
+    public String getName() {
+        return name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {
@@ -241,8 +231,7 @@ public class VendorDTO {
         return "VendorDTO{" +
             "vendorId=" + vendorId +
             ", userId=" + userId +
-            ", firstName='" + firstName + '\'' +
-            ", lastaName='" + lastName + '\'' +
+            ", name='" + name + '\'' +
             ", address='" + address + '\'' +
             ", website='" + website + '\'' +
             ", contactPerson='" + contactPerson + '\'' +

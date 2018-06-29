@@ -1,0 +1,13 @@
+id;full_name;tel;address;zip_code;email;user_id;city;country
+'1';'Zana';'049856214';'Rr.1';'10000';'jetakasabaqi@gmail.com';'4';'Prishtine';'Kosove'
+'2';'Taulant';'1254465';'rr.2';'44135';'jetakasabaqi@gmail.com';'4';'Dortmund';'Germany'
+'3';'Diell';'04548478';'rr.3';'11000';'jetakasabaqi@gmail.com';'4';'Berlin';'Germany'
+'4';'Fortese';'048965789';'rr.4';'70000';'jetakasabaqi@gmail.com';'4';'Ferizaj';'Kosove'
+'5';'Zanfina';'048965789';'rr.5';'30000';'jetakasabaqi@gmail.com';'4';'Peje';'Kosove'
+'6';'Zanita';'048965789';'rr.6';'24000';'jetakasabaqi@gmail.com';'4';'Malisheve';'Kosove'
+'7';'Diona';'048965789';'rr.7';'50000';'jetakasabaqi@gmail.com';'4';'Gjakove';'Kosove'
+'8';'Rina';'048965789';'rr.8';'62000';'jetakasabaqi@gmail.com';'4';'London';'Great Britain'
+'9';'Florim';'048965789';'rr.9';'41101';'jetakasabaqi@gmail.com';'4';'Gothenburg';'Sweden'
+'10';'Arsim';'048965789';'rr.10';'10000';'jetakasabaqi@gmail.com';'4';'Prishtine';'Kosove'
+
+

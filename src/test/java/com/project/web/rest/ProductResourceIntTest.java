@@ -196,7 +196,7 @@ public class ProductResourceIntTest {
     public void getNonExistingProduct() throws Exception {
         // Get the product
         restProductMockMvc.perform(get("/api/products/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

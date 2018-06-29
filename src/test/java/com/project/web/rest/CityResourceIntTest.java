@@ -138,8 +138,7 @@ public class CityResourceIntTest {
         cityRepository.saveAndFlush(city);
 
         // Get all the cityList
-        restCityMockMvc.perform(get("/api/cities?sort=id,desc"))
-            .andExpect(status().isOk())
+        restCityMockMvc.perform(get("/api/cities?sort=id,desc")).andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(city.getId().intValue())))
             .andExpect(jsonPath("$.[*].cityName").value(hasItem(DEFAULT_CITY_NAME.toString())));
@@ -178,7 +177,7 @@ public class CityResourceIntTest {
     public void getNonExistingCity() throws Exception {
         // Get the city
         restCityMockMvc.perform(get("/api/cities/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

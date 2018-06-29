@@ -142,7 +142,7 @@ public class CityResource {
             try {
                 page = cityService.findAll(pageable);
                 PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
-                return new ResponseEntity<>(page.getContent(), headers, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
             }

@@ -98,8 +98,7 @@ public class VendorResourceIntTest {
      */
     public static Vendor createEntity(EntityManager em) {
         Vendor vendor = new Vendor()
-            .firstName(DEFAULT_FULL_NAME)
-            .lastName(DEFAULT_FULL_NAME)
+            .name(DEFAULT_FULL_NAME)
             .address(DEFAULT_ADDRESS)
             .email(DEFAULT_EMAIL)
             .website(DEFAULT_WEBSITE)
@@ -128,7 +127,7 @@ public class VendorResourceIntTest {
         List<Vendor> vendorList = vendorRepository.findAll();
         assertThat(vendorList).hasSize(databaseSizeBeforeCreate + 1);
         Vendor testVendor = vendorList.get(vendorList.size() - 1);
-        assertThat(testVendor.getFirstName()).isEqualTo(DEFAULT_FULL_NAME);
+        assertThat(testVendor.getName()).isEqualTo(DEFAULT_FULL_NAME);
         assertThat(testVendor.getAddress()).isEqualTo(DEFAULT_ADDRESS);
         assertThat(testVendor.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(testVendor.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
@@ -166,8 +165,7 @@ public class VendorResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(vendor.getId().intValue())))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FULL_NAME.toString())))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_FULL_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_FULL_NAME.toString())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
@@ -186,8 +184,7 @@ public class VendorResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(vendor.getId().intValue())))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FULL_NAME.toString())))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_FULL_NAME.toString())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_FULL_NAME.toString())))
             .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS.toString())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL.toString())))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE.toString())))
@@ -209,7 +206,7 @@ public class VendorResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(vendor.getId().intValue()))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FULL_NAME.toString()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_FULL_NAME.toString()))
             .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS.toString()))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL.toString()))
             .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE.toString()))
@@ -222,7 +219,7 @@ public class VendorResourceIntTest {
     public void getNonExistingVendor() throws Exception {
         // Get the vendor
         restVendorMockMvc.perform(get("/api/vendors/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -238,8 +235,7 @@ public class VendorResourceIntTest {
         // Disconnect from session so that the updates on updatedVendor are not directly saved in db
         em.detach(updatedVendor);
         updatedVendor
-            .firstName(UPDATED_FULL_NAME)
-            .lastName(UPDATED_FULL_NAME)
+            .name(UPDATED_FULL_NAME)
             .address(UPDATED_ADDRESS)
             .email(UPDATED_EMAIL)
             .website(UPDATED_WEBSITE)
@@ -255,7 +251,7 @@ public class VendorResourceIntTest {
         List<Vendor> vendorList = vendorRepository.findAll();
         assertThat(vendorList).hasSize(databaseSizeBeforeUpdate);
         Vendor testVendor = vendorList.get(vendorList.size() - 1);
-        assertThat(testVendor.getFirstName()).isEqualTo(UPDATED_FULL_NAME);
+        assertThat(testVendor.getName()).isEqualTo(UPDATED_FULL_NAME);
         assertThat(testVendor.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testVendor.getEmail()).isEqualTo(UPDATED_EMAIL);
         assertThat(testVendor.getWebsite()).isEqualTo(UPDATED_WEBSITE);

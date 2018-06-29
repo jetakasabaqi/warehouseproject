@@ -210,7 +210,7 @@ public class PersonResourceIntTest {
     public void getNonExistingPerson() throws Exception {
         // Get the person
         restPersonMockMvc.perform(get("/api/people/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

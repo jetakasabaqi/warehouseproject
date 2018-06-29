@@ -198,10 +198,11 @@ public class ShipmentResource {
 
     @RequestMapping(method = RequestMethod.GET, value = "shipment/{client_id}/package")
     @ResponseBody
-    public ResponseEntity<PackageDTO> getOnePackage(@RequestParam(value = "product.id", required = false) Long package_id, @PathVariable(value = "client_id") Long client_id) {
+    public ResponseEntity<PackageDTO> getOnePackage(@RequestParam(value = "product.id") Long package_id, @PathVariable(value = "client_id") Long client_id) {
+
         PackageDTO packageDTO = shipmentService.getShipmentsByClientIdAndProductID(package_id, client_id);
 
-        return new ResponseEntity<>(packageDTO, HttpStatus.OK);
+        return new ResponseEntity<>( packageDTO, HttpStatus.OK);
 
     }
 

@@ -1,0 +1,9 @@
+id;name;address;email;website;contact_person;zip_code;user_id
+'1';'Etc';'rr.1';'etc@gmail.com';'www.etc.com';'045632156';'10000';'4'
+'2';'Viva';'rr.2';'viva@gmail.com';'www.viva.com';'45698751';'10000';'4'
+'3';'Neptun';'rr.3';'neptun@gmail.com';'www.neptun.com';'136251';'22000';'4'
+'4';'Aztech';'rr.4';'aztech@gmail.com';'www.aztech.com';'13562458';'21233';'4'
+'5';'Dell';'rr.5';'dell@gmail.com';'www.dell.com';'1365214';'10000';'4'
+'6';'Lenovo';'rr.6';'lenovo@gmail.com';'www.lenovo.com';'6987456';'30000';'4'
+'7';'Apple';'rr.7';'apple@gmail.com';'www.apple.com';'1235698';'10000';'4'
+'8';'HP';'rr.8';'hp@gmail.com';'www.hp.com';'63245678';'10000';'4'

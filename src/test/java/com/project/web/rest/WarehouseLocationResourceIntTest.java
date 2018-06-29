@@ -205,7 +205,7 @@ public class WarehouseLocationResourceIntTest {
     public void getNonExistingWarehouseLocation() throws Exception {
         // Get the warehouseLocation
         restWarehouseLocationMockMvc.perform(get("/api/warehouse-locations/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

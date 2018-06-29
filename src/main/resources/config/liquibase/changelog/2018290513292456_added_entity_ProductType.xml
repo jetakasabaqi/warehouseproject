@@ -24,6 +24,7 @@
             </column>
 
         </createTable>
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/product_type.csv" separator=";" identityInsertEnabled="true" tableName="product_type">-->
 
     </changeSet>
 

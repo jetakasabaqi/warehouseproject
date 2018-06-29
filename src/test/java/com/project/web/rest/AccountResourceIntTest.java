@@ -52,8 +52,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = Jeta123App.class)
 public class AccountResourceIntTest {
 
-    @Autowired
-    private MailEngine mailEngine;
+
+
 
     @Autowired
     private UserRepository userRepository;
@@ -160,40 +160,6 @@ public class AccountResourceIntTest {
             .andExpect(status().isInternalServerError());
     }
 
-//    @Test
-//    public void setMailServiceTest() throws Exception {
-//        User user = new User();
-//        user.setLogin("test");
-//        user.setFirstName("john");
-//        user.setLastName("doe");
-//        user.setEmail("john.doe@jhipster.com");
-//        user.setImageUrl("http://placehold.it/50x50");
-//        user.setLangKey("en");
-//
-//        byte[] bytes= mailServiceTest.sendPdfTemplets(user);
-//        assertThat(bytes).isNotEmpty();
-//    }
-
-//    @Test
-//    public void setMailServiceLISTTest() throws Exception {
-//        User user = new User();
-//        user.setLogin("test");
-//        user.setFirstName("john");
-//        user.setLastName("doe");
-//        user.setEmail("john.doe@jhipster.com");
-//        user.setImageUrl("http://placehold.it/50x50");
-//        user.setLangKey("en");
-//
-//        List<Status> statuses=new ArrayList<>();
-//        Status status=new Status().statusName("Shipped");
-//
-//        Status status1=new Status().statusName("Arrived");
-//        statuses.add(status);
-//        statuses.add(status1);
-//
-//        mailServiceTest.sendPdfTempletsLisy(user,statuses);
-//
-//    }
 
 
     @Test

@@ -179,7 +179,7 @@ public class PriceResourceIntTest {
     public void getNonExistingPrice() throws Exception {
         // Get the price
         restPriceMockMvc.perform(get("/api/prices/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

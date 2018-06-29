@@ -207,7 +207,7 @@ public class EmployeeResourceIntTest {
     public void getNonExistingEmployee() throws Exception {
         // Get the employee
         restEmployeeMockMvc.perform(get("/api/employees/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test
@@ -267,6 +267,7 @@ public class EmployeeResourceIntTest {
     @Transactional
     public void deleteEmployee() throws Exception {
         // Initialize the database
+
         employeeService.save(employee);
 
         int databaseSizeBeforeDelete = employeeRepository.findAll().size();

@@ -44,10 +44,11 @@
                 <constraints unique="false" nullable="true"/>
             </column>
             <column name="product_details" type="bigint">
-                <constraints unique="true" nullable="true"/>
+                <constraints unique="false" nullable="true"/>
             </column>
 
         </createTable>
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/vendor.csv" separator=";" identityInsertEnabled="true" tableName="vendor">-->
 
     </changeSet>
 

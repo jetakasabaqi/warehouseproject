@@ -59,4 +59,14 @@
     <include file="config/liquibase/changelog/00000000000004_load_city.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000005_load_employee_type.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/00000000000006_load_employee.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000007_load_person.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000008_load_product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000009_load_receiver_info.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000010_load_product_type.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000011_load_weight_unit.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000012_load_warehouse_location.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000013_load_product_details.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000014_load_vendor.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/00000000000015_load_shipment.xml" relativeToChangelogFile="false"/>
+
 </databaseChangeLog>

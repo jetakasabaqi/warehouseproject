@@ -89,7 +89,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void delete(Long id) throws Exception {
         log.debug("Request to delete Employee : {}", id);
-        employeeRepository.delete(id);
         Employee employee=employeeRepository.findOne(id);
         if(employee==null)
 

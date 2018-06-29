@@ -39,7 +39,7 @@
                 <constraints nullable="true"/>
             </column>
             <column name="user_id" type="bigint">
-                <constraints unique="true" nullable="true"/>
+                <constraints unique="false" nullable="true"/>
             </column>
             <column name="city" type="varchar(255)">
                 <constraints unique="false" nullable="true"/>
@@ -50,7 +50,7 @@
             </column>
 
         </createTable>
-
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/person.csv" separator=";" identityInsertEnabled="true" tableName="person">-->
     </changeSet>
 
 </databaseChangeLog>

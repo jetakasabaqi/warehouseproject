@@ -24,6 +24,7 @@
             </column>
 
         </createTable>
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/weight_unit.csv" separator=";" identityInsertEnabled="true" tableName="weight_unit">-->
 
     </changeSet>
 

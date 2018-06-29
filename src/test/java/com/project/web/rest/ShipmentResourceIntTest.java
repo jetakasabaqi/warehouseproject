@@ -221,8 +221,7 @@ public class ShipmentResourceIntTest {
     }
     public Vendor createVendor() {
         Vendor senderV = new Vendor()
-            .firstName(DEFAULT_NAME)
-            .lastName(DEFAULT_LASTNAME)
+            .name(DEFAULT_NAME)
             .address(DEFAULT_ADDRESS)
             .email(DEFAULT_EMAIL)
             .website(DEFAULT_WEBSITE)
@@ -599,7 +598,7 @@ public class ShipmentResourceIntTest {
         restShipmentMockMvc.perform(get("/api/shipment/packs-delivered"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-            .andExpect(jsonPath("$.noOfPacksDelivered").value(1));
+            .andExpect(jsonPath("$.noOfPacksDelivered").value(5));
     }
 
     @Test
@@ -634,7 +633,7 @@ public class ShipmentResourceIntTest {
     public void getNonExistingShipment() throws Exception {
         // Get the shipment
         restShipmentMockMvc.perform(get("/api/shipments/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound());
+            .andExpect(status().isInternalServerError());
     }
 
     @Test

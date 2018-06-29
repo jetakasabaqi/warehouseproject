@@ -60,7 +60,7 @@ public class UserResourceIntTest {
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
 
-    private static final String default_Email="jeta@gmail.com";
+    private static final String default_Email = "jeta@gmail.com";
     private static final String UPDATED_EMAIL = "jhipster@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
@@ -83,10 +83,9 @@ public class UserResourceIntTest {
 
     private static final String DEFAULT_ZIPCODE = "10000";
 
-    private static final String DEFAULT_TEL="04562314";
+    private static final String DEFAULT_TEL = "04562314";
 
-    private static final String DEFAULT_AGE="53";
-
+    private static final String DEFAULT_AGE = "53";
 
 
     @Autowired
@@ -230,7 +229,7 @@ public class UserResourceIntTest {
 
     private Vendor vendorCreate() throws Exception {
         Vendor vendor = new Vendor().website(DEFAULT_WEBSITE).contactPerson(DEFAULT_CONTACTPERSON).address(DEFAULT_ADDRESS).email(default_Email)
-            .zipCode(DEFAULT_ZIPCODE).firstName(DEFAULT_FIRSTNAME).lastName(DEFAULT_LASTNAME);
+            .zipCode(DEFAULT_ZIPCODE).name(DEFAULT_FIRSTNAME);
         vendor.setUser(user);
         vendor.getUser().setLogin(DEFAULT_LOGIN);
         vendor.getUser().setEmail(DEFAULT_EMAIL);
@@ -239,14 +238,13 @@ public class UserResourceIntTest {
     }
 
     private VendorDTO vendorDTOCreate() throws Exception {
-       Vendor vendor=vendorCreate();
+        Vendor vendor = vendorCreate();
         VendorDTO vendorDTO = new VendorDTO();
         vendorDTO.setActivated(user.getActivated());
         vendorDTO.setAddress(vendor.getAddress());
         vendorDTO.setContactPerson(vendor.getContactPerson());
         vendorDTO.setEmail(vendor.getEmail());
-        vendorDTO.setFirstName(vendor.getFirstName());
-        vendorDTO.setLastName(vendor.getLastName());
+        vendorDTO.setName(vendor.getName());
         vendorDTO.setLogin(user.getLogin());
         vendorDTO.setZipCode(vendor.getZipCode());
         vendorDTO.setCreatedDate(user.getCreatedDate());
@@ -270,12 +268,12 @@ public class UserResourceIntTest {
         assertThat(vendors).hasSize(databaseSizeBeforeCreate + 1);
         Vendor testVendor = vendors.get(vendors.size() - 1);
         assertThat(testVendor.getUser().getLogin()).isEqualTo(DEFAULT_LOGIN);
-        assertThat(testVendor.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-        assertThat(testVendor.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        assertThat(testVendor.getName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(testVendor.getEmail()).isEqualTo(default_Email);
-   //     assertThat(testVendor.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        //     assertThat(testVendor.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(testVendor.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
+
     private Employee employeeCreate() throws Exception {
         Employee employee = new Employee().email(DEFAULT_EMAIL).name(DEFAULT_FIRSTNAME).lastName(DEFAULT_LASTNAME).tel(DEFAULT_TEL).age(DEFAULT_AGE);
         employee.setUser(user);
@@ -288,7 +286,7 @@ public class UserResourceIntTest {
     }
 
     private EmployeeDTO employeeDTOCreate() throws Exception {
-        Employee employee=employeeCreate();
+        Employee employee = employeeCreate();
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setActivated(user.getActivated());
         employeeDTO.setEmail(employee.getEmail());
@@ -319,8 +317,8 @@ public class UserResourceIntTest {
         assertThat(testEmployee.getName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(testEmployee.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(testEmployee.getEmail()).isEqualTo(DEFAULT_EMAIL);
-       // assertThat(testEmployee.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-      //  assertThat(testEmployee.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+        // assertThat(testEmployee.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+        //  assertThat(testEmployee.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
 
     private Person personCreate() throws Exception {
@@ -335,7 +333,7 @@ public class UserResourceIntTest {
     }
 
     private PersonDTO personDTOcreate() throws Exception {
-        Person person=personCreate();
+        Person person = personCreate();
         PersonDTO personDTO = new PersonDTO();
         personDTO.setActivated(user.getActivated());
         personDTO.setEmail(person.getEmail());
@@ -363,7 +361,7 @@ public class UserResourceIntTest {
         Person testPerson = personList.get(personList.size() - 1);
         assertThat(testPerson.getUser().getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(testPerson.getFullName()).isEqualTo(DEFAULT_FIRSTNAME);
-       // assertThat(testPerson.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+        // assertThat(testPerson.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(testPerson.getEmail()).isEqualTo(DEFAULT_EMAIL);
         // assertThat(testEmployee.getUser().getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         //  assertThat(testEmployee.getUser().getLangKey()).isEqualTo(DEFAULT_LANGKEY);
@@ -473,6 +471,7 @@ public class UserResourceIntTest {
             .andExpect(jsonPath("$.[*].imageUrl").value(hasItem(DEFAULT_IMAGEURL)))
             .andExpect(jsonPath("$.[*].langKey").value(hasItem(DEFAULT_LANGKEY)));
     }
+
     @Test
     @Transactional
     public void getAllUsersSearch() throws Exception {
@@ -492,6 +491,7 @@ public class UserResourceIntTest {
 
 
     }
+
     @Test
     @Transactional
     public void getUser() throws Exception {

@@ -31,6 +31,7 @@
             </column>
 
         </createTable>
+        <!--<ext:loadData encoding="UTF_8" file="config/liquibase/import/warehouse_location.csv" separator=";" identityInsertEnabled="true" tableName="warehouse_location">-->
 
     </changeSet>
 
