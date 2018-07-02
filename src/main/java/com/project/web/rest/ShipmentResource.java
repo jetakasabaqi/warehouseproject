@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -298,6 +299,8 @@ public class ShipmentResource {
 
     @GetMapping("/shipment/weekly")
     @Timed
+    @Scheduled(cron="\t\n" +
+        "0 40 15 ? * TUE")
     public ResponseEntity<Boolean> getWeekly() throws IOException, DocumentException {
         return new ResponseEntity<Boolean>(shipmentService.weeklyReport(), HttpStatus.OK);
 

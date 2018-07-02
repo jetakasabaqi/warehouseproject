@@ -94,6 +94,7 @@ public class MailService {
                 MimeMessageHelper(mimeMessage, true);
 
             mimeMessageHelper.setTo(to);
+            mimeMessageHelper.setSubject("WarehouseApp notifications");
             mimeMessageHelper.setFrom(jHipsterProperties.getMail().getFrom());
 
 
